@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.pool.ConstantPool;
 
 public class ClassFile {
 
@@ -14,6 +15,7 @@ public class ClassFile {
 
     public final JavaVersion majorVersion;
     public final int minorVersion;
+    public final ConstantPool pool;
 
     public ClassFile(InputStream inStream) throws IOException, FileError {
 
@@ -26,6 +28,8 @@ public class ClassFile {
 
         minorVersion = Utils.getBigEndian2Int(inStream);
         majorVersion = JavaVersion.get(Utils.getBigEndian2Int(inStream));
+
+        pool = new ConstantPool(inStream);
     }
 
     @Override
