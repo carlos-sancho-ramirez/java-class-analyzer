@@ -20,6 +20,10 @@ public class FileError extends Exception {
         public static final int UNABLE_TO_READ = 4;
 
         public static final int INVALID_POOL_TYPE = 5;
+        public static final int INVALID_POOL_TYPE_MATCH = 6;
+
+        public static final int INVALID_POOL_INDEX = 7;
+        public static final int POOL_INCONSISTENCE = 8;
     }
 
     private static final Map<Integer,String> messageMap = new HashMap<Integer, String>();
@@ -29,6 +33,9 @@ public class FileError extends Exception {
         messageMap.put(Kind.FILE_NOT_FOUND, "Unable to find the specified file");
         messageMap.put(Kind.UNABLE_TO_READ, "Unable te extract data from the file");
         messageMap.put(Kind.INVALID_POOL_TYPE, "Found an invalid type within the constant pool. Type found is {0}");
+        messageMap.put(Kind.INVALID_POOL_TYPE_MATCH, "Found a non-matching type within the constant pool for index {0}");
+        messageMap.put(Kind.INVALID_POOL_INDEX, "Provided index {0} but it is out of the table. Table contains only {1} entries");
+        messageMap.put(Kind.POOL_INCONSISTENCE, "Pool is inconsistent");
     }
 
     protected int mKind;

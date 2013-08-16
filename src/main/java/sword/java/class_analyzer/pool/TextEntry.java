@@ -15,5 +15,12 @@ public class TextEntry extends ConstantPoolEntry {
         final byte buffer[] = new byte[bytes];
         Utils.fillBuffer(inStream, buffer);
         text = new String(buffer);
+
+        mResolved = true;
+    }
+
+    @Override
+    boolean resolve(ConstantPool pool) {
+        return true;
     }
 }

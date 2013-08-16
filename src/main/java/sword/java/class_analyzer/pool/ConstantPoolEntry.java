@@ -28,8 +28,35 @@ public abstract class ConstantPoolEntry {
         switch (entryType) {
         case Types.TEXT:
             return new TextEntry(inStream);
+
+        case Types.CLASS:
+            return new ClassReferenceEntry(inStream);
+
+        case Types.STRING:
+            return new StringReferenceEntry(inStream);
+
+        case Types.FIELD:
+            return new FieldEntry(inStream);
+
+        case Types.METHOD:
+            return new MethodEntry(inStream);
+
+        case Types.NAME_TYPE_PAIR:
+            return new VariableEntry(inStream);
+
         default:
             throw new FileError(Kind.INVALID_POOL_TYPE, "" + entryType);
         }
     }
+
+    boolean mResolved;
+
+    /**
+     * Uses the pool loaded to resolve all data by extracting by linking the
+     * data within the pool.
+     *
+     * @return whether this reference is actually resolved, this can be false if
+     * some dependencies are not yet resolved.
+     */
+    abstract boolean resolve(ConstantPool pool) throws FileError;
 }
