@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class ClassFile {
@@ -16,6 +17,10 @@ public class ClassFile {
     public final JavaVersion majorVersion;
     public final int minorVersion;
     public final ConstantPool pool;
+    public final int accessMask;
+
+    public final ClassReferenceEntry thisClassReference;
+    public final ClassReferenceEntry superClassReference;
 
     public ClassFile(InputStream inStream) throws IOException, FileError {
 
@@ -30,10 +35,21 @@ public class ClassFile {
         majorVersion = JavaVersion.get(Utils.getBigEndian2Int(inStream));
 
         pool = new ConstantPool(inStream);
+
+        accessMask = Utils.getBigEndian2Int(inStream);
+        final int thisIndex = Utils.getBigEndian2Int(inStream);
+        final int superIndex = Utils.getBigEndian2Int(inStream);
+
+        thisClassReference = pool.get(thisIndex, ClassReferenceEntry.class);
+        superClassReference = pool.get(superIndex, ClassReferenceEntry.class);
     }
 
     @Override
     public String toString() {
-        return "Class file for version " + majorVersion;
+        String output = "Class file for version " + majorVersion + "\n";
+
+        output = output + "Class declaration: " + thisClassReference + " extends " + superClassReference;
+
+        return output;
     }
 }

@@ -10,4 +10,9 @@ public class ClassReferenceEntry extends AbstractReferenceEntry {
     public ClassReferenceEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
+
+    @Override
+    public String toString() {
+        return super.toString().replace('/', '.');
+    }
 }

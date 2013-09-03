@@ -26,4 +26,9 @@ public abstract class AbstractReferenceEntry extends ConstantPoolEntry {
 
         return resolved;
     }
+
+    @Override
+    public String toString() {
+        return mTextEntry.toString();
+    }
 }

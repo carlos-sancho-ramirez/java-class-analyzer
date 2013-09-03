@@ -23,4 +23,9 @@ public class TextEntry extends ConstantPoolEntry {
     boolean resolve(ConstantPool pool) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }
