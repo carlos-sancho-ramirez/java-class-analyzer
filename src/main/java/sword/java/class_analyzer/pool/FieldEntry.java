@@ -7,7 +7,7 @@ import sword.java.class_analyzer.FileError;
 
 public class FieldEntry extends AbstractMemberEntry {
 
-    public FieldEntry(InputStream inStream) throws IOException, FileError {
+    protected FieldEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
 }

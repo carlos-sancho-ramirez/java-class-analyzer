@@ -46,7 +46,7 @@ public class ConstantPool {
             throw new FileError(FileError.Kind.INVALID_POOL_INDEX, index, entries.size());
         }
 
-        ConstantPoolEntry entry = entries.get(index + 1);
+        ConstantPoolEntry entry = entries.get(index - 1);
         if (!expectedClass.isInstance(entry)) {
             throw new FileError(FileError.Kind.INVALID_POOL_TYPE_MATCH, index);
         }
