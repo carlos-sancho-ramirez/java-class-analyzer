@@ -17,7 +17,7 @@ public class ClassFile {
     public final JavaVersion majorVersion;
     public final int minorVersion;
     public final ConstantPool pool;
-    public final int accessMask;
+    public final ModifierMask accessMask;
 
     public final ClassReferenceEntry thisClassReference;
     public final ClassReferenceEntry superClassReference;
@@ -36,7 +36,7 @@ public class ClassFile {
 
         pool = new ConstantPool(inStream);
 
-        accessMask = Utils.getBigEndian2Int(inStream);
+        accessMask = new ModifierMask(Utils.getBigEndian2Int(inStream));
         final int thisIndex = Utils.getBigEndian2Int(inStream);
         final int superIndex = Utils.getBigEndian2Int(inStream);
 
@@ -48,7 +48,8 @@ public class ClassFile {
     public String toString() {
         String output = "Class file for version " + majorVersion + "\n";
 
-        output = output + "Class declaration: " + thisClassReference + " extends " + superClassReference;
+        output = output + "Class declaration: " + accessMask.getModifiersString()
+                + ' ' + thisClassReference + " extends " + superClassReference;
 
         return output;
     }
