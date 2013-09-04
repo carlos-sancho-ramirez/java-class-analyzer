@@ -22,6 +22,8 @@ public class ClassFile {
     public final ClassReferenceEntry thisClassReference;
     public final ClassReferenceEntry superClassReference;
 
+    public final InterfaceTable interfaceTable;
+
     public ClassFile(InputStream inStream) throws IOException, FileError {
 
         // We must check first that this is a class file
@@ -42,6 +44,8 @@ public class ClassFile {
 
         thisClassReference = pool.get(thisIndex, ClassReferenceEntry.class);
         superClassReference = pool.get(superIndex, ClassReferenceEntry.class);
+
+        interfaceTable = new InterfaceTable(inStream, pool);
     }
 
     @Override
@@ -49,7 +53,18 @@ public class ClassFile {
         String output = "Class file for version " + majorVersion + "\n";
 
         output = output + "Class declaration: " + accessMask.getModifiersString()
-                + ' ' + thisClassReference + " extends " + superClassReference;
+                + " class " + thisClassReference + " extends " + superClassReference;
+
+        ClassReferenceEntry interfaces[] = interfaceTable.interfaces;
+        if (interfaces.length != 0) {
+            output = output + " implements";
+            for (int i=0; i<interfaces.length; i++) {
+                output = output + ' ' + interfaces[i];
+                if (i < interfaces.length - 1) {
+                    output = output + ',';
+                }
+            }
+        }
 
         return output;
     }
