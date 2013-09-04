@@ -23,6 +23,7 @@ public class ClassFile {
     public final ClassReferenceEntry superClassReference;
 
     public final InterfaceTable interfaceTable;
+    public final FieldTable fieldTable;
 
     public ClassFile(InputStream inStream) throws IOException, FileError {
 
@@ -46,6 +47,7 @@ public class ClassFile {
         superClassReference = pool.get(superIndex, ClassReferenceEntry.class);
 
         interfaceTable = new InterfaceTable(inStream, pool);
+        fieldTable = new FieldTable(inStream, pool);
     }
 
     @Override
@@ -65,6 +67,8 @@ public class ClassFile {
                 }
             }
         }
+
+        output = output + "\n\nFields:\n" + fieldTable;
 
         return output;
     }
