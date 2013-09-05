@@ -26,7 +26,13 @@ public class MethodInfo {
 
     @Override
     public String toString() {
-        return accessMask.getModifiersString() + ' ' + type.returnTypeToString() +
+        String result = accessMask.getModifiersString() + ' ' + type.returnTypeToString() +
                 ' ' + name + '(' + type + ')';
+
+        for (AttributeInfo attr : attributes.attrs) {
+            result = result + " @ " + attr.name;
+        }
+
+        return result;
     }
 }

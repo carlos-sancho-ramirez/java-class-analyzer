@@ -38,6 +38,8 @@ public class ModifierMask {
         return (mMask & 0x10) != 0;
     }
 
+    // When talking about class access flags, this value is ACC_SUPER.
+    // Description is: Treat superclass methods specially when invoked by the invokespecial instruction.
     public boolean isSynchronized() {
         return (mMask & 0x20) != 0;
     }
@@ -60,6 +62,28 @@ public class ModifierMask {
 
     public boolean isStrict() {
         return (mMask & 0x800) != 0;
+    }
+
+    /**
+     * Synthetic applies to classes, and it means this class is not present in
+     * the source code and it is generated on the fly.
+     */
+    public boolean isSynthetic() {
+        return (mMask & 0x1000) != 0;
+    }
+
+    /**
+     * This applied to classes to specify this is declared as an annotation class.
+     */
+    public boolean isAnnotation() {
+        return (mMask & 0x2000) != 0;
+    }
+
+    /**
+     * This applies to classes to say it is declared as an enum.
+     */
+    public boolean isEnum() {
+        return (mMask & 0x4000) != 0;
     }
 
     public String getVisibilityString() {

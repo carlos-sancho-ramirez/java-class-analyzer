@@ -18,6 +18,10 @@ public class AttributeTable {
         }
     }
 
+    public int size() {
+        return attrs.length;
+    }
+
     @Override
     public String toString() {
         String output = "";
