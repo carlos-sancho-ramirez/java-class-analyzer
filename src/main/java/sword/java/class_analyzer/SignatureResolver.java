@@ -23,6 +23,7 @@ public class SignatureResolver {
         primitiveTypes.put('J', "long");
         primitiveTypes.put('S', "short");
         primitiveTypes.put('Z', "boolean");
+        primitiveTypes.put('V', "void");
     }
 
     public SignatureResolver(TextEntry text) {
@@ -34,7 +35,7 @@ public class SignatureResolver {
         public String signature = "";
     }
 
-    public static List<ResolvedType> resolve(final String text) throws IllegalArgumentException {
+    public static List<ResolvedType> resolveTypeList(final String text) throws IllegalArgumentException {
         final int textLength = text.length();
         int index = 0;
         final List<ResolvedType> returnList = new ArrayList<ResolvedType>();
@@ -82,9 +83,54 @@ public class SignatureResolver {
         return returnList;
     }
 
-    @Override
-    public String toString() {
-        List<ResolvedType> types = resolve(mText.toString());
+    public static class ResolvedMethod {
+        public List<ResolvedType> parameters;
+        public String parametersSignature;
+        public ResolvedType returnType;
+    }
+
+    public static boolean hasMethodSignature(String signature) {
+        final int closingParameters = signature.indexOf(')');
+        return !(signature.charAt(0) != '(' || closingParameters < 0 || closingParameters == signature.length() - 1);
+    }
+
+    public static ResolvedMethod resolveMethod(String signature) throws IllegalArgumentException {
+        final int closingParameters = signature.indexOf(')');
+
+        if (!hasMethodSignature(signature)) {
+            throw new IllegalArgumentException("Worng method signature");
+        }
+
+        ResolvedMethod returned = new ResolvedMethod();
+        returned.parametersSignature = signature.substring(1, closingParameters);
+        returned.parameters = resolveTypeList(returned.parametersSignature);
+
+        final List<ResolvedType> returnedTypes = resolveTypeList(signature.substring(closingParameters + 1));
+        if (returnedTypes.size() != 1) {
+            throw new IllegalArgumentException("Returning multiple types is not allowed");
+        }
+        returned.returnType = returnedTypes.get(0);
+
+        return returned;
+    }
+
+    /**
+     * Returns the list of types in the signature with comma separation.
+     *
+     * In case of being a method signature, the resulting list will only reflect
+     * the parameters for the method, but not the returning type.
+     */
+    public String typeListToString() {
+        final String signature = mText.toString();
+
+        final List<ResolvedType> types;
+        if (hasMethodSignature(signature)) {
+            types = resolveMethod(signature).parameters;
+        }
+        else {
+            types = resolveTypeList(signature);
+        }
+
         String result = "";
 
         final int typeCount = types.size();
@@ -95,5 +141,18 @@ public class SignatureResolver {
         }
 
         return result;
+    }
+
+    /**
+     * Returns the java-like returning type in case this is a method signature
+     * or an empty string in any other case.
+     */
+    public String returnTypeToString() {
+        return resolveMethod(mText.toString()).returnType.javaType;
+    }
+
+    @Override
+    public String toString() {
+        return typeListToString();
     }
 }

@@ -24,6 +24,7 @@ public class ClassFile {
 
     public final InterfaceTable interfaceTable;
     public final FieldTable fieldTable;
+    public final MethodTable methodTable;
 
     public ClassFile(InputStream inStream) throws IOException, FileError {
 
@@ -48,6 +49,7 @@ public class ClassFile {
 
         interfaceTable = new InterfaceTable(inStream, pool);
         fieldTable = new FieldTable(inStream, pool);
+        methodTable = new MethodTable(inStream, pool);
     }
 
     @Override
@@ -69,6 +71,8 @@ public class ClassFile {
         }
 
         output = output + "\n\nFields:\n" + fieldTable;
+
+        output = output + "\n\nMethods:\n" + methodTable;
 
         return output;
     }

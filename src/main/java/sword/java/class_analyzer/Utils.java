@@ -22,6 +22,19 @@ public final class Utils {
         return (value1 << 8) + value2;
     }
 
+    public static int getBigEndian4Int(InputStream inStream) throws IOException, FileError {
+        int value1 = inStream.read();
+        int value2 = inStream.read();
+        int value3 = inStream.read();
+        int value4 = inStream.read();
+
+        if (value1 < 0 || value2 < 0 || value3 < 0 || value4 < 0) {
+            throw new FileError(Kind.UNEXPECTED_END_OF_FILE);
+        }
+
+        return (((((value1 << 8) + value2) << 8) + value3) << 8) + value4;
+    }
+
     public static void fillBuffer(InputStream inStream, final byte[] buffer) throws IOException, FileError {
         final int bytes = buffer.length;
         int index = 0;
