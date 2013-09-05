@@ -10,7 +10,7 @@ public class FieldInfo {
 
     public final ModifierMask accessMask;
     public final TextEntry name;
-    public final TextEntry type;
+    public final SignatureResolver type;
     //Attributes are missing
 
     public FieldInfo(InputStream inStream, ConstantPool pool) throws IOException, FileError {
@@ -21,7 +21,7 @@ public class FieldInfo {
 
         accessMask = new ModifierMask(accessMaskValue);
         name = pool.get(nameIndex, TextEntry.class);
-        type = pool.get(typeIndex, TextEntry.class);
+        type = new SignatureResolver(pool.get(typeIndex, TextEntry.class));
 
         if (attrCount != 0) {
             throw new UnsupportedOperationException("Attributes retrieval is not implemented yet");
