@@ -30,12 +30,36 @@ public class ModifierMask {
         }
     }
 
+    public boolean isStatic() {
+        return (mMask & 0x08) != 0;
+    }
+
     public boolean isFinal() {
         return (mMask & 0x10) != 0;
     }
 
+    public boolean isSynchronized() {
+        return (mMask & 0x20) != 0;
+    }
+
+    public boolean isVolatile() {
+        return (mMask & 0x40) != 0;
+    }
+
+    public boolean isTransient() {
+        return (mMask & 0x80) != 0;
+    }
+
+    public boolean isNative() {
+        return (mMask & 0x100) != 0;
+    }
+
     public boolean isAbstract() {
         return (mMask & 0x400) != 0;
+    }
+
+    public boolean isStrict() {
+        return (mMask & 0x800) != 0;
     }
 
     public String getVisibilityString() {
@@ -48,8 +72,28 @@ public class ModifierMask {
             result = result + ' ';
         }
 
+        if (isStatic()) {
+            result = result + "static ";
+        }
+
         if (isFinal()) {
             result = result + "final ";
+        }
+
+        if (isSynchronized()) {
+            result = result + "synchronized ";
+        }
+
+        if (isVolatile()) {
+            result = result + "volatile ";
+        }
+
+        if (isTransient()) {
+            result = result + "transient ";
+        }
+
+        if (isNative()) {
+            result = result + "native ";
         }
 
         if (isAbstract()) {
