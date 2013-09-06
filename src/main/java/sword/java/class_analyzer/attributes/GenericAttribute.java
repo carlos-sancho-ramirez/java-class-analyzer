@@ -1,21 +1,22 @@
-package sword.java.class_analyzer;
+package sword.java.class_analyzer.attributes;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.Utils;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
-public class AttributeInfo {
+public class GenericAttribute extends AbstractAttribute {
 
     public final TextEntry name;
     public final byte info[];
 
-    public AttributeInfo(InputStream inStream, ConstantPool pool) throws IOException, FileError {
-        final int nameIndex = Utils.getBigEndian2Int(inStream);
+    public GenericAttribute(InputStream inStream, TextEntry name, ConstantPool pool) throws IOException, FileError {
+        this.name = name;
         final int attrInfoSize = Utils.getBigEndian4Int(inStream);
 
-        name = pool.get(nameIndex, TextEntry.class);
         info = new byte[attrInfoSize];
         Utils.fillBuffer(inStream, info);
     }

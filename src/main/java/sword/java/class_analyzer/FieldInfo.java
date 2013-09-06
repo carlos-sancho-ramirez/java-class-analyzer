@@ -3,6 +3,7 @@ package sword.java.class_analyzer;
 import java.io.IOException;
 import java.io.InputStream;
 
+import sword.java.class_analyzer.attributes.AttributeTable;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 

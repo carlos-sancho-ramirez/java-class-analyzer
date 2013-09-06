@@ -3,6 +3,8 @@ package sword.java.class_analyzer;
 import java.io.IOException;
 import java.io.InputStream;
 
+import sword.java.class_analyzer.attributes.AttributeTable;
+import sword.java.class_analyzer.attributes.ExceptionsAttribute;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -28,10 +30,12 @@ public class MethodInfo {
     public String toString() {
         String result = accessMask.getModifiersString() + ' ' + type.returnTypeToString() +
                 ' ' + name + '(' + type + ')';
-
-        for (AttributeInfo attr : attributes.attrs) {
-            result = result + " @ " + attr.name;
+        ExceptionsAttribute exceptions = attributes.getExceptions();
+        if (exceptions != null) {
+            result = result + " throws " + exceptions.exceptionListToString();
         }
+
+        result = result + attributes.genericAttributesToString();
 
         return result;
     }

@@ -53,4 +53,21 @@ public final class Utils {
             index += readNow;
         }
     }
+
+    public static void skipBytes(InputStream inStream, long byteCount) throws IOException, FileError {
+        long remaining = byteCount;
+        int triesCount = TRIES;
+
+        while (remaining > 0) {
+            long skippedNow = inStream.skip(remaining);
+            if (skippedNow <= 0) {
+                if ((--triesCount) == 0) {
+                    throw new FileError(Kind.UNABLE_TO_READ);
+                }
+            }
+            else {
+                remaining -= skippedNow;
+            }
+        }
+    }
 }
