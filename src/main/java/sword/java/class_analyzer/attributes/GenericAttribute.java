@@ -14,8 +14,8 @@ public class GenericAttribute extends AbstractAttribute {
     public final byte info[];
 
     public GenericAttribute(InputStream inStream, TextEntry name, ConstantPool pool) throws IOException, FileError {
+        super(inStream);
         this.name = name;
-        final int attrInfoSize = Utils.getBigEndian4Int(inStream);
 
         info = new byte[attrInfoSize];
         Utils.fillBuffer(inStream, info);

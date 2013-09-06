@@ -29,6 +29,8 @@ public class FileError extends Exception {
          * Triggered in case an attribute declared has a length smaller that the expected due to it content.
          */
         public static final int TOO_SMALL_ATTRIBUTE = 9;
+
+        public static final int ATTRIBUTE_NOT_UNIQUE = 10;
     }
 
     private static final Map<Integer,String> messageMap = new HashMap<Integer, String>();
@@ -42,6 +44,7 @@ public class FileError extends Exception {
         messageMap.put(Kind.INVALID_POOL_INDEX, "Provided index {0} but it is out of the table. Table contains only {1} entries");
         messageMap.put(Kind.POOL_INCONSISTENCE, "Pool is inconsistent");
         messageMap.put(Kind.TOO_SMALL_ATTRIBUTE, "Attribute {0} has length {1} but at least {2} is expected");
+        messageMap.put(Kind.ATTRIBUTE_NOT_UNIQUE, "Attribute {0} is present more than once in the same table, which is forbidden");
     }
 
     protected int mKind;

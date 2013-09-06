@@ -18,7 +18,7 @@ public class ExceptionsAttribute extends AbstractAttribute {
     ExceptionsAttribute(InputStream inStream, ConstantPool pool)
             throws IOException, FileError {
 
-        final int attrInfoSize = Utils.getBigEndian4Int(inStream);
+        super(inStream);
         final int exceptionCount = Utils.getBigEndian2Int(inStream);
         final int expectedInfoLength = (exceptionCount + 1) * 2;
 

@@ -10,12 +10,21 @@ import sword.java.class_analyzer.pool.TextEntry;
 
 public abstract class AbstractAttribute {
 
+    protected final int attrInfoSize;
+
+    AbstractAttribute(InputStream inStream) throws IOException, FileError {
+        attrInfoSize = Utils.getBigEndian4Int(inStream);
+    }
+
     public static AbstractAttribute get(InputStream inStream, ConstantPool pool) throws IOException, FileError {
         final int nameIndex = Utils.getBigEndian2Int(inStream);
         final TextEntry name = pool.get(nameIndex, TextEntry.class);
 
         final AbstractAttribute result;
-        if (ExceptionsAttribute.attrType.equals(name.text)) {
+        if (CodeAttribute.attrType.equals(name.text)) {
+            result = new CodeAttribute(inStream, pool);
+        }
+        else if (ExceptionsAttribute.attrType.equals(name.text)) {
             result = new ExceptionsAttribute(inStream, pool);
         }
         else {
@@ -23,5 +32,14 @@ public abstract class AbstractAttribute {
         }
 
         return result;
+    }
+
+    /**
+     * Returns the amount of bytes this attribute is taking on the file.
+     * This method relies on the byte count provided for each generic attribute.
+     * The space used by the counter and the name is also included in the size returned.
+     */
+    public int fileSize() {
+        return 2 + 4 + attrInfoSize;
     }
 }

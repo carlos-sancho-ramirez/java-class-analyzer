@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import sword.java.class_analyzer.attributes.AttributeTable;
+import sword.java.class_analyzer.attributes.CodeAttribute;
 import sword.java.class_analyzer.attributes.ExceptionsAttribute;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
@@ -37,6 +38,10 @@ public class MethodInfo {
 
         result = result + attributes.genericAttributesToString();
 
+        CodeAttribute code = attributes.getCode();
+        if (code != null) {
+            result = result + ' ' + code.instructionBundle;
+        }
         return result;
     }
 }
