@@ -57,10 +57,10 @@ public class InstructionBundle {
 
         result = result + "{\n";
         for (InstructionHolder holder : holders) {
-            result = result + "  " + holder.index + '\t' + holder.instruction.disassemble();
+            result = result + "  " + holder.index + '\t' + holder.instruction.disassemble() + '\n';
         }
 
-        result = result + "\n}\n";
+        result = result + "}\n";
 
         return result;
     }
