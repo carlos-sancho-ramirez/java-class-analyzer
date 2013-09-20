@@ -31,4 +31,8 @@ public class VariableEntry extends ConstantPoolEntry {
 
         return resolved;
     }
+
+    public String getName() {
+        return mName.toString();
+    }
 }

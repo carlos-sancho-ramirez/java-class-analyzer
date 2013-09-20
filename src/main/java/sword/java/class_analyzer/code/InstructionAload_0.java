@@ -1,13 +1,13 @@
 package sword.java.class_analyzer.code;
 
-public class InstructionIconst_m1 extends AbstractInstruction {
+public class InstructionAload_0 extends AbstractInstruction {
 
     static final ByteCodeInterpreter interpreter = new ByteCodeInterpreter() {
 
         @Override
         public boolean matches(byte[] code, int index) {
             final byte opcode = code[index];
-            return opcode == 0x02;
+            return opcode == 0x2A;
         }
 
         @Override
@@ -16,17 +16,17 @@ public class InstructionIconst_m1 extends AbstractInstruction {
         }
     };
 
-    protected InstructionIconst_m1(byte[] code, int index) throws
+    public InstructionAload_0() {
+        super();
+    }
+
+    protected InstructionAload_0(byte[] code, int index) throws
             IllegalArgumentException, IncompleteInstructionException {
         super(code, index, interpreter);
     }
 
-    InstructionIconst_m1() {
-        super();
-    }
-
     @Override
     public String disassemble() {
-        return "iconst_m1";
+        return "aload_0";
     }
 }

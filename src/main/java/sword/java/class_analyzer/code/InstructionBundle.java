@@ -7,6 +7,7 @@ import java.util.List;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.pool.ConstantPool;
 
 public class InstructionBundle {
 
@@ -23,27 +24,26 @@ public class InstructionBundle {
     /**
      * Set to true if this bundle includes valid checked code.
      */
-    private boolean valid;
-    private List<InstructionHolder> holders = new ArrayList<InstructionHolder>();
+    private boolean mValid;
+    private List<InstructionHolder> mHolders = new ArrayList<InstructionHolder>();
+    private String mInvalidReason;
 
-    public InstructionBundle(InputStream inStream, int codeLength) throws IOException, FileError {
+    public InstructionBundle(InputStream inStream, int codeLength, ConstantPool pool) throws IOException, FileError {
         final byte code[] = new byte[codeLength];
         Utils.fillBuffer(inStream, code);
 
         int counter = 0;
-        valid = true;
-        while (counter < codeLength) {
-            AbstractInstruction instruction = Instances.match(code, counter);
-
-            if (instruction != null) {
+        mValid = true;
+        try {
+            while (counter < codeLength) {
+                AbstractInstruction instruction = Instances.match(code, counter, pool);
                 InstructionHolder holder = new InstructionHolder(counter, instruction);
-                holders.add(holder);
-                counter += instruction.size();
+                mHolders.add(holder);
+                counter += instruction.byteCodeSize();
             }
-            else {
-                valid = false;
-                break;
-            }
+        } catch(InvalidByteCodeException e) {
+            mValid = false;
+            mInvalidReason = e.getInvalidReason();
         }
     }
 
@@ -51,12 +51,12 @@ public class InstructionBundle {
     public String toString() {
 
         String result = "";
-        if (!valid) {
-            result = result + "WARNING: Instruction bundle not valid.\n";
+        if (!mValid) {
+            result = result + "WARNING: Instruction bundle not valid. " + mInvalidReason + '\n';
         }
 
         result = result + "{\n";
-        for (InstructionHolder holder : holders) {
+        for (InstructionHolder holder : mHolders) {
             result = result + "  " + holder.index + '\t' + holder.instruction.disassemble() + '\n';
         }
 

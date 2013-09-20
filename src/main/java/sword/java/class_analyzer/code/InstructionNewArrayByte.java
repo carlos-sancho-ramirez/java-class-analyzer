@@ -2,14 +2,27 @@ package sword.java.class_analyzer.code;
 
 public class InstructionNewArrayByte extends AbstractInstructionNewArray {
 
-    private static final byte expectedType = 0x08;
+    static final ByteCodeInterpreter interpreter = new AbstractInstructionNewArray.Interpreter() {
 
-    public static boolean matches(byte code[], int index) {
-        return AbstractInstructionNewArray.matches(code, index, expectedType);
+        private static final byte expectedType = 0x08;
+
+        @Override
+        public boolean matches(byte[] code, int index) {
+            return super.matches(code, index, expectedType);
+        }
+    };
+
+    protected InstructionNewArrayByte(byte[] code, int index) throws
+            IllegalArgumentException, IncompleteInstructionException {
+        super(code, index, interpreter);
+    }
+
+    InstructionNewArrayByte() {
+        super();
     }
 
     @Override
-    public String disassemble() throws InvalidInstruction {
+    public String disassemble() {
         return super.disassemble() + "byte";
     }
 }

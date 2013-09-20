@@ -2,32 +2,42 @@ package sword.java.class_analyzer.code;
 
 public abstract class AbstractInstructionNewArray extends AbstractInstruction {
 
-    /**
-     * Called for each NewArray instruction to check if it matches.
-     * @param code Code to be checked in byte code
-     * @param index Index within the code array.
-     * @param atype byte code expected to be found in the second byte. Each type has a different value.
-     * @return Whether the code, in the specified index position, actually
-     * includes a valid instruction matching this.
-     */
-    protected static boolean matches(byte code[], int index, byte expectedType) {
-        if (index > code.length - 2) {
-            return false;
+    protected static abstract class Interpreter implements ByteCodeInterpreter {
+
+        public boolean matches(byte[] code, int index, byte expectedType) {
+            if (index > code.length - 2) {
+                return false;
+            }
+
+            final byte opcode = code[index];
+            final byte atype = code[index + 1];
+
+            return opcode == (byte)0xBC && atype == expectedType;
         }
 
-        final byte opcode = code[index];
-        final byte atype = code[index + 1];
+        @Override
+        public int instructionSize(byte[] code, int index) {
+            return matches(code, index)? 2 : 0;
+        }
+    };
 
-        return opcode == (byte)0xBC && atype == expectedType;
+    protected AbstractInstructionNewArray(byte[] code, int index,
+            ByteCodeInterpreter interpreter) throws IllegalArgumentException,
+            IncompleteInstructionException {
+        super(code, index, interpreter);
+    }
+
+    protected AbstractInstructionNewArray() {
+        super();
     }
 
     @Override
-    public int size() {
+    public int byteCodeSize() {
         return 2;
     }
 
     @Override
-    public String disassemble() throws InvalidInstruction {
+    public String disassemble() {
         return "newarray ";
     }
 }

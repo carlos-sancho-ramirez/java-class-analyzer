@@ -1,6 +1,25 @@
 package sword.java.class_analyzer.code;
 
+import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.pool.ConstantPool;
+
 public class Instances {
+
+    public static final InstructionArraylength ARRAYLENGTH = new InstructionArraylength();
+    public static final InstructionBastore BASTORE = new InstructionBastore();
+    public static final InstructionDup DUP = new InstructionDup();
+    public static final InstructionPop POP = new InstructionPop();
+    public static final InstructionReturn RETURN = new InstructionReturn();
+
+    public static final InstructionAload_0 ALOAD_0 = new InstructionAload_0();
+    public static final InstructionAload_1 ALOAD_1 = new InstructionAload_1();
+    public static final InstructionAload_2 ALOAD_2 = new InstructionAload_2();
+    public static final InstructionAload_3 ALOAD_3 = new InstructionAload_3();
+
+    public static final InstructionAstore_0 ASTORE_0 = new InstructionAstore_0();
+    public static final InstructionAstore_1 ASTORE_1 = new InstructionAstore_1();
+    public static final InstructionAstore_2 ASTORE_2 = new InstructionAstore_2();
+    public static final InstructionAstore_3 ASTORE_3 = new InstructionAstore_3();
 
     public static final InstructionIconst_0 ICONST_0 = new InstructionIconst_0();
     public static final InstructionIconst_1 ICONST_1 = new InstructionIconst_1();
@@ -19,55 +38,150 @@ public class Instances {
     public static final InstructionNewArrayLong NEW_ARRAY_LONG = new InstructionNewArrayLong();
     public static final InstructionNewArrayShort NEW_ARRAY_SHORT = new InstructionNewArrayShort();
 
-    public static AbstractInstruction match(byte code[], int index) {
+    /**
+     * Returns an instance that matches the byte code represented in the array
+     * in the given index.
+     *
+     * In order to save memory, this method not always creates an instance for
+     * each call and instances previously returned can be reused if they are suitable.
+     *
+     * @param code Array of bytes containing the byte code to be extracted.
+     * @param index Pointer for the byte to be read within the array.
+     * @param pool ConstantPool used to retrieve constants and linked them to
+     * the new generated instruction instances.
+     * @return An instance matching the bytecode. Never null
+     * @throws InvalidByteCodeException in case a problem is detected in the bytecode analyzed and this method cannot complete the task.
+     * @throws FileError In case an error is found in the class file.
+     */
+    public static AbstractInstruction match(byte code[], int index, ConstantPool pool) throws InvalidByteCodeException, FileError {
 
-        if (InstructionIconst_0.matches(code, index)) {
+        if (InstructionArraylength.interpreter.matches(code, index)) {
+            return ARRAYLENGTH;
+        }
+        else if (InstructionBastore.interpreter.matches(code, index)) {
+            return BASTORE;
+        }
+        else if (InstructionBipush.interpreter.matches(code, index)) {
+            return new InstructionBipush(code, index);
+        }
+        else if (InstructionDup.interpreter.matches(code, index)) {
+            return DUP;
+        }
+        else if (InstructionPop.interpreter.matches(code, index)) {
+            return POP;
+        }
+        else if (InstructionReturn.interpreter.matches(code, index)) {
+            return RETURN;
+        }
+        else if (InstructionGetstatic.interpreter.matches(code, index)) {
+            return new InstructionGetstatic(code, index, pool);
+        }
+        else if (InstructionPutstatic.interpreter.matches(code, index)) {
+            return new InstructionPutstatic(code, index, pool);
+        }
+
+        else if (InstructionIfeq.interpreter.matches(code, index)) {
+            return new InstructionIfeq(code, index);
+        }
+        else if (InstructionIfne.interpreter.matches(code, index)) {
+            return new InstructionIfne(code, index);
+        }
+        else if (InstructionIflt.interpreter.matches(code, index)) {
+            return new InstructionIflt(code, index);
+        }
+        else if (InstructionIfge.interpreter.matches(code, index)) {
+            return new InstructionIfge(code, index);
+        }
+        else if (InstructionIfgt.interpreter.matches(code, index)) {
+            return new InstructionIfgt(code, index);
+        }
+        else if (InstructionIfle.interpreter.matches(code, index)) {
+            return new InstructionIfle(code, index);
+        }
+
+        else if (InstructionInvokevirtual.interpreter.matches(code, index)) {
+            return new InstructionInvokevirtual(code, index, pool);
+        }
+        else if (InstructionInvokespecial.interpreter.matches(code, index)) {
+            return new InstructionInvokespecial(code, index, pool);
+        }
+        else if (InstructionInvokestatic.interpreter.matches(code, index)) {
+            return new InstructionInvokestatic(code, index, pool);
+        }
+
+        else if (InstructionAload_0.interpreter.matches(code, index)) {
+            return ALOAD_0;
+        }
+        else if (InstructionAload_1.interpreter.matches(code, index)) {
+            return ALOAD_1;
+        }
+        else if (InstructionAload_2.interpreter.matches(code, index)) {
+            return ALOAD_2;
+        }
+        else if (InstructionAload_3.interpreter.matches(code, index)) {
+            return ALOAD_3;
+        }
+
+        else if (InstructionAstore_0.interpreter.matches(code, index)) {
+            return ASTORE_0;
+        }
+        else if (InstructionAstore_1.interpreter.matches(code, index)) {
+            return ASTORE_1;
+        }
+        else if (InstructionAstore_2.interpreter.matches(code, index)) {
+            return ASTORE_2;
+        }
+        else if (InstructionAstore_3.interpreter.matches(code, index)) {
+            return ASTORE_3;
+        }
+
+        else if (InstructionIconst_0.interpreter.matches(code, index)) {
             return ICONST_0;
         }
-        else if (InstructionIconst_1.matches(code, index)) {
+        else if (InstructionIconst_1.interpreter.matches(code, index)) {
             return ICONST_1;
         }
-        else if (InstructionIconst_2.matches(code, index)) {
+        else if (InstructionIconst_2.interpreter.matches(code, index)) {
             return ICONST_2;
         }
-        else if (InstructionIconst_3.matches(code, index)) {
+        else if (InstructionIconst_3.interpreter.matches(code, index)) {
             return ICONST_3;
         }
-        else if (InstructionIconst_4.matches(code, index)) {
+        else if (InstructionIconst_4.interpreter.matches(code, index)) {
             return ICONST_4;
         }
-        else if (InstructionIconst_5.matches(code, index)) {
+        else if (InstructionIconst_5.interpreter.matches(code, index)) {
             return ICONST_5;
         }
-        else if (InstructionIconst_m1.matches(code, index)) {
+        else if (InstructionIconst_m1.interpreter.matches(code, index)) {
             return ICONST_M1;
         }
 
-        else if (InstructionNewArrayBoolean.matches(code, index)) {
+        else if (InstructionNewArrayBoolean.interpreter.matches(code, index)) {
             return NEW_ARRAY_BOOLEAN;
         }
-        else if (InstructionNewArrayByte.matches(code, index)) {
+        else if (InstructionNewArrayByte.interpreter.matches(code, index)) {
             return NEW_ARRAY_BYTE;
         }
-        else if (InstructionNewArrayChar.matches(code, index)) {
+        else if (InstructionNewArrayChar.interpreter.matches(code, index)) {
             return NEW_ARRAY_CHAR;
         }
-        else if (InstructionNewArrayDouble.matches(code, index)) {
+        else if (InstructionNewArrayDouble.interpreter.matches(code, index)) {
             return NEW_ARRAY_DOUBLE;
         }
-        else if (InstructionNewArrayFloat.matches(code, index)) {
+        else if (InstructionNewArrayFloat.interpreter.matches(code, index)) {
             return NEW_ARRAY_FLOAT;
         }
-        else if (InstructionNewArrayInt.matches(code, index)) {
+        else if (InstructionNewArrayInt.interpreter.matches(code, index)) {
             return NEW_ARRAY_INT;
         }
-        else if (InstructionNewArrayLong.matches(code, index)) {
+        else if (InstructionNewArrayLong.interpreter.matches(code, index)) {
             return NEW_ARRAY_LONG;
         }
-        else if (InstructionNewArrayShort.matches(code, index)) {
+        else if (InstructionNewArrayShort.interpreter.matches(code, index)) {
             return NEW_ARRAY_SHORT;
         }
 
-        return null;
+        throw new InvalidInstructionException(code, index);
     }
 }

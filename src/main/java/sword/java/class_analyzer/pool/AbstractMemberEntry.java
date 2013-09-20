@@ -31,4 +31,8 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
 
         return resolved;
     }
+
+    public String getName() {
+        return mClass.toString() + '.' + mVariable.getName();
+    }
 }

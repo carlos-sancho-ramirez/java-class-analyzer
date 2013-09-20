@@ -29,7 +29,7 @@ public class CodeAttribute extends AbstractAttribute {
         maxLocalVariables = Utils.getBigEndian2Int(inStream);
 
         final int codeLength = Utils.getBigEndian4Int(inStream);
-        instructionBundle = new InstructionBundle(inStream, codeLength);
+        instructionBundle = new InstructionBundle(inStream, codeLength, pool);
 
         final int codeExceptionCount = Utils.getBigEndian2Int(inStream);
         exceptions = new CodeException[codeExceptionCount];
