@@ -99,6 +99,13 @@ public class Instances {
             return new InstructionIfle(code, index);
         }
 
+        else if (InstructionNew.interpreter.matches(code, index)) {
+            return new InstructionNew(code, index, pool);
+        }
+        else if (InstructionAnewarray.interpreter.matches(code, index)) {
+            return new InstructionAnewarray(code, index, pool);
+        }
+
         else if (InstructionInvokevirtual.interpreter.matches(code, index)) {
             return new InstructionInvokevirtual(code, index, pool);
         }
