@@ -77,11 +77,18 @@ public class Instances {
         else if (InstructionAthrow.interpreter.matches(code, index)) {
             return ATHROW;
         }
+
         else if (InstructionGetstatic.interpreter.matches(code, index)) {
             return new InstructionGetstatic(code, index, pool);
         }
         else if (InstructionPutstatic.interpreter.matches(code, index)) {
             return new InstructionPutstatic(code, index, pool);
+        }
+        else if (InstructionGetfield.interpreter.matches(code, index)) {
+            return new InstructionGetfield(code, index, pool);
+        }
+        else if (InstructionPutfield.interpreter.matches(code, index)) {
+            return new InstructionPutfield(code, index, pool);
         }
 
         else if (InstructionIfeq.interpreter.matches(code, index)) {
