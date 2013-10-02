@@ -30,6 +30,11 @@ public class Instances {
     public static final InstructionIconst_5 ICONST_5 = new InstructionIconst_5();
     public static final InstructionIconst_m1 ICONST_M1 = new InstructionIconst_m1();
 
+    public static final InstructionIstore_0 ISTORE_0 = new InstructionIstore_0();
+    public static final InstructionIstore_1 ISTORE_1 = new InstructionIstore_1();
+    public static final InstructionIstore_2 ISTORE_2 = new InstructionIstore_2();
+    public static final InstructionIstore_3 ISTORE_3 = new InstructionIstore_3();
+
     public static final InstructionNewArrayBoolean NEW_ARRAY_BOOLEAN = new InstructionNewArrayBoolean();
     public static final InstructionNewArrayByte NEW_ARRAY_BYTE = new InstructionNewArrayByte();
     public static final InstructionNewArrayChar NEW_ARRAY_CHAR = new InstructionNewArrayChar();
@@ -173,6 +178,22 @@ public class Instances {
         }
         else if (InstructionIconst_m1.interpreter.matches(code, index)) {
             return ICONST_M1;
+        }
+
+        else if (InstructionIstore_0.interpreter.matches(code, index)) {
+            return ISTORE_0;
+        }
+        else if (InstructionIstore_1.interpreter.matches(code, index)) {
+            return ISTORE_1;
+        }
+        else if (InstructionIstore_2.interpreter.matches(code, index)) {
+            return ISTORE_2;
+        }
+        else if (InstructionIstore_3.interpreter.matches(code, index)) {
+            return ISTORE_3;
+        }
+        else if (InstructionIstore_n.interpreter.matches(code, index)) {
+            return new InstructionIstore_n(code, index);
         }
 
         else if (InstructionNewArrayBoolean.interpreter.matches(code, index)) {
