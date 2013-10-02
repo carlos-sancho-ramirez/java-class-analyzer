@@ -6,7 +6,7 @@ import java.io.InputStream;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.Utils;
-import sword.java.class_analyzer.code.InstructionBundle;
+import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class CodeAttribute extends AbstractAttribute {
@@ -16,7 +16,7 @@ public class CodeAttribute extends AbstractAttribute {
     public final int maxStackEntries;
     public final int maxLocalVariables;
 
-    public final InstructionBundle instructionBundle;
+    public final MethodCode methodCode;
     public final CodeException exceptions[];
     public final AttributeTable attributes;
 
@@ -29,7 +29,7 @@ public class CodeAttribute extends AbstractAttribute {
         maxLocalVariables = Utils.getBigEndian2Int(inStream);
 
         final int codeLength = Utils.getBigEndian4Int(inStream);
-        instructionBundle = new InstructionBundle(inStream, codeLength, pool);
+        methodCode = new MethodCode(inStream, codeLength, pool);
 
         final int codeExceptionCount = Utils.getBigEndian2Int(inStream);
         exceptions = new CodeException[codeExceptionCount];

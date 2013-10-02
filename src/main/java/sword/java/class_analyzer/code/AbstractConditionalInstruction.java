@@ -1,5 +1,8 @@
 package sword.java.class_analyzer.code;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class AbstractConditionalInstruction extends AbstractInstruction {
 
     protected static abstract class AbstractByteCodeInterpreter implements ByteCodeInterpreter {
@@ -16,6 +19,18 @@ public abstract class AbstractConditionalInstruction extends AbstractInstruction
     };
 
     private final int mOffset;
+
+    @Override
+    public boolean canBranch() {
+        return true;
+    }
+
+    @Override
+    public Set<Integer> knownBranches(int index) {
+        HashSet<Integer> set = new HashSet<Integer>(1);
+        set.add(index + mOffset);
+        return set;
+    }
 
     protected AbstractConditionalInstruction(byte code[], int index,
             ByteCodeInterpreter interpreter) throws IllegalArgumentException,

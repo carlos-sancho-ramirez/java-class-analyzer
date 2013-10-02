@@ -26,6 +26,11 @@ public class InstructionReturn extends AbstractInstruction {
     }
 
     @Override
+    public boolean alwaysJump() {
+        return true;
+    }
+
+    @Override
     public String disassemble() {
         return "return";
     }

@@ -40,7 +40,7 @@ public class MethodInfo {
 
         CodeAttribute code = attributes.getCode();
         if (code != null) {
-            result = result + '\n' + code.instructionBundle;
+            result = result + '\n' + code.methodCode;
         }
         return result;
     }
