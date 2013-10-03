@@ -33,6 +33,21 @@ public class Instances {
     public static final InstructionIconst_5 ICONST_5 = new InstructionIconst_5();
     public static final InstructionIconst_m1 ICONST_M1 = new InstructionIconst_m1();
 
+    public static final InstructionIadd IADD = new InstructionIadd();
+    public static final InstructionIsub ISUB = new InstructionIsub();
+    public static final InstructionImul IMUL = new InstructionImul();
+    public static final InstructionIdiv IDIV = new InstructionIdiv();
+    public static final InstructionIrem IREM = new InstructionIrem();
+
+    public static final InstructionIand IAND = new InstructionIand();
+    public static final InstructionIor IOR = new InstructionIor();
+    public static final InstructionIneg INEG = new InstructionIneg();
+    public static final InstructionIxor IXOR = new InstructionIxor();
+
+    public static final InstructionIshl ISHL = new InstructionIshl();
+    public static final InstructionIshr ISHR = new InstructionIshr();
+    public static final InstructionIushr IUSHR = new InstructionIushr();
+
     public static final InstructionIload_0 ILOAD_0 = new InstructionIload_0();
     public static final InstructionIload_1 ILOAD_1 = new InstructionIload_1();
     public static final InstructionIload_2 ILOAD_2 = new InstructionIload_2();
@@ -219,6 +234,45 @@ public class Instances {
         }
         else if (InstructionIconst_m1.interpreter.matches(code, index)) {
             return ICONST_M1;
+        }
+
+        else if (InstructionIadd.interpreter.matches(code, index)) {
+            return IADD;
+        }
+        else if (InstructionIsub.interpreter.matches(code, index)) {
+            return ISUB;
+        }
+        else if (InstructionImul.interpreter.matches(code, index)) {
+            return IMUL;
+        }
+        else if (InstructionIdiv.interpreter.matches(code, index)) {
+            return IDIV;
+        }
+        else if (InstructionIrem.interpreter.matches(code, index)) {
+            return IREM;
+        }
+
+        else if (InstructionIand.interpreter.matches(code, index)) {
+            return IADD;
+        }
+        else if (InstructionIor.interpreter.matches(code, index)) {
+            return IOR;
+        }
+        else if (InstructionIneg.interpreter.matches(code, index)) {
+            return INEG;
+        }
+        else if (InstructionIxor.interpreter.matches(code, index)) {
+            return IXOR;
+        }
+
+        else if (InstructionIshl.interpreter.matches(code, index)) {
+            return ISHL;
+        }
+        else if (InstructionIshr.interpreter.matches(code, index)) {
+            return ISHR;
+        }
+        else if (InstructionIushr.interpreter.matches(code, index)) {
+            return IUSHR;
         }
 
         else if (InstructionIload_0.interpreter.matches(code, index)) {
