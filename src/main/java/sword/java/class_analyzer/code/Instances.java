@@ -248,6 +248,9 @@ public class Instances {
         else if (InstructionLdc_w.interpreter.matches(code, index)) {
             return new InstructionLdc_w(code, index, pool);
         }
+        else if (InstructionCheckcast.interpreter.matches(code, index)) {
+            return new InstructionCheckcast(code, index, pool);
+        }
 
         throw new InvalidInstructionException(code, index);
     }
