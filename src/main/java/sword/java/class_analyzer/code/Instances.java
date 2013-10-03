@@ -275,6 +275,10 @@ public class Instances {
             return IUSHR;
         }
 
+        else if (InstructionIinc.interpreter.matches(code, index)) {
+            return new InstructionIinc(code, index);
+        }
+
         else if (InstructionIload_0.interpreter.matches(code, index)) {
             return ILOAD_0;
         }
