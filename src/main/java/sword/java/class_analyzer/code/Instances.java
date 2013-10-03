@@ -242,6 +242,13 @@ public class Instances {
             return NEW_ARRAY_SHORT;
         }
 
+        else if (InstructionLdc.interpreter.matches(code, index)) {
+            return new InstructionLdc(code, index, pool);
+        }
+        else if (InstructionLdc_w.interpreter.matches(code, index)) {
+            return new InstructionLdc_w(code, index, pool);
+        }
+
         throw new InvalidInstructionException(code, index);
     }
 }
