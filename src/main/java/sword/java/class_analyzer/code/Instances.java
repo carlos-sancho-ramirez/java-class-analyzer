@@ -12,6 +12,9 @@ public class Instances {
     public static final InstructionReturn RETURN = new InstructionReturn();
     public static final InstructionAthrow ATHROW = new InstructionAthrow();
 
+    public static final InstructionAaload AALOAD = new InstructionAaload();
+    public static final InstructionAastore AASTORE = new InstructionAastore();
+
     public static final InstructionAload_0 ALOAD_0 = new InstructionAload_0();
     public static final InstructionAload_1 ALOAD_1 = new InstructionAload_1();
     public static final InstructionAload_2 ALOAD_2 = new InstructionAload_2();
@@ -86,6 +89,13 @@ public class Instances {
         }
         else if (InstructionAthrow.interpreter.matches(code, index)) {
             return ATHROW;
+        }
+
+        else if (InstructionAaload.interpreter.matches(code, index)) {
+            return AALOAD;
+        }
+        else if (InstructionAastore.interpreter.matches(code, index)) {
+            return AASTORE;
         }
 
         else if (InstructionGetstatic.interpreter.matches(code, index)) {
