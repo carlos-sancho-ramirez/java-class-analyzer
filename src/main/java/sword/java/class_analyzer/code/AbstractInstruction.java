@@ -41,9 +41,9 @@ public abstract class AbstractInstruction {
      *     afterwards. This will return false
      *   - ifeq will return true because the program counter can be pointing to
      *     the next instruction or to another position in the code.
-     *   - return will return false because even if this is jumping we know the
-     *     next instruction never will be executed. So, only one point of execution
-     *     is possible.
+     *   - return and goto will return false because even if they are jumping we
+     *     know the next instruction never will be executed. So, only one point
+     *     of execution is possible.
      */
     public boolean canBranch() {
         return false;

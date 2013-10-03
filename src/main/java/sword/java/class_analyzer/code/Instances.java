@@ -106,6 +106,10 @@ public class Instances {
             return ATHROW;
         }
 
+        else if (InstructionGoto.interpreter.matches(code, index)) {
+            return new InstructionGoto(code, index);
+        }
+
         else if (InstructionAaload.interpreter.matches(code, index)) {
             return AALOAD;
         }

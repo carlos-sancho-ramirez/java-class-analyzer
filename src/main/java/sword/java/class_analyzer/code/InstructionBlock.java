@@ -52,8 +52,9 @@ public class InstructionBlock {
                 InstructionHolder holder = new InstructionHolder(blockRelativeIndex, instruction);
                 mHolders.add(holder);
 
-                if (instruction.canBranch()) {
-                    Set<Integer> positions = instruction.knownBranches(blockRelativeIndex);
+                Set<Integer> positions = instruction.knownBranches(blockRelativeIndex);
+
+                if (!positions.isEmpty()) {
                     for(Integer position : positions) {
                         if (position >= blockRelativeIndex) {
                             endIndex = Math.min(endIndex, position + startIndex);
@@ -138,7 +139,12 @@ public class InstructionBlock {
             throw new IllegalArgumentException();
         }
 
-        List<InstructionHolder> subList = mHolders.subList(arraySplitPosition, originalArraySize);
+        final int subListSize = originalArraySize - arraySplitPosition;
+        List<InstructionHolder> subList = new ArrayList<InstructionHolder>(subListSize);
+        for (int i=arraySplitPosition; i<originalArraySize; i++) {
+            subList.add(mHolders.get(i));
+        }
+
         mHolders.removeAll(subList);
 
         for (InstructionHolder holder : subList) {
