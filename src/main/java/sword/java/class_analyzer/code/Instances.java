@@ -120,6 +120,32 @@ public class Instances {
             return new InstructionIfle(code, index);
         }
 
+        else if (InstructionIf_icmpeq.interpreter.matches(code, index)) {
+            return new InstructionIf_icmpeq(code, index);
+        }
+        else if (InstructionIf_icmpne.interpreter.matches(code, index)) {
+            return new InstructionIf_icmpne(code, index);
+        }
+        else if (InstructionIf_icmplt.interpreter.matches(code, index)) {
+            return new InstructionIf_icmplt(code, index);
+        }
+        else if (InstructionIf_icmpge.interpreter.matches(code, index)) {
+            return new InstructionIf_icmpge(code, index);
+        }
+        else if (InstructionIf_icmpgt.interpreter.matches(code, index)) {
+            return new InstructionIf_icmpgt(code, index);
+        }
+        else if (InstructionIf_icmple.interpreter.matches(code, index)) {
+            return new InstructionIf_icmple(code, index);
+        }
+
+        else if (InstructionIf_acmpeq.interpreter.matches(code, index)) {
+            return new InstructionIf_acmpeq(code, index);
+        }
+        else if (InstructionIf_acmpne.interpreter.matches(code, index)) {
+            return new InstructionIf_acmpne(code, index);
+        }
+
         else if (InstructionNew.interpreter.matches(code, index)) {
             return new InstructionNew(code, index, pool);
         }
