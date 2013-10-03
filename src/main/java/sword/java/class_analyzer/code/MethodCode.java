@@ -137,9 +137,11 @@ public class MethodCode {
         }
 
         mValid = true;
-        for (BlockHolder holder : mHolders) {
+        for (int i=0; i<mHolders.size(); i++) {
+            final BlockHolder holder = mHolders.get(i);
             if (!holder.block.isValid()) {
                 mValid = false;
+                mInvalidReason = holder.block.getInvalidReason() + " at block" + i;
                 break;
             }
         }
@@ -150,11 +152,15 @@ public class MethodCode {
 
         String result = "";
         if (!mValid) {
-            result = result + "WARNING: At least one instruction bundle is not valid. " + mInvalidReason + '\n';
+            result = result + "WARNING: At least one instruction block is not valid. " + mInvalidReason + '\n';
         }
 
         result = result + "{\n";
-        for (BlockHolder holder : mHolders) {
+        for (int i=0; i<mHolders.size(); i++) {
+            final BlockHolder holder = mHolders.get(i);
+            if (i != 0) {
+                result = result + "\n Block" + i + ":\n";
+            }
             result = result + holder.block.disassemble(holder.index);
         }
 
