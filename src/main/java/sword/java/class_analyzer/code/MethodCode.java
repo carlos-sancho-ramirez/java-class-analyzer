@@ -30,10 +30,6 @@ public class MethodCode {
         }
     }
 
-    /**
-     * Set to true if this bundle includes valid checked code.
-     */
-    private boolean mValid;
     private List<BlockHolder> mHolders = new ArrayList<BlockHolder>();
     private String mInvalidReason;
 
@@ -136,12 +132,10 @@ public class MethodCode {
             indexes.addAll(newBlock.getKnownBlockPositions(targetIndex));
         }
 
-        mValid = true;
         for (int i=0; i<mHolders.size(); i++) {
-            final BlockHolder holder = mHolders.get(i);
-            if (!holder.block.isValid()) {
-                mValid = false;
-                mInvalidReason = holder.block.getInvalidReason() + " at block" + i;
+            final InstructionBlock block = mHolders.get(i).block;
+            if (!block.isValid()) {
+                mInvalidReason = block.getInvalidReason() + " at block" + i;
                 break;
             }
         }
@@ -151,7 +145,7 @@ public class MethodCode {
     public String toString() {
 
         String result = "";
-        if (!mValid) {
+        if (!isValid()) {
             result = result + "WARNING: At least one instruction block is not valid. " + mInvalidReason + '\n';
         }
 
@@ -167,5 +161,9 @@ public class MethodCode {
         result = result + "}\n";
 
         return result;
+    }
+
+    public boolean isValid() {
+        return mInvalidReason == null;
     }
 }

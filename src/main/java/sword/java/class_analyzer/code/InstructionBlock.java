@@ -30,7 +30,6 @@ public class InstructionBlock {
         }
     }
 
-    private boolean mValid;
     private final List<InstructionHolder> mHolders;
     private String mInvalidReason;
 
@@ -44,7 +43,6 @@ public class InstructionBlock {
         int counter = startIndex;
         endIndex = Math.min(code.length, endIndex);
 
-        mValid = true;
         try {
             while (counter < endIndex) {
                 final int blockRelativeIndex = counter - startIndex;
@@ -71,7 +69,6 @@ public class InstructionBlock {
                 }
             }
         } catch(InvalidByteCodeException e) {
-            mValid = false;
             mInvalidReason = e.getInvalidReason();
         }
 
@@ -107,7 +104,6 @@ public class InstructionBlock {
     private InstructionBlock(List<InstructionHolder> list, String invalidReason) {
         mHolders = list;
 
-        mValid = invalidReason != null;
         mInvalidReason = invalidReason;
 
         mKnownBlockOffsets = extractKnownBlockOffsets(list);
@@ -154,7 +150,13 @@ public class InstructionBlock {
         mKnownBlockOffsets.addAll(extractKnownBlockOffsets(mHolders));
         mByteCodeSize = extractByteCodeSize(mHolders);
 
-        return new InstructionBlock(subList, mInvalidReason);
+        // This is assuming the only reason for a block to be invalid is that
+        // the last instruction connot be resolved. If this is not true the next
+        // piece of code may fail.
+        final String invalidReason = mInvalidReason;
+        mInvalidReason = null;
+
+        return new InstructionBlock(subList, invalidReason);
     }
 
     public Set<Integer> getKnownBlockPositions(int index) {
@@ -184,15 +186,15 @@ public class InstructionBlock {
     public String toString() {
 
         String result = "";
-        if (!mValid) {
-            result = result + "WARNING: Instruction bundle not valid. " + mInvalidReason + '\n';
+        if (!isValid()) {
+            result = result + "WARNING: Instruction block not valid. " + mInvalidReason + '\n';
         }
 
         return result + disassemble(0);
     }
 
     public boolean isValid() {
-        return mValid;
+        return mInvalidReason == null;
     }
 
     public String getInvalidReason() {
