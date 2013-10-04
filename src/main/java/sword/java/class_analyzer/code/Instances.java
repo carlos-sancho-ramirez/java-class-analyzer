@@ -10,6 +10,7 @@ public class Instances {
     public static final InstructionDup DUP = new InstructionDup();
     public static final InstructionPop POP = new InstructionPop();
     public static final InstructionReturn RETURN = new InstructionReturn();
+    public static final InstructionAreturn ARETURN = new InstructionAreturn();
     public static final InstructionAthrow ATHROW = new InstructionAthrow();
 
     public static final InstructionAaload AALOAD = new InstructionAaload();
@@ -101,6 +102,9 @@ public class Instances {
         }
         else if (InstructionReturn.interpreter.matches(code, index)) {
             return RETURN;
+        }
+        else if (InstructionAreturn.interpreter.matches(code, index)) {
+            return ARETURN;
         }
         else if (InstructionAthrow.interpreter.matches(code, index)) {
             return ATHROW;
