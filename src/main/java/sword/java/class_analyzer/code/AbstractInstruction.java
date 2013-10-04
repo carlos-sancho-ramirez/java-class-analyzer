@@ -3,6 +3,9 @@ package sword.java.class_analyzer.code;
 import java.util.HashSet;
 import java.util.Set;
 
+import sword.java.class_analyzer.pool.FieldEntry;
+import sword.java.class_analyzer.pool.MethodEntry;
+
 
 public abstract class AbstractInstruction {
 
@@ -68,6 +71,18 @@ public abstract class AbstractInstruction {
      */
     public Set<Integer> knownBranches(int index) {
         return new HashSet<Integer>(0);
+    }
+
+    /**
+     * Returns a set of methods this instruction can call. In case no method can
+     * be called an empty set will be returned instead.
+     */
+    public Set<MethodEntry> getKnownInvokedMethods() {
+        return new HashSet<MethodEntry>(0);
+    }
+
+    public Set<FieldEntry> getKnownReferencedFields() {
+        return new HashSet<FieldEntry>(0);
     }
 
     protected static int getUnsignedBigEndian2Int(byte code[], int index) {

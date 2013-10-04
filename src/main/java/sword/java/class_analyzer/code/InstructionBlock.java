@@ -8,6 +8,8 @@ import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.pool.ConstantPool;
+import sword.java.class_analyzer.pool.FieldEntry;
+import sword.java.class_analyzer.pool.MethodEntry;
 
 /**
  * Class representing a sortered list of instructions to execute.
@@ -166,6 +168,30 @@ public class InstructionBlock {
         }
 
         return result;
+    }
+
+    public Set<MethodEntry> getKnownInvokedMethods() {
+        Set<MethodEntry> methods = new HashSet<MethodEntry>();
+        for (InstructionHolder holder : mHolders) {
+            Set<MethodEntry> insMethods = holder.instruction.getKnownInvokedMethods();
+            if (insMethods.size() > 0) {
+                methods.addAll(insMethods);
+            }
+        }
+
+        return methods;
+    }
+
+    public Set<FieldEntry> getKnownReferencedFields() {
+        Set<FieldEntry> fields = new HashSet<FieldEntry>();
+        for (InstructionHolder holder : mHolders) {
+            Set<FieldEntry> insFields = holder.instruction.getKnownReferencedFields();
+            if (insFields.size() > 0) {
+                fields.addAll(insFields);
+            }
+        }
+
+        return fields;
     }
 
     public int byteCodeSize() {
