@@ -21,7 +21,7 @@ public class InstructionLdc extends AbstractInstruction {
     @Override
     protected void fillByteCode(byte code[], int index) {
         super.fillByteCode(code, index);
-        fillBigEndian2Int(code, index + 1, mPoolIndex);
+        code[index + 1] = (byte) mPoolIndex;
     }
 
     @Override

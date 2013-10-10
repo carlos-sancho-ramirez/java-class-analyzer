@@ -23,6 +23,11 @@ import sword.java.class_analyzer.pool.MethodEntry;
  */
 public class InstructionBlock {
 
+    public static final class DisassemblerOptions {
+       public static final int SHOW_INDEX = 1;
+       public static final int SHOW_OPCODE = 2;
+    }
+
     private static class InstructionHolder {
         public int index;
         public AbstractInstruction instruction;
@@ -199,11 +204,40 @@ public class InstructionBlock {
         return mByteCodeSize;
     }
 
-    public String disassemble(int offset) {
+    private static final int OPCODE_MIN_SPACE = 4;
+
+    public String disassemble(int offset, int options) {
         String result = "";
 
+        final boolean showIndex = (options & DisassemblerOptions.SHOW_INDEX) != 0;
+        final boolean showOpcodes = (options & DisassemblerOptions.SHOW_INDEX) != 0;
+
         for (InstructionHolder holder : mHolders) {
-            result = result + "  " + (holder.index + offset) + '\t' + holder.instruction.disassemble() + '\n';
+            result = result + "  ";
+
+            if (showIndex) {
+                result = result + (holder.index + offset) + '\t';
+            }
+
+            if (showOpcodes) {
+                final AbstractInstruction instruction = holder.instruction;
+                final int validOpcodesToShow = instruction.byteCodeSize();
+
+                final byte opcodes[] = new byte[validOpcodesToShow];
+                instruction.retrieveByteCode(opcodes, 0);
+
+                for (int i= 0; i<OPCODE_MIN_SPACE; i++) {
+                    if (i < validOpcodesToShow) {
+                        //result = result + ' ' + Integer.toHexString((opcodes[i]) & 0xFF);
+                        result = result + String.format("%02X", (opcodes[i]) & 0xFF) + ' ';
+                    }
+                    else {
+                        result = result + "   ";
+                    }
+                }
+            }
+
+            result = result + holder.instruction.disassemble() + '\n';
         }
 
         return result;
@@ -217,7 +251,7 @@ public class InstructionBlock {
             result = result + "WARNING: Instruction block not valid. " + mInvalidReason + '\n';
         }
 
-        return result + disassemble(0);
+        return result + disassemble(0, 0);
     }
 
     public boolean isValid() {

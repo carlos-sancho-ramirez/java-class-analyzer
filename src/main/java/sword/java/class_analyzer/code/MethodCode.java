@@ -9,6 +9,7 @@ import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.code.InstructionBlock.DisassemblerOptions;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
 import sword.java.class_analyzer.pool.MethodEntry;
@@ -174,7 +175,8 @@ public class MethodCode {
             if (i != 0) {
                 result = result + "\n Block" + i + ":\n";
             }
-            result = result + holder.block.disassemble(holder.index);
+            final int options = DisassemblerOptions.SHOW_INDEX | DisassemblerOptions.SHOW_OPCODE;
+            result = result + holder.block.disassemble(holder.index, options);
         }
 
         result = result + "}\n";
