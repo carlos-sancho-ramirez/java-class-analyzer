@@ -14,6 +14,6 @@ public class InstructionInvokespecial extends AbstractInvokeInstruction {
 
     @Override
     public String disassemble() {
-        return "invokespecial\t" + mMethod.getName();
+        return "invokespecial\t" + methodToString();
     }
 }

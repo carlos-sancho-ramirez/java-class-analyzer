@@ -15,6 +15,6 @@ public class InstructionInvokevirtual extends AbstractInvokeInstruction {
 
     @Override
     public String disassemble() {
-        return "invokevirtual\t" + mMethod.getName();
+        return "invokevirtual\t" + methodToString();
     }
 }

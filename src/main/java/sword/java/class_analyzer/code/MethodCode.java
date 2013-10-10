@@ -161,7 +161,7 @@ public class MethodCode {
         if (methods.size() > 0) {
             result = result + "depends on methods:\n";
             for(MethodEntry method : methods) {
-                result = result + "  " + method.getName() + '\n';
+                result = result + "  " + method.toString() + '\n';
             }
         }
 

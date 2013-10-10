@@ -15,6 +15,6 @@ public class InstructionInvokestatic extends AbstractInvokeInstruction {
 
     @Override
     public String disassemble() {
-        return "invokestatic\t" + mMethod.getName();
+        return "invokestatic\t" + methodToString();
     }
 }

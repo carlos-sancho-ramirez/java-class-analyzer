@@ -10,4 +10,9 @@ public class MethodEntry extends AbstractMemberEntry {
     protected MethodEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
+
+    @Override
+    public String toString() {
+        return getName() + ' ' + getType();
+    }
 }

@@ -26,4 +26,8 @@ public abstract class AbstractInvokeInstruction extends AbstractConstantPoolRefe
         methods.add(mMethod);
         return methods;
     }
+
+    protected String methodToString() {
+        return mMethod.toString();
+    }
 }
