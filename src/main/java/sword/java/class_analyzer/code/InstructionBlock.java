@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.code.instructions.AbstractInstruction;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
 import sword.java.class_analyzer.pool.MethodEntry;
@@ -48,7 +49,7 @@ public class InstructionBlock {
         try {
             while (counter < endIndex) {
                 final int blockRelativeIndex = counter - startIndex;
-                AbstractInstruction instruction = Instances.match(code, counter, pool);
+                AbstractInstruction instruction = InstructionFactory.match(code, counter, pool);
                 InstructionHolder holder = new InstructionHolder(blockRelativeIndex, instruction);
                 mHolders.add(holder);
 
