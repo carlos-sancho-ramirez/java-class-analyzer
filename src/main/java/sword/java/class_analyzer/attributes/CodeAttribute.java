@@ -33,6 +33,9 @@ public class CodeAttribute extends AbstractAttribute {
 
         final int codeExceptionCount = Utils.getBigEndian2Int(inStream);
         exceptions = new CodeException[codeExceptionCount];
+        for(int i=0; i<codeExceptionCount; i++) {
+            exceptions[0] = new CodeException(inStream);
+        }
 
         attributes = new AttributeTable(inStream, pool);
 
