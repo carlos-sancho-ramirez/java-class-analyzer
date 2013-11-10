@@ -40,7 +40,7 @@ public class ClassFile {
 
         pool = new ConstantPool(inStream);
 
-        accessMask = new ModifierMask(Utils.getBigEndian2Int(inStream));
+        accessMask = new ClassModifierMask(Utils.getBigEndian2Int(inStream));
         final int thisIndex = Utils.getBigEndian2Int(inStream);
         final int superIndex = Utils.getBigEndian2Int(inStream);
 
@@ -56,8 +56,8 @@ public class ClassFile {
     public String toString() {
         String output = "Class file for version " + majorVersion + "\n";
 
-        output = output + "Class declaration: " + accessMask.getModifiersString()
-                + " class " + thisClassReference + " extends " + superClassReference;
+        output = output + "Class declaration: " + accessMask.getModifiersString() +
+                ' ' + thisClassReference + " extends " + superClassReference;
 
         ClassReferenceEntry interfaces[] = interfaceTable.interfaces;
         if (interfaces.length != 0) {

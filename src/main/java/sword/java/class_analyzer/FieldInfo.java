@@ -19,7 +19,7 @@ public class FieldInfo {
         final int nameIndex = Utils.getBigEndian2Int(inStream);
         final int typeIndex = Utils.getBigEndian2Int(inStream);
 
-        accessMask = new ModifierMask(accessMaskValue);
+        accessMask = new MemberModifierMask(accessMaskValue);
         name = pool.get(nameIndex, TextEntry.class);
         type = new SignatureResolver(pool.get(typeIndex, TextEntry.class));
         attributes = new AttributeTable(inStream, pool);
