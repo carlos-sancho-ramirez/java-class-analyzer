@@ -23,6 +23,11 @@ public abstract class JavaType {
         }
     }
 
+    /**
+     * Returns the JavaType instance matching the given signature.
+     * @param signature JNI style signature.
+     * @return The instance matching the signature or null if the signature is not valid.
+     */
     public static JavaType getFromSignature(String signature) {
         for(JavaType instance : INSTANCES) {
             if (instance.matchesSignature(signature)) {
@@ -50,4 +55,15 @@ public abstract class JavaType {
 
     public abstract String signature();
     public abstract boolean matchesSignature(String signature);
+
+    @Override
+    public int hashCode() {
+        return signature().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return object != null && object instanceof JavaType &&
+                signature().equals(((JavaType) object).signature());
+    }
 }

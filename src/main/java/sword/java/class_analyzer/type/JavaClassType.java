@@ -10,7 +10,7 @@ public class JavaClassType extends JavaType {
         return signature.startsWith("L") && signature.endsWith(";");
     }
 
-    public JavaClassType(String signature) {
+    JavaClassType(String signature) {
         if (!checkValidSignature(signature)) {
             throw new IllegalArgumentException();
         }

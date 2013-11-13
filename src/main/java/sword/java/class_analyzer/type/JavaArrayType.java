@@ -4,11 +4,7 @@ public class JavaArrayType extends JavaType {
 
     private final JavaType mArrayType;
 
-    public JavaArrayType(JavaType arrayType) {
-        if (arrayType == null) {
-            throw new IllegalArgumentException();
-        }
-
+    JavaArrayType(JavaType arrayType) {
         mArrayType = arrayType;
     }
 
