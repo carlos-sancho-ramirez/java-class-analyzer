@@ -6,7 +6,7 @@ public abstract class MemberReference extends JavaReference {
 
     public MemberReference(ClassReference classReference, String name) {
         super(name);
-        final int parentCharsCount = mName.length() - name.length() - 1;
+        final int parentCharsCount = name.length() - mName.length() - 1;
         if (parentCharsCount > 0) {
             mClass = new ClassReference(null, name.substring(0,parentCharsCount));
         }

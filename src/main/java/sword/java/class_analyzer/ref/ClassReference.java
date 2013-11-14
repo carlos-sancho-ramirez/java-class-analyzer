@@ -7,7 +7,7 @@ public class ClassReference extends JavaReference {
     public ClassReference(PackageReference javaPackage, String name) {
         super(name);
 
-        final int parentCharsCount = mName.length() - name.length() - 1;
+        final int parentCharsCount = name.length() - mName.length() - 1;
         if (parentCharsCount > 0) {
             mPackage = new PackageReference(javaPackage, name.substring(0,parentCharsCount));
         }

@@ -1,6 +1,6 @@
 package sword.java.class_analyzer.ref;
 
-import sword.java.class_analyzer.type.JavaType;
+import sword.java.class_analyzer.java_type.JavaType;
 
 public class MethodReference extends MemberReference {
 

@@ -1,4 +1,4 @@
-package sword.java.class_analyzer.type;
+package sword.java.class_analyzer.java_type;
 
 public class PrimitiveType extends JavaType {
 
@@ -11,10 +11,5 @@ public class PrimitiveType extends JavaType {
     @Override
     public String signature() {
         return mSignature;
-    }
-
-    @Override
-    public boolean matchesSignature(String signature) {
-        return mSignature.equals(signature);
     }
 }

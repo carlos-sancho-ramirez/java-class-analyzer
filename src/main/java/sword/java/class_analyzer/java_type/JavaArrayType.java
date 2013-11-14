@@ -1,4 +1,4 @@
-package sword.java.class_analyzer.type;
+package sword.java.class_analyzer.java_type;
 
 public class JavaArrayType extends JavaType {
 
@@ -6,11 +6,6 @@ public class JavaArrayType extends JavaType {
 
     JavaArrayType(JavaType arrayType) {
         mArrayType = arrayType;
-    }
-
-    @Override
-    public boolean matchesSignature(String signature) {
-        return signature.startsWith("[") && mArrayType.matchesSignature(signature.substring(1));
     }
 
     @Override

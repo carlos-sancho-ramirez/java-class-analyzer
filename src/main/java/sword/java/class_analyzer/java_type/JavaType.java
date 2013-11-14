@@ -1,4 +1,4 @@
-package sword.java.class_analyzer.type;
+package sword.java.class_analyzer.java_type;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +29,10 @@ public abstract class JavaType {
      * @return The instance matching the signature or null if the signature is not valid.
      */
     public static JavaType getFromSignature(String signature) {
+        if (signature == null) {
+            return null;
+        }
+
         for(JavaType instance : INSTANCES) {
             if (instance.matchesSignature(signature)) {
                 return instance;
@@ -47,14 +51,21 @@ public abstract class JavaType {
         }
 
         if (JavaClassType.checkValidSignature(signature)) {
-            return new JavaClassType(signature);
+            final JavaType type = new JavaClassType(signature);
+            if (type != null) {
+                INSTANCES.add(type);
+            }
+            return type;
         }
 
         return null;
     }
 
     public abstract String signature();
-    public abstract boolean matchesSignature(String signature);
+
+    public boolean matchesSignature(String signature) {
+        return signature().equals(signature);
+    }
 
     @Override
     public int hashCode() {
