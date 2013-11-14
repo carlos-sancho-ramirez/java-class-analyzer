@@ -34,7 +34,7 @@ public abstract class JavaType {
         }
 
         for(JavaType instance : INSTANCES) {
-            if (instance.matchesSignature(signature)) {
+            if (instance.signature().equals(signature)) {
                 return instance;
             }
         }
@@ -62,10 +62,6 @@ public abstract class JavaType {
     }
 
     public abstract String signature();
-
-    public boolean matchesSignature(String signature) {
-        return signature().equals(signature);
-    }
 
     @Override
     public int hashCode() {

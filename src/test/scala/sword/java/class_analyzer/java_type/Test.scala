@@ -12,10 +12,18 @@ class Test extends FunSuite {
   val allValidValues = primitiveSignatures ::: arraySignatures ::: someClassRef
   val allTestingValues = wrongClassRefs ::: allValidValues
 
-  test("Two news created different instances") {
-    val a = new PrimitiveType(primitiveSignatures.head);
-    val b = new PrimitiveType(primitiveSignatures.head);
-    assert(a ne b)
+  test("Valid values for signatures never gives null references") {
+    allValidValues foreach { x => assert( JavaType.getFromSignature(x) ne null) }
+  }
+
+  test("Invalid signatures returns null references") {
+    wrongClassRefs foreach { x => assert( JavaType.getFromSignature(x) eq null) }
+  }
+
+  test("Signature is the one given") {
+    allValidValues foreach { x =>
+      assert(JavaType.getFromSignature(x).signature().equals(x))
+    }
   }
 
   test("Same instance") {
