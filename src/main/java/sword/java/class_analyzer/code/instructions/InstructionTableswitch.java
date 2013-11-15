@@ -1,5 +1,8 @@
 package sword.java.class_analyzer.code.instructions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
@@ -77,4 +80,15 @@ public class InstructionTableswitch extends AbstractInstruction {
         return true;
     }
 
+    @Override
+    public Set<Integer> knownBranches(int index) {
+        final HashSet<Integer> set = new HashSet<Integer>(mOffsets.length + 1);
+
+        for (int offset : mOffsets) {
+            set.add(index + offset);
+        }
+        set.add(index + mDefault);
+
+        return set;
+    }
 }

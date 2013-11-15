@@ -69,8 +69,7 @@ public abstract class AbstractInstruction {
     /**
      * Returns a set of known possible places where this instructions can jump
      * if possible and if it can be extracted by the instruction itself.
-     * This must return an empty set if this instruction returns false on
-     * calling canBranch method.
+     * This must return an empty set if both canBranch and alwaysJump methods returns false.
      *
      * @param index Index for this instruction. Needed to convert relative
      * pointers to absolute ones.
