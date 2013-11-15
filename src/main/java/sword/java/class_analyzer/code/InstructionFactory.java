@@ -88,6 +88,7 @@ import sword.java.class_analyzer.code.instructions.InstructionPop;
 import sword.java.class_analyzer.code.instructions.InstructionPutfield;
 import sword.java.class_analyzer.code.instructions.InstructionPutstatic;
 import sword.java.class_analyzer.code.instructions.InstructionReturn;
+import sword.java.class_analyzer.code.instructions.InstructionTableswitch;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class InstructionFactory {
@@ -157,6 +158,29 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0xA5, 3, InstructionIf_acmpeq.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xA6, 3, InstructionIf_acmpne.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xA7, 3, InstructionGoto.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAA, 1, InstructionTableswitch.class) {
+
+                    @Override
+                    public int expectedByteCodeSize(int index) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public int instructionSize(byte[] code, int index) {
+                        if (matches(code, index)) {
+                            final int alignedIndex = (index + 4) & 0xFFFFFFFC;
+                            final int low = AbstractInstruction.getBigEndian4Int(code, alignedIndex + 4);
+                            final int high = AbstractInstruction.getBigEndian4Int(code, alignedIndex + 8);
+                            final int entries = high - low + 1;
+                            final int endIndex = alignedIndex + (3 + entries) * 4;
+                            return endIndex - index;
+                        }
+                        else {
+                            return 0;
+                        }
+                    }
+
+                }) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB0, 1, InstructionAreturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB1, 1, InstructionReturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB2, 3, InstructionGetstatic.class)) ||
@@ -208,7 +232,7 @@ public class InstructionFactory {
                 }
                 catch (InstantiationException e) {
                     e.printStackTrace();
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("Unable to instance instruction with opcode " + code[index]);
                 }
             }
         }

@@ -31,8 +31,10 @@ public abstract class AbstractInstruction {
         }
     }
 
-    public final int byteCodeSize() {
-        return mInterpreter.expectedByteCodeSize();
+    // Instruction tableswitch need to be aligned to 4. This means that the
+    // byteCodeSize can be different depending on the index for the instruction.
+    public int byteCodeSize(int index) {
+        return mInterpreter.expectedByteCodeSize(index);
     }
 
     /**
@@ -99,7 +101,7 @@ public abstract class AbstractInstruction {
      * @param index position to start writing on the buffer.
      */
     public final void retrieveByteCode(final byte code[], int index) throws IllegalArgumentException {
-        if (index < 0 || index + byteCodeSize() > code.length) {
+        if (index < 0 || index + byteCodeSize(index) > code.length) {
             throw new IllegalArgumentException();
         }
 
@@ -122,6 +124,15 @@ public abstract class AbstractInstruction {
         final int value2 = (code[index + 1]) & 0xFF;
 
         return (value1 << 8) + value2;
+    }
+
+    public static int getBigEndian4Int(byte code[], int index) {
+        final int value1 = (code[index]) & 0xFF;
+        final int value2 = (code[index + 1]) & 0xFF;
+        final int value3 = (code[index + 2]) & 0xFF;
+        final int value4 = (code[index + 3]) & 0xFF;
+
+        return (value1 << 8) + (value2 << 16) + (value3 << 8) + value4;
     }
 
     protected static void fillBigEndian2Int(byte code[], int index, int value) {

@@ -45,11 +45,11 @@ public class SimpleByteCodeInterpreter implements ByteCodeInterpreter {
 
     @Override
     public int instructionSize(byte[] code, int index) {
-        return matches(code, index)? expectedByteCodeSize() : 0;
+        return matches(code, index)? expectedByteCodeSize(index) : 0;
     }
 
     @Override
-    public int expectedByteCodeSize() {
+    public int expectedByteCodeSize(int index) {
         return mSize;
     }
 

@@ -28,7 +28,7 @@ public interface ByteCodeInterpreter {
      * This returns the amount of byte it is expected this instruction will take.
      * This includes any opcode, offset, index for the constant pool or local table, etc.
      */
-    public int expectedByteCodeSize();
+    public int expectedByteCodeSize(int index);
 
     /**
      * Returns the amount of bytes the instruction takes or zero if the instruction does not match.

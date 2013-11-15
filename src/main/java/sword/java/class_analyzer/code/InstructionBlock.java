@@ -70,7 +70,7 @@ public class InstructionBlock {
                     mKnownBlockOffsets.addAll(positions);
                 }
 
-                counter += instruction.byteCodeSize();
+                counter += instruction.byteCodeSize(counter);
 
                 if (instruction.alwaysJump()) {
                     break;
@@ -80,7 +80,7 @@ public class InstructionBlock {
             mInvalidReason = e.getInvalidReason();
         }
 
-        mByteCodeSize = extractByteCodeSize(mHolders);
+        mByteCodeSize = extractByteCodeSize(startIndex, mHolders);
     }
 
     private Set<Integer> extractKnownBlockOffsets(List<InstructionHolder> holders) {
@@ -100,22 +100,26 @@ public class InstructionBlock {
         return result;
     }
 
-    private int extractByteCodeSize(List<InstructionHolder> holders) {
+    private int extractByteCodeSize(int index, List<InstructionHolder> holders) {
+
+        final int holderCount = holders.size();
         int result = 0;
-        for(InstructionHolder holder : holders) {
-            result += holder.instruction.byteCodeSize();
+
+        for(int i=0; i<holderCount; i++) {
+            final InstructionHolder holder = holders.get(i);
+            result += holder.instruction.byteCodeSize(index + result);
         }
 
         return result;
     }
 
-    private InstructionBlock(List<InstructionHolder> list, String invalidReason) {
+    private InstructionBlock(int index, List<InstructionHolder> list, String invalidReason) {
         mHolders = list;
 
         mInvalidReason = invalidReason;
 
         mKnownBlockOffsets = extractKnownBlockOffsets(list);
-        mByteCodeSize = extractByteCodeSize(list);
+        mByteCodeSize = extractByteCodeSize(index, list);
     }
 
     /**
@@ -156,7 +160,7 @@ public class InstructionBlock {
         }
         mKnownBlockOffsets.clear();
         mKnownBlockOffsets.addAll(extractKnownBlockOffsets(mHolders));
-        mByteCodeSize = extractByteCodeSize(mHolders);
+        mByteCodeSize = extractByteCodeSize(index, mHolders);
 
         // This is assuming the only reason for a block to be invalid is that
         // the last instruction connot be resolved. If this is not true the next
@@ -164,7 +168,7 @@ public class InstructionBlock {
         final String invalidReason = mInvalidReason;
         mInvalidReason = null;
 
-        return new InstructionBlock(subList, invalidReason);
+        return new InstructionBlock(index, subList, invalidReason);
     }
 
     public Set<Integer> getKnownBlockPositions(int index) {
@@ -220,20 +224,30 @@ public class InstructionBlock {
             }
 
             if (showOpcodes) {
-                final AbstractInstruction instruction = holder.instruction;
-                final int validOpcodesToShow = instruction.byteCodeSize();
+                try {
+                    final AbstractInstruction instruction = holder.instruction;
+                    final int validOpcodesToShow = instruction.byteCodeSize(holder.index + offset);
 
-                final byte opcodes[] = new byte[validOpcodesToShow];
-                instruction.retrieveByteCode(opcodes, 0);
+                    final byte opcodes[] = new byte[validOpcodesToShow];
+                    // retrieveByteCode can throw IllegalArgumentException
+                    // when the size of the instruction depends on the index.
+                    // This is because holder.index + offset != 0. Used above to
+                    // retrieve the size for the buffer.
+                    // TODO: Provide a solution for this
+                    instruction.retrieveByteCode(opcodes, 0);
 
-                for (int i= 0; i<OPCODE_MIN_SPACE; i++) {
-                    if (i < validOpcodesToShow) {
-                        //result = result + ' ' + Integer.toHexString((opcodes[i]) & 0xFF);
-                        result = result + String.format("%02X", (opcodes[i]) & 0xFF) + ' ';
+                    for (int i= 0; i<OPCODE_MIN_SPACE; i++) {
+                        if (i < validOpcodesToShow) {
+                            //result = result + ' ' + Integer.toHexString((opcodes[i]) & 0xFF);
+                            result = result + String.format("%02X", (opcodes[i]) & 0xFF) + ' ';
+                        }
+                        else {
+                            result = result + "   ";
+                        }
                     }
-                    else {
-                        result = result + "   ";
-                    }
+                }
+                catch (IllegalArgumentException e) {
+                    result = result + "<invalid>   ";
                 }
             }
 
