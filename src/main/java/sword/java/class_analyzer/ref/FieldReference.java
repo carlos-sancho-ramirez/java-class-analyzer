@@ -6,7 +6,7 @@ public class FieldReference extends MemberReference {
 
     private final JavaType mType;
 
-    public FieldReference(ClassReference classReference, String name, JavaType javaType) {
+    FieldReference(ClassReference classReference, String name, JavaType javaType) {
         super(classReference, name);
 
         if (javaType == null) {
