@@ -6,11 +6,15 @@ import scala.collection.immutable.Map
 import scala.reflect.Manifest
 import scala.runtime.BoxedUnit
 import java.lang.reflect.Method
+import sword.java.class_analyzer.java_type.JavaType
 
 class Test extends FunSuite {
 
   val someValidPackages = "java.util" :: "scala.collection.immutable" :: "java.io" :: "java.net" :: "java.lang" :: List()
   val someValidClasses = "java.util.List" :: "java.util.Set" :: "java.lang.Enum" :: "org.scalatest.FunSuite" :: List()
+
+  val someValidFields = "System.out" :: "my_package.MyClass.myField" :: List()
+  val someValidMethods = "my_package.MyClass.myMethod" :: "Math.pow" :: "System.out.println" :: List()
 
   val allValidReferences = someValidPackages ::: someValidClasses
 
@@ -56,6 +60,36 @@ class Test extends FunSuite {
       val b = root.addClass(x)
       assert(a eq b)
     }
+    someValidFields foreach { x =>
+      val javaType = JavaType.getFromSignature("I")
+      val a = root.addField(x, javaType)
+      val b = root.addField(x, javaType)
+      assert(a eq b)
+    }
+    someValidClasses foreach { x =>
+      val retType = JavaType.getFromSignature("V")
+      val a = root.addMethod(x, retType)
+      val b = root.addMethod(x, retType)
+      assert(a eq b)
+    }
+  }
+
+  test("Method reference generates a package, a class and a nested method") {
+    val methodRef = "my_package.MyClass.myMethod"
+    val returningType = JavaType.getFromSignature("V")
+    val methodReference = root.addMethod(methodRef, returningType)
+    assert(methodReference.isInstanceOf[MethodReference])
+    assert(methodReference.getSimpleName === "myMethod")
+
+    val classReference = methodReference.getJavaParentReference
+    assert(classReference.isInstanceOf[ClassReference])
+    assert(classReference.getSimpleName === "MyClass")
+
+    val packageReference = classReference.getJavaParentReference
+    assert(packageReference.isInstanceOf[PackageReference])
+    assert(packageReference.getSimpleName === "my_package")
+
+    assert(packageReference.getJavaParentReference.isRootReference)
   }
 
   test("Java reference instance returns the expected qualified name") {
@@ -64,6 +98,14 @@ class Test extends FunSuite {
     }
     someValidClasses foreach { x =>
       assert(x === root.addClass(x).getQualifiedName)
+    }
+    someValidFields foreach { x =>
+      val javaType = JavaType.getFromSignature("I")
+      assert(x === root.addField(x, javaType).getQualifiedName)
+    }
+    someValidMethods foreach { x =>
+      val retType = JavaType.getFromSignature("V")
+      assert(x === root.addMethod(x, retType).getQualifiedName)
     }
   }
 }

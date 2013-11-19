@@ -21,11 +21,64 @@ public class PackageReference extends JavaReference {
         return mParent;
     }
 
+    private static final AddNodeLambda<FieldReference, PackageReference> addFieldLambda = new AddNodeLambda<FieldReference, PackageReference>() {
+
+        @Override
+        public FieldReference addIt(PackageReference instance, String first,
+                String rest, JavaType returningType, JavaType... paramTypes) {
+            if (rest.contains(".")) {
+                return instance.addPackage(first).addField(rest, returningType);
+            } else {
+                return instance.addClass(first).addField(rest, returningType);
+            }
+        }
+
+        @Override
+        public FieldReference createIt(PackageReference instance, String name,
+                JavaType returningType, JavaType... paramTypes) {
+            throw new IllegalArgumentException(
+                    "Illegal field reference from package");
+        }
+    };
+
+    public FieldReference addField(String qualifiedName, JavaType fieldType) {
+        return addNode(qualifiedName, null, addFieldLambda, fieldType,
+                (JavaType[]) null);
+    }
+
+    private static final AddNodeLambda<MethodReference, PackageReference> addMethodLambda = new AddNodeLambda<MethodReference, PackageReference>() {
+
+        @Override
+        public MethodReference addIt(PackageReference instance, String first,
+                String rest, JavaType returningType, JavaType... paramTypes) {
+            if (rest.contains(".")) {
+                return instance.addPackage(first).addMethod(rest,
+                        returningType, paramTypes);
+            } else {
+                return instance.addClass(first).addMethod(rest, returningType,
+                        paramTypes);
+            }
+        }
+
+        @Override
+        public MethodReference createIt(PackageReference instance, String name,
+                JavaType returningType, JavaType... paramTypes) {
+            throw new IllegalArgumentException(
+                    "Illegal field reference from package");
+        }
+    };
+
+    public MethodReference addMethod(String qualifiedName,
+            JavaType returningType, JavaType... paramTypes) {
+        return addNode(qualifiedName, null, addMethodLambda, returningType,
+                paramTypes);
+    }
+
     private static final AddNodeLambda<ClassReference, PackageReference> addClassLambda = new AddNodeLambda<ClassReference, PackageReference>() {
 
         @Override
         public ClassReference addIt(PackageReference instance, String first,
-                String rest) {
+                String rest, JavaType returningType, JavaType... paramTypes) {
             return instance.addPackage(first).addClass(rest);
         }
 
@@ -45,7 +98,7 @@ public class PackageReference extends JavaReference {
 
         @Override
         public PackageReference addIt(PackageReference instance, String first,
-                String rest) {
+                String rest, JavaType returningType, JavaType... paramTypes) {
             return instance.addPackage(first).addPackage(rest);
         }
 
