@@ -24,6 +24,10 @@ public class TextEntry extends ConstantPoolEntry {
         return true;
     }
 
+    String getText() {
+        return text;
+    }
+
     @Override
     public String toString() {
         return text;

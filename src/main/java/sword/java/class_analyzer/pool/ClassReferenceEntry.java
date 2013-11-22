@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.ref.ClassReference;
+import sword.java.class_analyzer.ref.RootReference;
 
 public class ClassReferenceEntry extends AbstractReferenceEntry {
+
+    private ClassReference mReference;
 
     public ClassReferenceEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
@@ -13,6 +17,22 @@ public class ClassReferenceEntry extends AbstractReferenceEntry {
 
     @Override
     public String toString() {
-        return super.toString().replace('/', '.');
+        return mReference.getQualifiedName();
+    }
+
+    @Override
+    boolean resolve(ConstantPool pool) throws FileError {
+        final boolean parentResult = super.resolve(pool);
+
+        if (parentResult) {
+            mReference = RootReference.getInstance().addClass(
+                    mTextEntry.getText().replace('/', '.'));
+        }
+
+        return parentResult;
+    }
+
+    public ClassReference getReference() {
+        return mReference;
     }
 }

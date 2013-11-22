@@ -9,20 +9,23 @@ class Test extends FunSuite {
   val someClassRef = "Ljava/util/List;" :: "Ljava/lang/Class;" :: "Lorg/scalatest/FunSuite;" :: List()
   val wrongClassRefs = null :: "" :: "L;" :: "Ljava/util/List" :: "java/util/List;" :: "Java/util/List" :: "List" :: "Ljava.util.List;" :: List()
 
-  val allValidValues = primitiveSignatures ::: arraySignatures ::: someClassRef
+  val validTypeLists = "[ZI" :: "D[[B" :: "ZLjava/lang/String;[I" :: "[Ljava/util/List;D" :: List()
+  val validMethodSignatures = validTypeLists.map(x => "(" + x + ")I") ::: "()V" :: List()
+
+  val allValidValues = primitiveSignatures ::: arraySignatures ::: someClassRef ::: validTypeLists ::: validMethodSignatures
   val allTestingValues = wrongClassRefs ::: allValidValues
 
   test("Valid values for signatures never gives null references") {
-    allValidValues foreach { x => assert( JavaType.getFromSignature(x) ne null) }
+    allValidValues foreach { x => assert( JavaType.getFromSignature(x) ne null, "null reference for " + x) }
   }
 
   test("Invalid signatures returns null references") {
-    wrongClassRefs foreach { x => assert( JavaType.getFromSignature(x) eq null) }
+    wrongClassRefs foreach { x => assert( JavaType.getFromSignature(x) eq null, "not null reference for " + x) }
   }
 
   test("Signature is the one given") {
     allValidValues foreach { x =>
-      assert(JavaType.getFromSignature(x).signature().equals(x))
+      assert(JavaType.getFromSignature(x).signature() === x)
     }
   }
 
@@ -35,7 +38,7 @@ class Test extends FunSuite {
   }
 
   test("different instances") {
-    allValidValues.foreach {
+    allValidValues foreach {
       x => allValidValues.foreach {
         y => if (x != y) {
           val a = JavaType getFromSignature x
@@ -43,6 +46,14 @@ class Test extends FunSuite {
           assert(a ne b)
         }
       }
+    }
+  }
+
+  test("only JavaTypeList return true on isTypeList method") {
+    allValidValues foreach { x =>
+      val isList = validTypeLists.contains(x)
+      val javaTypeList = JavaType.getFromSignature(x)
+      assert(javaTypeList.isTypeList() == isList, "isList returns" + !isList + " for " + x)
     }
   }
 }

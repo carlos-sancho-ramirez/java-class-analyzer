@@ -5,6 +5,10 @@ import java.util.Set;
 
 public abstract class JavaType {
 
+    /**
+     * Set for primitive, arrays and class references.
+     * Type lists and method signatures are not included.
+     */
     private static final Set<JavaType> INSTANCES = new HashSet<JavaType>();
 
     static {
@@ -29,8 +33,34 @@ public abstract class JavaType {
      * @return The instance matching the signature or null if the signature is not valid.
      */
     public static JavaType getFromSignature(String signature) {
-        if (signature == null) {
+        if (signature == null || signature.equals("")) {
             return null;
+        }
+
+        if (signature.startsWith("(")) {
+            final int closingIndex = signature.lastIndexOf(')');
+            if (closingIndex <= 0 || closingIndex >= signature.length() - 1) {
+                return null;
+            }
+
+            final String parametersSignature = signature.substring(1,closingIndex);
+            final JavaType parameters;
+            if (parametersSignature.length() != 0) {
+                parameters = getFromSignature(parametersSignature);
+                if (parameters == null) {
+                    return null;
+                }
+            }
+            else {
+                parameters = new JavaTypeList();
+            }
+
+            final JavaType returningType = getFromSignature(signature.substring(closingIndex + 1));
+            if (returningType == null || returningType.isTypeList()) {
+                return null;
+            }
+
+            return new JavaMethod(parameters, returningType);
         }
 
         for(JavaType instance : INSTANCES) {
@@ -39,23 +69,65 @@ public abstract class JavaType {
             }
         }
 
-        if (signature.startsWith("[")) {
-            final JavaType arrayType = getFromSignature(signature.substring(1));
-            if (arrayType == null) {
-                return null;
-            }
-
-            final JavaType newArray = new JavaArrayType(arrayType);
-            INSTANCES.add(newArray);
-            return newArray;
+        int arrayDepth = 0;
+        while (signature.startsWith("[")) {
+            ++arrayDepth;
+            signature = signature.substring(1);
         }
 
-        if (JavaClassType.checkValidSignature(signature)) {
-            final JavaType type = new JavaClassType(signature);
-            if (type != null) {
-                INSTANCES.add(type);
+        for(JavaType instance : INSTANCES) {
+            if (instance.signature().equals(signature)) {
+                JavaType javaType = instance;
+                while (arrayDepth-- > 0) {
+                    javaType = new JavaArrayType(instance);
+                }
+
+                INSTANCES.add(javaType);
+                return javaType;
             }
-            return type;
+        }
+
+        for(JavaType instance : INSTANCES) {
+            if (signature.startsWith(instance.signature())) {
+                final JavaType rest = getFromSignature(signature.substring(instance.signature().length()));
+
+                if (rest == null) {
+                    return null;
+                }
+
+                JavaType first = instance;
+                while (arrayDepth-- > 0) {
+                    first = new JavaArrayType(first);
+                }
+
+                return new JavaTypeList(first, rest);
+            }
+        }
+
+        final int firstSemiColon = signature.indexOf(';');
+        final boolean validClassReference = firstSemiColon > 0;
+        final String firstSignature = (validClassReference &&
+                firstSemiColon < signature.length() - 1) ?
+                        signature.substring(0,firstSemiColon + 1) : signature;
+
+        if (validClassReference && JavaClassType.checkValidSignature(firstSignature)) {
+            final JavaType firstType = new JavaClassType(firstSignature);
+
+            if (signature.length() > firstSignature.length()) {
+                final JavaType rest = getFromSignature(signature.substring(firstSemiColon + 1));
+                if (rest == null) {
+                    return null;
+                }
+
+                if (firstType != null) {
+                    INSTANCES.add(firstType);
+                }
+
+                return new JavaTypeList(firstType, rest);
+            }
+
+            INSTANCES.add(firstType);
+            return firstType;
         }
 
         return null;
@@ -72,5 +144,9 @@ public abstract class JavaType {
     public boolean equals(Object object) {
         return object != null && object instanceof JavaType &&
                 signature().equals(((JavaType) object).signature());
+    }
+
+    boolean isTypeList() {
+        return false;
     }
 }

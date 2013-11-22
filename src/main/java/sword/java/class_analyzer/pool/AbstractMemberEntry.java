@@ -5,14 +5,15 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.ref.MemberReference;
 
 public abstract class AbstractMemberEntry extends ConstantPoolEntry {
 
     private final int mClassReferenceIndex;
     private final int mVarReferenceIndex;
 
-    private ClassReferenceEntry mClass;
-    private VariableEntry mVariable;
+    ClassReferenceEntry mClassEntry;
+    VariableEntry mVariableEntry;
 
     protected AbstractMemberEntry(InputStream inStream) throws IOException, FileError {
         mClassReferenceIndex = Utils.getBigEndian2Int(inStream);
@@ -21,10 +22,10 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
 
     @Override
     boolean resolve(ConstantPool pool) throws FileError {
-        mClass = pool.get(mClassReferenceIndex, ClassReferenceEntry.class);
-        mVariable = pool.get(mVarReferenceIndex, VariableEntry.class);
+        mClassEntry = pool.get(mClassReferenceIndex, ClassReferenceEntry.class);
+        mVariableEntry = pool.get(mVarReferenceIndex, VariableEntry.class);
 
-        boolean resolved = mClass.mResolved && mVariable.mResolved;
+        boolean resolved = mClassEntry.mResolved && mVariableEntry.mResolved;
         if (resolved) {
             mResolved = true;
         }
@@ -32,11 +33,13 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
         return resolved;
     }
 
+    abstract MemberReference getReference();
+
     public String getName() {
-        return mClass.toString() + '.' + mVariable.getName();
+        return getReference().getQualifiedName();
     }
 
     public String getType() {
-        return mVariable.getType();
+        return mVariableEntry.getType();
     }
 }

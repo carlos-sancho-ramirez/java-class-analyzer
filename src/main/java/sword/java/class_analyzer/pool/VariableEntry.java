@@ -8,23 +8,23 @@ import sword.java.class_analyzer.Utils;
 
 public class VariableEntry extends ConstantPoolEntry {
 
-    private final int mNameReference;
-    private final int mTypeReference;
+    private final int mNameReferenceIndex;
+    private final int mTypeReferenceIndex;
 
-    private TextEntry mName;
-    private TextEntry mType;
+    private TextEntry mNameEntry;
+    private TextEntry mTypeEntry;
 
     public VariableEntry(InputStream inStream) throws IOException, FileError {
-        mNameReference = Utils.getBigEndian2Int(inStream);
-        mTypeReference = Utils.getBigEndian2Int(inStream);
+        mNameReferenceIndex = Utils.getBigEndian2Int(inStream);
+        mTypeReferenceIndex = Utils.getBigEndian2Int(inStream);
     }
 
     @Override
     boolean resolve(ConstantPool pool) throws FileError {
-        mName = pool.get(mNameReference, TextEntry.class);
-        mType = pool.get(mTypeReference, TextEntry.class);
+        mNameEntry = pool.get(mNameReferenceIndex, TextEntry.class);
+        mTypeEntry = pool.get(mTypeReferenceIndex, TextEntry.class);
 
-        boolean resolved = mName.mResolved && mType.mResolved;
+        boolean resolved = mNameEntry.mResolved && mTypeEntry.mResolved;
         if (resolved) {
             mResolved = true;
         }
@@ -33,15 +33,15 @@ public class VariableEntry extends ConstantPoolEntry {
     }
 
     public String getName() {
-        return mName.toString();
+        return mNameEntry.toString();
     }
 
     public String getType() {
-        return mType.toString();
+        return mTypeEntry.toString();
     }
 
     @Override
     public String toString() {
-        return mName.toString() + ' ' + mType.toString();
+        return mNameEntry.toString() + ' ' + mTypeEntry.toString();
     }
 }
