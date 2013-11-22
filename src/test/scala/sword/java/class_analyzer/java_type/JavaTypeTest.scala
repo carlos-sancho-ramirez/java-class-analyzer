@@ -2,7 +2,7 @@ package sword.java.class_analyzer.java_type
 
 import org.scalatest.FunSuite
 
-class Test extends FunSuite {
+class JavaTypeTest extends FunSuite {
 
   val primitiveSignatures = "V" :: "Z" :: "B" :: "C" :: "S" :: "I" :: "J" :: "F" :: "D" :: List()
   val arraySignatures = primitiveSignatures.map( "[" + _ )
@@ -10,7 +10,7 @@ class Test extends FunSuite {
   val wrongClassRefs = null :: "" :: "L;" :: "Ljava/util/List" :: "java/util/List;" :: "Java/util/List" :: "List" :: "Ljava.util.List;" :: List()
 
   val validTypeLists = "[ZI" :: "D[[B" :: "ZLjava/lang/String;[I" :: "[Ljava/util/List;D" :: List()
-  val validMethodSignatures = validTypeLists.map(x => "(" + x + ")I") ::: "()V" :: List()
+  val validMethodSignatures = validTypeLists.map(x => "(" + x + ")I") ::: ("()V" :: List())
 
   val allValidValues = primitiveSignatures ::: arraySignatures ::: someClassRef ::: validTypeLists ::: validMethodSignatures
   val allTestingValues = wrongClassRefs ::: allValidValues
@@ -54,6 +54,21 @@ class Test extends FunSuite {
       val isList = validTypeLists.contains(x)
       val javaTypeList = JavaType.getFromSignature(x)
       assert(javaTypeList.isTypeList() == isList, "isList returns" + !isList + " for " + x)
+    }
+  }
+
+  test("only JavaMethod returns a non null instance on tryCastingToMethod") {
+    allValidValues foreach { x =>
+      val isMethod = validMethodSignatures.contains(x)
+      val javaType = JavaType.getFromSignature(x)
+      if (isMethod) {
+        val method = javaType.tryCastingToMethod
+        assert((method ne null) && method.isInstanceOf[JavaMethod])
+      }
+      else {
+        val method = javaType.tryCastingToMethod
+        assert(method eq null)
+      }
     }
   }
 }

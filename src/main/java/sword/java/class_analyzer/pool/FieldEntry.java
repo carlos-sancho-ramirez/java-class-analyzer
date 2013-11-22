@@ -11,7 +11,7 @@ public class FieldEntry extends AbstractMemberEntry {
 
     private FieldReference mReference;
 
-    protected FieldEntry(InputStream inStream) throws IOException, FileError {
+    FieldEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
 
@@ -20,8 +20,10 @@ public class FieldEntry extends AbstractMemberEntry {
         final boolean parentResult = super.resolve(pool);
 
         if (parentResult) {
-            JavaType fieldType = JavaType.getFromSignature(mVariableEntry.getType());
-            mReference = mClassEntry.getReference().addField(mVariableEntry.getName(), fieldType);
+            JavaType fieldType = JavaType.getFromSignature(mVariableEntry
+                    .getType());
+            mReference = mClassEntry.getReference().addField(
+                    mVariableEntry.getName(), fieldType);
         }
 
         return parentResult;
@@ -30,10 +32,5 @@ public class FieldEntry extends AbstractMemberEntry {
     @Override
     public FieldReference getReference() {
         return mReference;
-    }
-
-    @Override
-    public String toString() {
-        return mReference.getQualifiedName() + ' ' + mReference.getTypeSignature();
     }
 }

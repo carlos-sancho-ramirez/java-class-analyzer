@@ -1,36 +1,24 @@
 package sword.java.class_analyzer.ref;
 
-import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.java_type.JavaMethod;
 
 public class MethodReference extends MemberReference {
 
-    private final JavaType mParameters[];
-    private final JavaType mReturningType;
+    private final JavaMethod mType;
 
-    public MethodReference(ClassReference classReference, String name, JavaType returningType, JavaType... parameters) {
+    MethodReference(ClassReference classReference, String name,
+            JavaMethod methodType) {
         super(classReference, name);
 
-        if (parameters == null || returningType == null) {
+        if (methodType == null) {
             throw new IllegalArgumentException();
         }
 
-        for(JavaType parameter : parameters) {
-            if (parameter == null) {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        mParameters = parameters;
-        mReturningType = returningType;
+        mType = methodType;
     }
 
     @Override
     public String getTypeSignature() {
-        String result = "(";
-        for (JavaType parameter : mParameters) {
-            result = result + parameter.signature();
-        }
-
-        return result + ")" + mReturningType.signature();
+        return mType.signature();
     }
 }

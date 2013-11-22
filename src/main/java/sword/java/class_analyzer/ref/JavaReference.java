@@ -41,19 +41,16 @@ public abstract class JavaReference {
     }
 
     /** Generalized implementation to avoid having repeated code for all adders */
-    interface AddNodeLambda<T extends JavaReference, P extends JavaReference> {
-        public T addIt(P instance, String first, String rest,
-                JavaType returningType, JavaType... paramTypes);
+    interface AddNodeLambda<T extends JavaReference, P extends JavaReference, JT extends JavaType> {
+        public T addIt(P instance, String first, String rest, JT javaType);
 
-        public T createIt(P instance, String name, JavaType returningType,
-                JavaType... paramTypes);
+        public T createIt(P instance, String name, JT javaType);
     }
 
     @SuppressWarnings("unchecked")
-    <T extends JavaReference, P extends JavaReference> T addNode(
+    <T extends JavaReference, P extends JavaReference, JT extends JavaType> T addNode(
             String qualifiedName, Set<T> instances,
-            AddNodeLambda<T, P> lambdas, JavaType returningType,
-            JavaType... paramTypes) {
+            AddNodeLambda<T, P, JT> lambdas, JT javaType) {
         assertValidName(qualifiedName);
 
         final int firstDot = qualifiedName.indexOf('.');
@@ -61,8 +58,7 @@ public abstract class JavaReference {
         if (firstDot > 0) {
             final String firstName = qualifiedName.substring(0, firstDot);
             final String restOfName = qualifiedName.substring(firstDot + 1);
-            result = lambdas.addIt((P) this, firstName, restOfName,
-                    returningType, paramTypes);
+            result = lambdas.addIt((P) this, firstName, restOfName, javaType);
         } else {
             T found = null;
             if (instances != null) {
@@ -77,8 +73,7 @@ public abstract class JavaReference {
             if (found != null) {
                 result = found;
             } else {
-                result = lambdas.createIt((P) this, qualifiedName,
-                        returningType, paramTypes);
+                result = lambdas.createIt((P) this, qualifiedName, javaType);
             }
 
             // This position will never be reached with instances == null

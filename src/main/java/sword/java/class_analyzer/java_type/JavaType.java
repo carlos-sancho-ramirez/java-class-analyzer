@@ -6,29 +6,28 @@ import java.util.Set;
 public abstract class JavaType {
 
     /**
-     * Set for primitive, arrays and class references.
-     * Type lists and method signatures are not included.
+     * Set for primitive, arrays and class references. Type lists and method
+     * signatures are not included.
      */
     private static final Set<JavaType> INSTANCES = new HashSet<JavaType>();
 
     static {
-        if (
-                !INSTANCES.add(new PrimitiveType("V")) ||
-                !INSTANCES.add(new PrimitiveType("Z")) ||
-                !INSTANCES.add(new PrimitiveType("B")) ||
-                !INSTANCES.add(new PrimitiveType("C")) ||
-                !INSTANCES.add(new PrimitiveType("S")) ||
-                !INSTANCES.add(new PrimitiveType("I")) ||
-                !INSTANCES.add(new PrimitiveType("J")) ||
-                !INSTANCES.add(new PrimitiveType("F")) ||
-                !INSTANCES.add(new PrimitiveType("D"))
-            ) {
+        if (!INSTANCES.add(new PrimitiveType("V"))
+                || !INSTANCES.add(new PrimitiveType("Z"))
+                || !INSTANCES.add(new PrimitiveType("B"))
+                || !INSTANCES.add(new PrimitiveType("C"))
+                || !INSTANCES.add(new PrimitiveType("S"))
+                || !INSTANCES.add(new PrimitiveType("I"))
+                || !INSTANCES.add(new PrimitiveType("J"))
+                || !INSTANCES.add(new PrimitiveType("F"))
+                || !INSTANCES.add(new PrimitiveType("D"))) {
             throw new IllegalArgumentException();
         }
     }
 
     /**
      * Returns the JavaType instance matching the given signature.
+     *
      * @param signature JNI style signature.
      * @return The instance matching the signature or null if the signature is not valid.
      */
@@ -43,19 +42,20 @@ public abstract class JavaType {
                 return null;
             }
 
-            final String parametersSignature = signature.substring(1,closingIndex);
+            final String parametersSignature = signature.substring(1,
+                    closingIndex);
             final JavaType parameters;
             if (parametersSignature.length() != 0) {
                 parameters = getFromSignature(parametersSignature);
                 if (parameters == null) {
                     return null;
                 }
-            }
-            else {
+            } else {
                 parameters = new JavaTypeList();
             }
 
-            final JavaType returningType = getFromSignature(signature.substring(closingIndex + 1));
+            final JavaType returningType = getFromSignature(signature
+                    .substring(closingIndex + 1));
             if (returningType == null || returningType.isTypeList()) {
                 return null;
             }
@@ -63,7 +63,7 @@ public abstract class JavaType {
             return new JavaMethod(parameters, returningType);
         }
 
-        for(JavaType instance : INSTANCES) {
+        for (JavaType instance : INSTANCES) {
             if (instance.signature().equals(signature)) {
                 return instance;
             }
@@ -75,11 +75,11 @@ public abstract class JavaType {
             signature = signature.substring(1);
         }
 
-        for(JavaType instance : INSTANCES) {
+        for (JavaType instance : INSTANCES) {
             if (instance.signature().equals(signature)) {
                 JavaType javaType = instance;
                 while (arrayDepth-- > 0) {
-                    javaType = new JavaArrayType(instance);
+                    javaType = new JavaArrayType(javaType);
                 }
 
                 INSTANCES.add(javaType);
@@ -87,9 +87,10 @@ public abstract class JavaType {
             }
         }
 
-        for(JavaType instance : INSTANCES) {
+        for (JavaType instance : INSTANCES) {
             if (signature.startsWith(instance.signature())) {
-                final JavaType rest = getFromSignature(signature.substring(instance.signature().length()));
+                final JavaType rest = getFromSignature(signature
+                        .substring(instance.signature().length()));
 
                 if (rest == null) {
                     return null;
@@ -106,15 +107,17 @@ public abstract class JavaType {
 
         final int firstSemiColon = signature.indexOf(';');
         final boolean validClassReference = firstSemiColon > 0;
-        final String firstSignature = (validClassReference &&
-                firstSemiColon < signature.length() - 1) ?
-                        signature.substring(0,firstSemiColon + 1) : signature;
+        final String firstSignature = (validClassReference && firstSemiColon < signature
+                .length() - 1) ? signature.substring(0, firstSemiColon + 1)
+                : signature;
 
-        if (validClassReference && JavaClassType.checkValidSignature(firstSignature)) {
+        if (validClassReference
+                && JavaClassType.checkValidSignature(firstSignature)) {
             final JavaType firstType = new JavaClassType(firstSignature);
 
             if (signature.length() > firstSignature.length()) {
-                final JavaType rest = getFromSignature(signature.substring(firstSemiColon + 1));
+                final JavaType rest = getFromSignature(signature
+                        .substring(firstSemiColon + 1));
                 if (rest == null) {
                     return null;
                 }
@@ -142,11 +145,24 @@ public abstract class JavaType {
 
     @Override
     public boolean equals(Object object) {
-        return object != null && object instanceof JavaType &&
-                signature().equals(((JavaType) object).signature());
+        return object != null && object instanceof JavaType
+                && signature().equals(((JavaType) object).signature());
     }
 
     boolean isTypeList() {
         return false;
+    }
+
+    /**
+     * Returns this same instance to a method if possible. This will return null
+     * if not possible.
+     */
+    public JavaMethod tryCastingToMethod() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return signature();
     }
 }

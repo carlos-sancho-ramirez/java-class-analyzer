@@ -15,7 +15,7 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
     ClassReferenceEntry mClassEntry;
     VariableEntry mVariableEntry;
 
-    protected AbstractMemberEntry(InputStream inStream) throws IOException, FileError {
+    AbstractMemberEntry(InputStream inStream) throws IOException, FileError {
         mClassReferenceIndex = Utils.getBigEndian2Int(inStream);
         mVarReferenceIndex = Utils.getBigEndian2Int(inStream);
     }
@@ -41,5 +41,12 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
 
     public String getType() {
         return mVariableEntry.getType();
+    }
+
+    @Override
+    public String toString() {
+        final MemberReference reference = getReference();
+        return reference.getQualifiedName() + ' '
+                + reference.getTypeSignature();
     }
 }

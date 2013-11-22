@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.java_type.JavaMethod;
 import sword.java.class_analyzer.java_type.JavaType;
 import sword.java.class_analyzer.ref.MethodReference;
 
@@ -11,7 +13,7 @@ public class MethodEntry extends AbstractMemberEntry {
 
     private MethodReference mReference;
 
-    protected MethodEntry(InputStream inStream) throws IOException, FileError {
+    MethodEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
 
@@ -20,8 +22,20 @@ public class MethodEntry extends AbstractMemberEntry {
         final boolean parentResult = super.resolve(pool);
 
         if (parentResult) {
-            JavaType methodType = JavaType.getFromSignature(mVariableEntry.getType());
-            mReference = mClassEntry.getReference().addMethod(mVariableEntry.getName(), methodType);
+            JavaType javaType = JavaType.getFromSignature(mVariableEntry
+                    .getType());
+
+            JavaMethod methodType = null;
+            if (javaType != null) {
+                methodType = javaType.tryCastingToMethod();
+            }
+
+            if (methodType == null) {
+                throw new FileError(Kind.INVALID_MEMBER_SIGNATURE, "method", mVariableEntry.getType());
+            }
+
+            mReference = mClassEntry.getReference().addMethod(
+                        mVariableEntry.getName(), methodType);
         }
 
         return parentResult;
@@ -34,6 +48,7 @@ public class MethodEntry extends AbstractMemberEntry {
 
     @Override
     public String toString() {
-        return mReference.getQualifiedName() + ' ' + mReference.getTypeSignature();
+        return mReference.getQualifiedName() + ' '
+                + mReference.getTypeSignature();
     }
 }

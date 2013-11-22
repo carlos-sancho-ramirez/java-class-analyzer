@@ -7,8 +7,9 @@ import scala.reflect.Manifest
 import scala.runtime.BoxedUnit
 import java.lang.reflect.Method
 import sword.java.class_analyzer.java_type.JavaType
+import sword.java.class_analyzer.java_type.JavaMethod
 
-class Test extends FunSuite {
+class RefTest extends FunSuite {
 
   val someValidPackages = "java.util" :: "scala.collection.immutable" :: "java.io" :: "java.net" :: "java.lang" :: List()
   val someValidClasses = "java.util.List" :: "java.util.Set" :: "java.lang.Enum" :: "org.scalatest.FunSuite" :: List()
@@ -67,7 +68,7 @@ class Test extends FunSuite {
       assert(a eq b)
     }
     someValidClasses foreach { x =>
-      val retType = JavaType.getFromSignature("V")
+      val retType = JavaType.getFromSignature("()V").asInstanceOf[JavaMethod]
       val a = root.addMethod(x, retType)
       val b = root.addMethod(x, retType)
       assert(a eq b)
@@ -76,8 +77,8 @@ class Test extends FunSuite {
 
   test("Method reference generates a package, a class and a nested method") {
     val methodRef = "my_package.MyClass.myMethod"
-    val returningType = JavaType.getFromSignature("V")
-    val methodReference = root.addMethod(methodRef, returningType)
+    val methodType = JavaType.getFromSignature("()V").asInstanceOf[JavaMethod]
+    val methodReference = root.addMethod(methodRef, methodType)
     assert(methodReference.isInstanceOf[MethodReference])
     assert(methodReference.getSimpleName === "myMethod")
 
@@ -104,8 +105,8 @@ class Test extends FunSuite {
       assert(x === root.addField(x, javaType).getQualifiedName)
     }
     someValidMethods foreach { x =>
-      val retType = JavaType.getFromSignature("V")
-      assert(x === root.addMethod(x, retType).getQualifiedName)
+      val methodType = JavaType.getFromSignature("()V").asInstanceOf[JavaMethod]
+      assert(x === root.addMethod(x, methodType).getQualifiedName)
     }
   }
 }

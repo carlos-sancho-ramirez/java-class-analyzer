@@ -8,8 +8,7 @@ public class JavaMethod extends JavaType {
     JavaMethod(JavaType parameters, JavaType returning) {
         if (!parameters.isTypeList()) {
             mParameters = new JavaTypeList(parameters);
-        }
-        else {
+        } else {
             mParameters = (JavaTypeList) parameters;
         }
 
@@ -18,6 +17,11 @@ public class JavaMethod extends JavaType {
 
     @Override
     public String signature() {
-        return "(" + mParameters + ')' + mReturning;
+        return "(" + mParameters.signature() + ')' + mReturning.signature();
+    }
+
+    @Override
+    public JavaMethod tryCastingToMethod() {
+        return this;
     }
 }
