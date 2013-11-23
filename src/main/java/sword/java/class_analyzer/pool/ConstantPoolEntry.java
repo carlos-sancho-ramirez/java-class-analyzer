@@ -41,6 +41,9 @@ public abstract class ConstantPoolEntry {
         case Types.METHOD:
             return new MethodEntry(inStream);
 
+        case Types.INTERFACE_METHOD:
+            return new InterfaceMethodEntry(inStream);
+
         case Types.NAME_TYPE_PAIR:
             return new VariableEntry(inStream);
 
