@@ -27,4 +27,13 @@ public class JavaClassType extends JavaType {
     public String signature() {
         return "L" + mClass.getQualifiedName().replace('.', '/') + ";";
     }
+
+    @Override
+    public String getJavaRepresentation() {
+        return mClass.getQualifiedName();
+    }
+
+    public ClassReference getReference() {
+        return mClass;
+    }
 }

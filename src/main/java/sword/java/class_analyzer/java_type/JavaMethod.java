@@ -21,7 +21,25 @@ public class JavaMethod extends JavaType {
     }
 
     @Override
-    public JavaMethod tryCastingToMethod() {
+    JavaMethod tryCastingToMethod() {
         return this;
+    }
+
+    public static JavaMethod getFromSignature(String signature) {
+        JavaType javaType = JavaType.getFromSignature(signature);
+        return javaType != null ? javaType.tryCastingToMethod() : null;
+    }
+
+    public JavaType getReturningType() {
+        return mReturning;
+    }
+
+    public JavaTypeList getParameterTypeList() {
+        return mParameters;
+    }
+
+    @Override
+    public String getJavaRepresentation() {
+        return "(" + mParameters.getJavaRepresentation() + ") " + mReturning.getJavaRepresentation();
     }
 }

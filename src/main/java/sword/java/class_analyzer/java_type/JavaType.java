@@ -12,15 +12,15 @@ public abstract class JavaType {
     private static final Set<JavaType> INSTANCES = new HashSet<JavaType>();
 
     static {
-        if (!INSTANCES.add(new PrimitiveType("V"))
-                || !INSTANCES.add(new PrimitiveType("Z"))
-                || !INSTANCES.add(new PrimitiveType("B"))
-                || !INSTANCES.add(new PrimitiveType("C"))
-                || !INSTANCES.add(new PrimitiveType("S"))
-                || !INSTANCES.add(new PrimitiveType("I"))
-                || !INSTANCES.add(new PrimitiveType("J"))
-                || !INSTANCES.add(new PrimitiveType("F"))
-                || !INSTANCES.add(new PrimitiveType("D"))) {
+        if (!INSTANCES.add(new PrimitiveType("V", "void"))
+                || !INSTANCES.add(new PrimitiveType("Z", "boolean"))
+                || !INSTANCES.add(new PrimitiveType("B", "byte"))
+                || !INSTANCES.add(new PrimitiveType("C", "char"))
+                || !INSTANCES.add(new PrimitiveType("S", "short"))
+                || !INSTANCES.add(new PrimitiveType("I", "int"))
+                || !INSTANCES.add(new PrimitiveType("J", "long"))
+                || !INSTANCES.add(new PrimitiveType("F", "float"))
+                || !INSTANCES.add(new PrimitiveType("D", "double"))) {
             throw new IllegalArgumentException();
         }
     }
@@ -138,6 +138,8 @@ public abstract class JavaType {
 
     public abstract String signature();
 
+    public abstract String getJavaRepresentation();
+
     @Override
     public int hashCode() {
         return signature().hashCode();
@@ -157,7 +159,7 @@ public abstract class JavaType {
      * Returns this same instance to a method if possible. This will return null
      * if not possible.
      */
-    public JavaMethod tryCastingToMethod() {
+    JavaMethod tryCastingToMethod() {
         return null;
     }
 

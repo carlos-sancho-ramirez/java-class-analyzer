@@ -83,4 +83,23 @@ public class JavaTypeList extends JavaType {
     boolean isTypeList() {
         return true;
     }
+
+    @Override
+    public String getJavaRepresentation() {
+        String result = "";
+        final int count = mJavaTypes.length;
+        for (int i=0; i<count; i++) {
+            result = result + mJavaTypes[i];
+
+            if (i < count - 1) {
+                result = result + ", ";
+            }
+        }
+
+        return result;
+    }
+
+    public JavaType[] toArray() {
+        return mJavaTypes;
+    }
 }

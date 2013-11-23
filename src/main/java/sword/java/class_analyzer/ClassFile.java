@@ -8,6 +8,8 @@ import java.util.Set;
 
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.code.MethodCode;
+import sword.java.class_analyzer.java_type.JavaClassType;
+import sword.java.class_analyzer.java_type.JavaType;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
@@ -66,6 +68,19 @@ public class ClassFile {
         set.add(superClassReference.getReference());
 
         for (MethodInfo method : methodTable.methods) {
+
+            JavaType returningType = method.type.getReturningType();
+            if (returningType instanceof JavaClassType) {
+                set.add(((JavaClassType) returningType).getReference());
+            }
+
+            JavaType paramTypeList[] = method.type.getParameterTypeList().toArray();
+            for (JavaType javaType : paramTypeList) {
+                if (javaType instanceof JavaClassType) {
+                    set.add(((JavaClassType) javaType).getReference());
+                }
+            }
+
             final MethodCode methodCode = method.getMethodCode();
             if (methodCode == null) {
                 continue;

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.java_type.JavaMethod;
-import sword.java.class_analyzer.java_type.JavaType;
 import sword.java.class_analyzer.ref.MethodReference;
 
 public class MethodEntry extends AbstractMemberEntry {
@@ -22,13 +21,8 @@ public class MethodEntry extends AbstractMemberEntry {
         final boolean parentResult = super.resolve(pool);
 
         if (parentResult) {
-            JavaType javaType = JavaType.getFromSignature(mVariableEntry
+            JavaMethod methodType = JavaMethod.getFromSignature(mVariableEntry
                     .getType());
-
-            JavaMethod methodType = null;
-            if (javaType != null) {
-                methodType = javaType.tryCastingToMethod();
-            }
 
             if (methodType == null) {
                 throw new FileError(Kind.INVALID_MEMBER_SIGNATURE, "method", mVariableEntry.getType());

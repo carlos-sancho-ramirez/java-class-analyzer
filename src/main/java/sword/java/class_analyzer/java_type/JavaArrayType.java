@@ -12,4 +12,9 @@ public class JavaArrayType extends JavaType {
     public String signature() {
         return "[" + mArrayType.signature();
     }
+
+    @Override
+    public String getJavaRepresentation() {
+        return mArrayType.getJavaRepresentation() + "[]";
+    }
 }

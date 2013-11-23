@@ -3,7 +3,9 @@ package sword.java.class_analyzer;
 import java.io.IOException;
 import java.io.InputStream;
 
+import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.attributes.AttributeTable;
+import sword.java.class_analyzer.java_type.JavaType;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -11,7 +13,7 @@ public class FieldInfo {
 
     public final ModifierMask accessMask;
     public final TextEntry name;
-    public final SignatureResolver type;
+    public final JavaType type;
     public final AttributeTable attributes;
 
     public FieldInfo(InputStream inStream, ConstantPool pool) throws IOException, FileError {
@@ -21,12 +23,17 @@ public class FieldInfo {
 
         accessMask = new MemberModifierMask(accessMaskValue);
         name = pool.get(nameIndex, TextEntry.class);
-        type = new SignatureResolver(pool.get(typeIndex, TextEntry.class));
+        final String signature = pool.get(typeIndex, TextEntry.class).text;
+        type = JavaType.getFromSignature(signature);
+        if (type == null) {
+            throw new FileError(Kind.INVALID_MEMBER_SIGNATURE, "field", signature);
+        }
+
         attributes = new AttributeTable(inStream, pool);
     }
 
     @Override
     public String toString() {
-        return accessMask.getModifiersString() + ' ' + type + ' ' + name;
+        return accessMask.getModifiersString() + ' ' + type.getJavaRepresentation() + ' ' + name;
     }
 }
