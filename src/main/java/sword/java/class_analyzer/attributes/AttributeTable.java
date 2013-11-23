@@ -8,6 +8,7 @@ import java.util.List;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class AttributeTable {
@@ -83,5 +84,9 @@ public class AttributeTable {
         }
 
         return sizeCount;
+    }
+
+    public MethodCode getMethodCode() {
+        return mCode != null ? mCode.getMethodCode() : null;
     }
 }

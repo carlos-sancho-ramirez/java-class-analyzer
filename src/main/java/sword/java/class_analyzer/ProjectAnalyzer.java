@@ -134,6 +134,11 @@ public class ProjectAnalyzer {
                                 classFile = new ClassFile(inStream);
                                 successfullyRead++;
                                 System.out.println("  Successfully loaded!");
+
+                                Set<ClassReference> dependencies = classFile.getReferencedClasses();
+                                for (ClassReference dependency : dependencies) {
+                                    System.out.println("Dependency: " + dependency.getQualifiedName());
+                                }
                             }
                             catch (IOException e) {
                                 e.printStackTrace();

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import sword.java.class_analyzer.attributes.AttributeTable;
 import sword.java.class_analyzer.attributes.CodeAttribute;
 import sword.java.class_analyzer.attributes.ExceptionsAttribute;
+import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -43,5 +44,9 @@ public class MethodInfo {
             result = result + '\n' + code.methodCode;
         }
         return result;
+    }
+
+    MethodCode getMethodCode() {
+        return attributes != null ? attributes.getMethodCode() : null;
     }
 }

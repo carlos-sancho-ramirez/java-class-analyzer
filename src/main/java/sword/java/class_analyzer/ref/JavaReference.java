@@ -90,4 +90,15 @@ public abstract class JavaReference {
      * @param classPath Folder where to look for files.
      */
     public abstract File getFile(File classPath);
+
+    @Override
+    public int hashCode() {
+        return getQualifiedName().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return object != null && object.getClass() == getClass() &&
+                getQualifiedName().equals(((JavaReference) object).getQualifiedName());
+    }
 }

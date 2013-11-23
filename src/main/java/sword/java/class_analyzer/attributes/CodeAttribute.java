@@ -48,4 +48,8 @@ public class CodeAttribute extends AbstractAttribute {
 
         Utils.skipBytes(inStream, extraBytes);
     }
+
+    MethodCode getMethodCode() {
+        return methodCode;
+    }
 }

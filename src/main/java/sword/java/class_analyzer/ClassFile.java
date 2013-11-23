@@ -3,10 +3,16 @@ package sword.java.class_analyzer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
+import sword.java.class_analyzer.pool.FieldEntry;
+import sword.java.class_analyzer.pool.MethodEntry;
+import sword.java.class_analyzer.ref.ClassReference;
 
 public class ClassFile {
 
@@ -50,6 +56,34 @@ public class ClassFile {
         interfaceTable = new InterfaceTable(inStream, pool);
         fieldTable = new FieldTable(inStream, pool);
         methodTable = new MethodTable(inStream, pool);
+    }
+
+    /**
+     * Returns a set with all classes that this class depends on
+     */
+    public Set<ClassReference> getReferencedClasses() {
+        Set<ClassReference> set = new HashSet<ClassReference>();
+        set.add(superClassReference.getReference());
+
+        for (MethodInfo method : methodTable.methods) {
+            final MethodCode methodCode = method.getMethodCode();
+            if (methodCode == null) {
+                continue;
+            }
+
+            final Set<FieldEntry> fieldEntries = methodCode.getKnownReferencedFields();
+            for (FieldEntry fieldEntry : fieldEntries) {
+                set.add(fieldEntry.getReference().getJavaParentReference());
+            }
+
+            final Set<MethodEntry> methodEntries = methodCode.getKnownInvokedMethods();
+            for (MethodEntry fieldEntry : methodEntries) {
+                set.add(fieldEntry.getReference().getJavaParentReference());
+            }
+        }
+
+        set.remove(thisClassReference.getReference());
+        return set;
     }
 
     @Override
