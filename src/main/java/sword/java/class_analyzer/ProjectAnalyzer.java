@@ -1,39 +1,57 @@
 package sword.java.class_analyzer;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import sword.java.class_analyzer.ref.ClassReference;
+import sword.java.class_analyzer.ref.RootReference;
+
 public class ProjectAnalyzer {
+
+    private static final class ProgramArguments {
+        /**
+         * System dependet path to the folder where class fiels are located.
+         */
+        public static final int CLASS_PATH = 0;
+
+        /**
+         * Qualified reference for a java class. It must be in the form "java.util.List"
+         */
+        public static final int MAIN_JAVA_CLASS = 1;
+
+        public static final int LENGTH = 2;
+    }
 
     private static final class ClassHolder {
 
-        public final String javaReference;
+        public final ClassReference reference;
         private boolean mChecked; // set to true if the classFile has been tried to be retrieved
         private ClassFile mClassFile;
 
-        public ClassHolder(String javaReference) {
-            this.javaReference = javaReference;
+        public ClassHolder(ClassReference reference) {
+            this.reference = reference;
 
-            if (javaReference == null) {
+            if (reference == null) {
                 throw new IllegalArgumentException();
             }
         }
 
         @Override
         public int hashCode() {
-            return javaReference.hashCode();
+            return reference.hashCode();
         }
 
         @Override
         public boolean equals(Object object) {
-            return javaReference.equals(object);
+            return reference.equals(object);
         }
 
-        public String getPath(String classPath) {
-            return classPath + '/' + javaReference.replace('.', '/') + ".class";
+        public File getFile(File classPath) {
+            return reference.getFile(classPath);
         }
 
         /**
@@ -70,64 +88,81 @@ public class ProjectAnalyzer {
     public static void main(String args[]) {
         System.out.println("ClassAnalyzer v0.1");
 
-        if (args.length < 2) {
+        if (args.length < ProgramArguments.LENGTH) {
             System.out.println("Syntax: java " + ProjectAnalyzer.class.getName() + " <class-path> <full-qualified-java-class>");
             System.out.println("");
         }
         else {
-            final String classPath = args[0];
-            Set<ClassHolder> classHolders = new HashSet<ClassHolder>();
-            classHolders.add(new ClassHolder(args[1]));
+            final File classPath = new File(args[ProgramArguments.CLASS_PATH]);
+            final ClassReference firstClass = RootReference.getInstance().addClass(args[ProgramArguments.MAIN_JAVA_CLASS]);
 
-            int checkedAmount = 0;
-            int foundAmount = 0;
-            int successfullyRead = 0;
-
-            while (checkedAmount < classHolders.size()) {
-                final ClassHolder currentHolder = findFirstNotChecked(classHolders);
-                final String filePath = currentHolder.getPath(classPath);
-
-                InputStreamWrapper inStream = null;
-                ClassFile classFile = null;
-
-                try {
-                    try {
-                        inStream = new InputStreamWrapper(new FileInputStream(filePath));
-                        foundAmount++;
-                        System.out.println("Class " + currentHolder.javaReference + " found at file " + filePath + "...");
-
-                        try {
-                            classFile = new ClassFile(inStream);
-                            successfullyRead++;
-                            System.out.println("  Successfully loaded!");
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        finally {
-                            try {
-                                inStream.close();
-                            }
-                            catch (IOException e) { }
-                        }
-                    }
-                    catch (FileNotFoundException e) {
-                        System.out.println("Class " + currentHolder.javaReference + " not found in the classPath");
-                    }
+            boolean error = true;
+            try {
+                if (firstClass == null || !classPath.isDirectory()) {
+                    System.err.println("Wrong java reference provided.");
                 }
-                catch (FileError e) {
-                    final int filePosition = inStream.readBytes();
-                    System.out.println("  Error found when loading the file at position " + filePosition + " (0x" + Integer.toHexString(filePosition) + ')');
-                    e.printStackTrace();
+                else {
+                    error = false;
                 }
-
-                currentHolder.setChecked(classFile);
-                checkedAmount++;
+            }
+            catch (SecurityException e) {
+                System.err.println("Unable to access the specified class path.");
             }
 
-            System.out.println("Referenced " + checkedAmount + " classes. " +
-                    foundAmount + " classes found in the classpath " + classPath +
-                    " and " + successfullyRead + " read with no major errors.");
+            if (!error) {
+                Set<ClassHolder> classHolders = new HashSet<ClassHolder>();
+                classHolders.add(new ClassHolder(firstClass));
+
+                int checkedAmount = 0;
+                int foundAmount = 0;
+                int successfullyRead = 0;
+
+                while (checkedAmount < classHolders.size()) {
+                    final ClassHolder currentHolder = findFirstNotChecked(classHolders);
+                    final File file = currentHolder.getFile(classPath);
+
+                    InputStreamWrapper inStream = null;
+                    ClassFile classFile = null;
+
+                    try {
+                        try {
+                            inStream = new InputStreamWrapper(new FileInputStream(file));
+                            foundAmount++;
+                            System.out.println("Class " + currentHolder.reference.getQualifiedName() + " found at file " + file.getPath() + "...");
+    
+                            try {
+                                classFile = new ClassFile(inStream);
+                                successfullyRead++;
+                                System.out.println("  Successfully loaded!");
+                            }
+                            catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                try {
+                                    inStream.close();
+                                }
+                                catch (IOException e) { }
+                            }
+                        }
+                        catch (FileNotFoundException e) {
+                            System.out.println("Class " + currentHolder.reference.getQualifiedName() + " not found in the classPath");
+                        }
+                    }
+                    catch (FileError e) {
+                        final int filePosition = inStream.readBytes();
+                        System.out.println("  Error found when loading the file at position " + filePosition + " (0x" + Integer.toHexString(filePosition) + ')');
+                        e.printStackTrace();
+                    }
+
+                    currentHolder.setChecked(classFile);
+                    checkedAmount++;
+                }
+
+                System.out.println("Referenced " + checkedAmount + " classes. " +
+                        foundAmount + " classes found in the classpath " + classPath +
+                        " and " + successfullyRead + " read with no major errors.");
+            }
         }
     }
 }

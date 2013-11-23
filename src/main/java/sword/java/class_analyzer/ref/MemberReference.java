@@ -1,5 +1,7 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
+
 public abstract class MemberReference extends JavaReference {
 
     private final ClassReference mClass;
@@ -21,4 +23,9 @@ public abstract class MemberReference extends JavaReference {
     }
 
     public abstract String getTypeSignature();
+
+    @Override
+    public File getFile(File classPath) {
+        return mClass.getFile(classPath);
+    }
 }

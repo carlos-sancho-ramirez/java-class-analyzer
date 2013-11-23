@@ -1,5 +1,7 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
+
 public class RootReference extends PackageReference {
 
     private static final RootReference INSTANCE = new RootReference();
@@ -22,5 +24,10 @@ public class RootReference extends PackageReference {
 
     public RootReference getJavaParentReference() {
         return this;
+    }
+
+    @Override
+    public File getFile(File classPath) {
+        return classPath;
     }
 }

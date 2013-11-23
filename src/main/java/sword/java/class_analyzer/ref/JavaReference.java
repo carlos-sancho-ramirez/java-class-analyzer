@@ -1,12 +1,13 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
 import java.util.Set;
 
 import sword.java.class_analyzer.java_type.JavaType;
 
 public abstract class JavaReference {
 
-    protected final String mName;
+    final String mName;
 
     JavaReference(String name) {
         mName = name;
@@ -83,4 +84,10 @@ public abstract class JavaReference {
 
         return result;
     }
+
+    /**
+     * Returns the file where the class should be within the classpath
+     * @param classPath Folder where to look for files.
+     */
+    public abstract File getFile(File classPath);
 }

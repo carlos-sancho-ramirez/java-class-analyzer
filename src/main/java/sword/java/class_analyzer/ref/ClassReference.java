@@ -1,5 +1,6 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,5 +62,10 @@ public class ClassReference extends JavaReference {
 
     public MethodReference addMethod(String qualifiedName, JavaMethod methodType) {
         return addNode(qualifiedName, mMethods, addMethodLambda, methodType);
+    }
+
+    @Override
+    public File getFile(File classPath) {
+        return new File(mPackage.getFile(classPath), mName + ".class");
     }
 }
