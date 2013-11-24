@@ -11,4 +11,9 @@ public class StringReferenceEntry extends AbstractReferenceEntry {
             FileError {
         super(inStream);
     }
+
+    @Override
+    public String toString() {
+        return "\"" + super.toString() + "\"";
+    }
 }
