@@ -39,10 +39,4 @@ public class MethodEntry extends AbstractMemberEntry {
     public MethodReference getReference() {
         return mReference;
     }
-
-    @Override
-    public String toString() {
-        return mReference.getQualifiedName() + ' '
-                + mReference.getTypeSignature();
-    }
 }
