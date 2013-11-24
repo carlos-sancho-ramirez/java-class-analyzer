@@ -60,6 +60,12 @@ public class ClassFile {
         methodTable = new MethodTable(inStream, pool);
     }
 
+    private static void registerClass(Set<ClassReference> set, JavaType type) {
+        if (type instanceof JavaClassType) {
+            set.add(((JavaClassType) type).getReference());
+        }
+    }
+
     /**
      * Returns a set with all classes that this class depends on
      */
@@ -67,18 +73,17 @@ public class ClassFile {
         Set<ClassReference> set = new HashSet<ClassReference>();
         set.add(superClassReference.getReference());
 
+        for (FieldInfo field : fieldTable.fields) {
+            registerClass(set, field.type);
+        }
+
         for (MethodInfo method : methodTable.methods) {
 
-            JavaType returningType = method.type.getReturningType();
-            if (returningType instanceof JavaClassType) {
-                set.add(((JavaClassType) returningType).getReference());
-            }
+            registerClass(set, method.type.getReturningType());
 
             JavaType paramTypeList[] = method.type.getParameterTypeList().toArray();
             for (JavaType javaType : paramTypeList) {
-                if (javaType instanceof JavaClassType) {
-                    set.add(((JavaClassType) javaType).getReference());
-                }
+                registerClass(set, javaType);
             }
 
             final MethodCode methodCode = method.getMethodCode();
