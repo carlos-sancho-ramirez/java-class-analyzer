@@ -47,7 +47,8 @@ public class ProjectAnalyzer {
 
         @Override
         public boolean equals(Object object) {
-            return reference.equals(object);
+            return object != null && object instanceof ClassHolder &&
+                    reference.equals(((ClassHolder) object).reference);
         }
 
         public File getFile(File classPath) {
@@ -72,6 +73,10 @@ public class ProjectAnalyzer {
 
         public boolean isChecked() {
             return mChecked;
+        }
+
+        public boolean loaded() {
+            return mClassFile != null;
         }
     }
 
@@ -137,6 +142,7 @@ public class ProjectAnalyzer {
 
                                 Set<ClassReference> dependencies = classFile.getReferencedClasses();
                                 for (ClassReference dependency : dependencies) {
+                                    classHolders.add(new ClassHolder(dependency));
                                     System.out.println("Dependency: " + dependency.getQualifiedName());
                                 }
                             }
@@ -162,6 +168,22 @@ public class ProjectAnalyzer {
 
                     currentHolder.setChecked(classFile);
                     checkedAmount++;
+                }
+
+                System.out.println("");
+                System.out.println("Claases referenced and found in classPath:");
+                for (ClassHolder holder : classHolders) {
+                    if (holder.loaded()) {
+                        System.out.println("  " + holder.reference.getQualifiedName());
+                    }
+                }
+
+                System.out.println("");
+                System.out.println("Claases referenced but not found in classPath:");
+                for (ClassHolder holder : classHolders) {
+                    if (!holder.loaded()) {
+                        System.out.println("  " + holder.reference.getQualifiedName());
+                    }
                 }
 
                 System.out.println("Referenced " + checkedAmount + " classes. " +

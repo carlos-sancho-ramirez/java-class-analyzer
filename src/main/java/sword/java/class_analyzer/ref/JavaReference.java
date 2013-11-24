@@ -98,7 +98,7 @@ public abstract class JavaReference {
 
     @Override
     public boolean equals(Object object) {
-        return object != null && object.getClass() == getClass() &&
+        return object != null && object instanceof JavaReference &&
                 getQualifiedName().equals(((JavaReference) object).getQualifiedName());
     }
 }
