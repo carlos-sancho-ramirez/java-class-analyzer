@@ -18,7 +18,17 @@ public class ConstantPool {
         poolEntryCountPlusOne = Utils.getBigEndian2Int(inStream);
 
         for (int counter = 1; counter < poolEntryCountPlusOne; counter++) {
-            entries.add(ConstantPoolEntry.get(inStream));
+            final ConstantPoolEntry entry = ConstantPoolEntry.get(inStream);
+            entries.add(entry);
+
+            final int entrySize = entry.size();
+            if (entrySize > 1) {
+                for (int index = 2; index <= entrySize; index++) {
+                    entries.add(new UnusedEntry());
+                }
+
+                counter += entrySize - 1;
+            }
         }
 
         final int entryCount = entries.size();

@@ -22,8 +22,6 @@ public abstract class ConstantPoolEntry {
         public static final int NAME_TYPE_PAIR = 12;
     }
 
-    // TODO: Double and long constant are still missing because they can use 2
-    // entries in the constant pool and it must be taken into account.
     public static ConstantPoolEntry get(InputStream inStream) throws IOException, FileError {
         final int entryType = inStream.read();
 
@@ -36,6 +34,12 @@ public abstract class ConstantPoolEntry {
 
         case Types.FLOAT:
             return new FloatEntry(inStream);
+
+        case Types.LONG:
+            return new LongEntry(inStream);
+
+        case Types.DOUBLE:
+            return new DoubleEntry(inStream);
 
         case Types.CLASS:
             return new ClassReferenceEntry(inStream);
@@ -70,4 +74,13 @@ public abstract class ConstantPoolEntry {
      * some dependencies are not yet resolved.
      */
     abstract boolean resolve(ConstantPool pool) throws FileError;
+
+    /**
+     * Returns the number of blocks that this entry takes within the constant pool.
+     *
+     * Only long and double is expected to return here 2. All others will return 1
+     */
+    int size() {
+        return 1;
+    }
 }

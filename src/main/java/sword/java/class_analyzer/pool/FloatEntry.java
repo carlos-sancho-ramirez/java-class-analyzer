@@ -20,5 +20,4 @@ public class FloatEntry extends ConstantPoolEntry {
     boolean resolve(ConstantPool pool) throws FileError {
         return true;
     }
-
 }
