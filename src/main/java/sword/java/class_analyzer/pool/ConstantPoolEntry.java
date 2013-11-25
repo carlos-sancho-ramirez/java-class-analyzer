@@ -22,12 +22,20 @@ public abstract class ConstantPoolEntry {
         public static final int NAME_TYPE_PAIR = 12;
     }
 
+    // TODO: Double and long constant are still missing because they can use 2
+    // entries in the constant pool and it must be taken into account.
     public static ConstantPoolEntry get(InputStream inStream) throws IOException, FileError {
         final int entryType = inStream.read();
 
         switch (entryType) {
         case Types.TEXT:
             return new TextEntry(inStream);
+
+        case Types.INT:
+            return new IntEntry(inStream);
+
+        case Types.FLOAT:
+            return new FloatEntry(inStream);
 
         case Types.CLASS:
             return new ClassReferenceEntry(inStream);

@@ -171,7 +171,7 @@ public class ProjectAnalyzer {
                 }
 
                 System.out.println("");
-                System.out.println("Claases referenced and found in classPath:");
+                System.out.println("Classes referenced and found in classPath:");
                 for (ClassHolder holder : classHolders) {
                     if (holder.loaded()) {
                         System.out.println("  " + holder.reference.getQualifiedName());
