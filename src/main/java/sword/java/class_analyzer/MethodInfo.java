@@ -9,6 +9,7 @@ import sword.java.class_analyzer.attributes.CodeAttribute;
 import sword.java.class_analyzer.attributes.ExceptionsAttribute;
 import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.java_type.JavaMethod;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -19,7 +20,7 @@ public class MethodInfo {
     public final JavaMethod type;
     public final AttributeTable attributes;
 
-    public MethodInfo(InputStream inStream, ConstantPool pool) throws IOException, FileError {
+    public MethodInfo(InputStream inStream, ConstantPool pool, JavaTypeFactory factory) throws IOException, FileError {
         final int accessMaskValue = Utils.getBigEndian2Int(inStream);
         final int nameIndex = Utils.getBigEndian2Int(inStream);
         final int typeIndex = Utils.getBigEndian2Int(inStream);
@@ -28,7 +29,7 @@ public class MethodInfo {
         name = pool.get(nameIndex, TextEntry.class);
 
         final String signature = pool.get(typeIndex, TextEntry.class).text;
-        type = JavaMethod.getFromSignature(signature);
+        type = factory.getMethodFromSignature(signature);
         if (type == null) {
             throw new FileError(Kind.INVALID_MEMBER_SIGNATURE, "method", signature);
         }

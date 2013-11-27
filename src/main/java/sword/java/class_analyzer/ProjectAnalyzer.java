@@ -99,7 +99,8 @@ public class ProjectAnalyzer {
         }
         else {
             final File classPath = new File(args[ProgramArguments.CLASS_PATH]);
-            final ClassReference firstClass = RootReference.getInstance().addClass(args[ProgramArguments.MAIN_JAVA_CLASS]);
+            final RootReference dependenciesReference = new RootReference();
+            final ClassReference firstClass = dependenciesReference.addClass(args[ProgramArguments.MAIN_JAVA_CLASS]);
 
             boolean error = true;
             try {
@@ -134,9 +135,9 @@ public class ProjectAnalyzer {
                             inStream = new InputStreamWrapper(new FileInputStream(file));
                             foundAmount++;
                             System.out.println("Class " + currentHolder.reference.getQualifiedName() + " found at file " + file.getPath() + "...");
-    
+
                             try {
-                                classFile = new ClassFile(inStream);
+                                classFile = new ClassFile(inStream, dependenciesReference);
                                 successfullyRead++;
                                 System.out.println("  Successfully loaded!");
 

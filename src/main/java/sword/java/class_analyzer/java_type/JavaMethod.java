@@ -20,16 +20,6 @@ public class JavaMethod extends JavaType {
         return "(" + mParameters.signature() + ')' + mReturning.signature();
     }
 
-    @Override
-    JavaMethod tryCastingToMethod() {
-        return this;
-    }
-
-    public static JavaMethod getFromSignature(String signature) {
-        JavaType javaType = JavaType.getFromSignature(signature);
-        return javaType != null ? javaType.tryCastingToMethod() : null;
-    }
-
     public JavaType getReturningType() {
         return mReturning;
     }

@@ -10,11 +10,13 @@ import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.java_type.JavaClassType;
 import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
 import sword.java.class_analyzer.pool.MethodEntry;
 import sword.java.class_analyzer.ref.ClassReference;
+import sword.java.class_analyzer.ref.RootReference;
 
 public class ClassFile {
 
@@ -34,7 +36,7 @@ public class ClassFile {
     public final FieldTable fieldTable;
     public final MethodTable methodTable;
 
-    public ClassFile(InputStream inStream) throws IOException, FileError {
+    public ClassFile(InputStream inStream, RootReference rootReference) throws IOException, FileError {
 
         // We must check first that this is a class file
         byte signatureBuffer[] = new byte[FILE_SIGNATURE.length];
@@ -46,7 +48,8 @@ public class ClassFile {
         minorVersion = Utils.getBigEndian2Int(inStream);
         majorVersion = JavaVersion.get(Utils.getBigEndian2Int(inStream));
 
-        pool = new ConstantPool(inStream);
+        final JavaTypeFactory factory = new JavaTypeFactory(rootReference);
+        pool = new ConstantPool(inStream, factory);
 
         accessMask = new ClassModifierMask(Utils.getBigEndian2Int(inStream));
         final int thisIndex = Utils.getBigEndian2Int(inStream);
@@ -56,8 +59,8 @@ public class ClassFile {
         superClassReference = pool.get(superIndex, ClassReferenceEntry.class);
 
         interfaceTable = new InterfaceTable(inStream, pool);
-        fieldTable = new FieldTable(inStream, pool);
-        methodTable = new MethodTable(inStream, pool);
+        fieldTable = new FieldTable(inStream, pool, factory);
+        methodTable = new MethodTable(inStream, pool, factory);
     }
 
     private static void registerClass(Set<ClassReference> set, JavaType type) {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.attributes.AttributeTable;
 import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -16,7 +17,7 @@ public class FieldInfo {
     public final JavaType type;
     public final AttributeTable attributes;
 
-    public FieldInfo(InputStream inStream, ConstantPool pool) throws IOException, FileError {
+    public FieldInfo(InputStream inStream, ConstantPool pool, JavaTypeFactory factory) throws IOException, FileError {
         final int accessMaskValue = Utils.getBigEndian2Int(inStream);
         final int nameIndex = Utils.getBigEndian2Int(inStream);
         final int typeIndex = Utils.getBigEndian2Int(inStream);
@@ -24,7 +25,7 @@ public class FieldInfo {
         accessMask = new MemberModifierMask(accessMaskValue);
         name = pool.get(nameIndex, TextEntry.class);
         final String signature = pool.get(typeIndex, TextEntry.class).text;
-        type = JavaType.getFromSignature(signature);
+        type = factory.getFromSignature(signature);
         if (type == null) {
             throw new FileError(Kind.INVALID_MEMBER_SIGNATURE, "field", signature);
         }

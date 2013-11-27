@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 
 public class VariableEntry extends ConstantPoolEntry {
 
@@ -20,7 +21,7 @@ public class VariableEntry extends ConstantPoolEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool) throws FileError {
+    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
         mNameEntry = pool.get(mNameReferenceIndex, TextEntry.class);
         mTypeEntry = pool.get(mTypeReferenceIndex, TextEntry.class);
 

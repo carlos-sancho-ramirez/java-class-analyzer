@@ -13,8 +13,8 @@ public class JavaClassType extends JavaType {
                 && !signature.contains(".");
     }
 
-    JavaClassType(String signature) {
-        mClass = RootReference.getInstance().addClass(
+    JavaClassType(RootReference rootReference, String signature) {
+        mClass = rootReference.addClass(
                 signature.substring(1, signature.length() - 1)
                         .replace('/', '.'));
 

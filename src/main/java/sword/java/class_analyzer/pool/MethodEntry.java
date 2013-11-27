@@ -6,6 +6,7 @@ import java.io.InputStream;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.java_type.JavaMethod;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.ref.MethodReference;
 
 public class MethodEntry extends AbstractMemberEntry {
@@ -17,11 +18,11 @@ public class MethodEntry extends AbstractMemberEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool) throws FileError {
-        final boolean parentResult = super.resolve(pool);
+    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
+        final boolean parentResult = super.resolve(pool, factory);
 
         if (parentResult) {
-            JavaMethod methodType = JavaMethod.getFromSignature(mVariableEntry
+            JavaMethod methodType = factory.getMethodFromSignature(mVariableEntry
                     .getType());
 
             if (methodType == null) {

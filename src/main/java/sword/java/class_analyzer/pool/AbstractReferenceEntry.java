@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 
 public abstract class AbstractReferenceEntry extends ConstantPoolEntry {
 
@@ -16,7 +17,7 @@ public abstract class AbstractReferenceEntry extends ConstantPoolEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool) throws FileError {
+    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
         mTextEntry = pool.get(mTextEntryIndex, TextEntry.class);
 
         final boolean resolved = mTextEntry.mResolved;

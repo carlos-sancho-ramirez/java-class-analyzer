@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.ref.FieldReference;
 
 public class FieldEntry extends AbstractMemberEntry {
@@ -16,11 +17,11 @@ public class FieldEntry extends AbstractMemberEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool) throws FileError {
-        final boolean parentResult = super.resolve(pool);
+    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
+        final boolean parentResult = super.resolve(pool, factory);
 
         if (parentResult) {
-            JavaType fieldType = JavaType.getFromSignature(mVariableEntry
+            JavaType fieldType = factory.getFromSignature(mVariableEntry
                     .getType());
             mReference = mClassEntry.getReference().addField(
                     mVariableEntry.getName(), fieldType);

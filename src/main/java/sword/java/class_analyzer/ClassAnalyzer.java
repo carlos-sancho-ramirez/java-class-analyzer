@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.ref.RootReference;
 
 public class ClassAnalyzer {
 
@@ -17,12 +18,14 @@ public class ClassAnalyzer {
             System.out.println("");
         }
         else {
+            final RootReference rootReference = new RootReference();
+
             try {
                 final String filePath = args[0];
                 try {
                     InputStream inStream = new FileInputStream(filePath);
                     try {
-                        ClassFile classFile = new ClassFile(inStream);
+                        ClassFile classFile = new ClassFile(inStream, rootReference);
                         System.out.println(classFile);
                     }
                     catch (IOException e) {
