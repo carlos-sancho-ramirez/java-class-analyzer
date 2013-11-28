@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import sword.java.class_analyzer.ref.ClassReference;
+import sword.java.class_analyzer.ref.PackageReference;
 import sword.java.class_analyzer.ref.RootReference;
 
 public class ProjectAnalyzer {
@@ -88,6 +89,31 @@ public class ProjectAnalyzer {
         }
 
         return null;
+    }
+
+    private static void checkClassPath(File packageFile, PackageReference reference) {
+        final String list[] = packageFile.list();
+        if (list == null) return;
+
+        for (String name : list) {
+            File file = new File(packageFile, name);
+
+            if (file.isDirectory()) {
+                PackageReference newReference = reference.addPackage(name);
+                checkClassPath(file, newReference);
+            }
+            else if (file.isFile() && name.endsWith(ClassReference.FILE_EXTENSION) &&
+                    name.length() > ClassReference.FILE_EXTENSION.length()) {
+                final int extensionPosition = name.length() - ClassReference.FILE_EXTENSION.length();
+                reference.addClass(name.substring(0, extensionPosition));
+            }
+        }
+    }
+
+    private static RootReference checkClassPath(File classPath) {
+        final RootReference root = new RootReference();
+        checkClassPath(classPath, root);
+        return root;
     }
 
     public static void main(String args[]) {
@@ -180,16 +206,28 @@ public class ProjectAnalyzer {
                 }
 
                 System.out.println("");
-                System.out.println("Claases referenced but not found in classPath:");
+                System.out.println("Classes referenced but not found in classPath:");
                 for (ClassHolder holder : classHolders) {
                     if (!holder.loaded()) {
                         System.out.println("  " + holder.reference.getQualifiedName());
                     }
                 }
 
+                System.out.println("");
                 System.out.println("Referenced " + checkedAmount + " classes. " +
                         foundAmount + " classes found in the classpath " + classPath +
                         " and " + successfullyRead + " read with no major errors.");
+
+                final RootReference classesInPath = checkClassPath(classPath);
+                Set<ClassReference> inPathSet = classesInPath.setOfClasses();
+
+                System.out.println("Found " + inPathSet.size() + " classes in the class path");
+
+                inPathSet.removeAll(dependenciesReference.setOfClasses());
+                System.out.println("Found " + inPathSet.size() + " files not referenced:");
+                for (ClassReference ref : inPathSet) {
+                    System.out.println("  " + ref.getQualifiedName());
+                }
             }
         }
     }
