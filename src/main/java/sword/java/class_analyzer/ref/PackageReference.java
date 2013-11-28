@@ -127,4 +127,19 @@ public class PackageReference extends JavaReference {
     public File getFile(File classPath) {
         return new File(mParent.getFile(classPath), mName);
     }
+
+    @Override
+    public Set<ClassReference> setOfClasses() {
+        final Set<ClassReference> set = new HashSet<ClassReference>();
+
+        for (ClassReference classRef : mClasses) {
+            set.add(classRef);
+        }
+
+        for (PackageReference packageRef : mSubPackages) {
+            set.addAll(packageRef.setOfClasses());
+        }
+
+        return set;
+    }
 }

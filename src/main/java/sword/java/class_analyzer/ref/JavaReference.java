@@ -101,4 +101,6 @@ public abstract class JavaReference {
         return object != null && object instanceof JavaReference &&
                 getQualifiedName().equals(((JavaReference) object).getQualifiedName());
     }
+
+    public abstract Set<ClassReference> setOfClasses();
 }
