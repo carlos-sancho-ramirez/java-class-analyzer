@@ -20,4 +20,11 @@ public class InstructionInvokeinterface extends AbstractInvokeInstruction<Interf
     public String disassemble() {
         return "invokeinterface\t(" + mCount + ") " + methodToString();
     }
+
+    @Override
+    protected void fillByteCode(byte code[], int index) {
+        super.fillByteCode(code, index);
+        code[index + 3] = (byte) mCount;
+        code[index + 4] = (byte) 0;
+    }
 }
