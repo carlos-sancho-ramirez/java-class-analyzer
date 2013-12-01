@@ -91,6 +91,7 @@ import sword.java.class_analyzer.code.instructions.InstructionPop;
 import sword.java.class_analyzer.code.instructions.InstructionPutfield;
 import sword.java.class_analyzer.code.instructions.InstructionPutstatic;
 import sword.java.class_analyzer.code.instructions.InstructionReturn;
+import sword.java.class_analyzer.code.instructions.InstructionSipush;
 import sword.java.class_analyzer.code.instructions.InstructionTableswitch;
 import sword.java.class_analyzer.pool.ConstantPool;
 
@@ -108,6 +109,7 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x07, 1, InstructionIconst_4.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x08, 1, InstructionIconst_5.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x10, 2, InstructionBipush.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x11, 3, InstructionSipush.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x12, 2, InstructionLdc.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x13, 3, InstructionLdc_w.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x15, 2, InstructionIload_n.class)) ||
