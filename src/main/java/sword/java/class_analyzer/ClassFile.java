@@ -14,7 +14,7 @@ import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.MethodEntry;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
 import sword.java.class_analyzer.ref.ClassReference;
 import sword.java.class_analyzer.ref.RootReference;
 
@@ -99,8 +99,8 @@ public class ClassFile {
                 set.add(fieldEntry.getReference().getJavaParentReference());
             }
 
-            final Set<MethodEntry> methodEntries = methodCode.getKnownInvokedMethods();
-            for (MethodEntry fieldEntry : methodEntries) {
+            final Set<AbstractMethodEntry> methodEntries = methodCode.getKnownInvokedMethods();
+            for (AbstractMethodEntry fieldEntry : methodEntries) {
                 set.add(fieldEntry.getReference().getJavaParentReference());
             }
         }

@@ -52,7 +52,7 @@ public abstract class ConstantPoolEntry {
             return new FieldEntry(inStream);
 
         case Types.METHOD:
-            return new MethodEntry(inStream);
+            return new InstanceMethodEntry(inStream);
 
         case Types.INTERFACE_METHOD:
             return new InterfaceMethodEntry(inStream);

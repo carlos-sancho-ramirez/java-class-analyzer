@@ -9,11 +9,11 @@ import sword.java.class_analyzer.java_type.JavaMethod;
 import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.ref.MethodReference;
 
-public class MethodEntry extends AbstractMemberEntry {
+public abstract class AbstractMethodEntry extends AbstractMemberEntry {
 
     private MethodReference mReference;
 
-    MethodEntry(InputStream inStream) throws IOException, FileError {
+    AbstractMethodEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
 

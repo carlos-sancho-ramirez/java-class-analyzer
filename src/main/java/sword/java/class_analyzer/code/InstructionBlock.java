@@ -10,7 +10,7 @@ import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.code.instructions.AbstractInstruction;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.MethodEntry;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
 
 /**
  * Class representing a sortered list of instructions to execute.
@@ -180,10 +180,10 @@ public class InstructionBlock {
         return result;
     }
 
-    public Set<MethodEntry> getKnownInvokedMethods() {
-        Set<MethodEntry> methods = new HashSet<MethodEntry>();
+    public Set<AbstractMethodEntry> getKnownInvokedMethods() {
+        Set<AbstractMethodEntry> methods = new HashSet<AbstractMethodEntry>();
         for (InstructionHolder holder : mHolders) {
-            Set<MethodEntry> insMethods = holder.instruction.getKnownInvokedMethods();
+            Set<AbstractMethodEntry> insMethods = holder.instruction.getKnownInvokedMethods();
             if (insMethods.size() > 0) {
                 methods.addAll(insMethods);
             }

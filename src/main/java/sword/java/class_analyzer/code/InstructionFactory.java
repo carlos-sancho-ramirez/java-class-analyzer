@@ -60,6 +60,7 @@ import sword.java.class_analyzer.code.instructions.InstructionIload_3;
 import sword.java.class_analyzer.code.instructions.InstructionIload_n;
 import sword.java.class_analyzer.code.instructions.InstructionImul;
 import sword.java.class_analyzer.code.instructions.InstructionIneg;
+import sword.java.class_analyzer.code.instructions.InstructionInvokeinterface;
 import sword.java.class_analyzer.code.instructions.InstructionInvokespecial;
 import sword.java.class_analyzer.code.instructions.InstructionInvokestatic;
 import sword.java.class_analyzer.code.instructions.InstructionInvokevirtual;
@@ -194,6 +195,7 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB6, 3, InstructionInvokevirtual.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB7, 3, InstructionInvokespecial.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB8, 3, InstructionInvokestatic.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xB9, 5, InstructionInvokeinterface.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBB, 3, InstructionNew.class)) ||
                 !interpreters.add(new TwoBytesSimpleByteCodeInterpreter(0xBC, 0x04, 2, InstructionNewArrayBoolean.class)) ||
                 !interpreters.add(new TwoBytesSimpleByteCodeInterpreter(0xBC, 0x05, 2, InstructionNewArrayChar.class)) ||

@@ -7,7 +7,7 @@ import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.MethodEntry;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
 
 
 public abstract class AbstractInstruction {
@@ -82,8 +82,8 @@ public abstract class AbstractInstruction {
      * Returns a set of methods this instruction can call. In case no method can
      * be called an empty set will be returned instead.
      */
-    public Set<MethodEntry> getKnownInvokedMethods() {
-        return new HashSet<MethodEntry>(0);
+    public Set<AbstractMethodEntry> getKnownInvokedMethods() {
+        return new HashSet<AbstractMethodEntry>(0);
     }
 
     public Set<FieldEntry> getKnownReferencedFields() {

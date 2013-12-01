@@ -5,9 +5,9 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 
-public class InterfaceMethodEntry extends AbstractMethodEntry {
+public class InstanceMethodEntry extends AbstractMethodEntry {
 
-    InterfaceMethodEntry(InputStream inStream) throws IOException, FileError {
+    InstanceMethodEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
     }
 }
