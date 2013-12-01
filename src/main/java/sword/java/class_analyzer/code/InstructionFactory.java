@@ -11,6 +11,7 @@ import sword.java.class_analyzer.code.instructions.InstructionAload_0;
 import sword.java.class_analyzer.code.instructions.InstructionAload_1;
 import sword.java.class_analyzer.code.instructions.InstructionAload_2;
 import sword.java.class_analyzer.code.instructions.InstructionAload_3;
+import sword.java.class_analyzer.code.instructions.InstructionAload_n;
 import sword.java.class_analyzer.code.instructions.InstructionAnewarray;
 import sword.java.class_analyzer.code.instructions.InstructionAreturn;
 import sword.java.class_analyzer.code.instructions.InstructionArraylength;
@@ -18,6 +19,7 @@ import sword.java.class_analyzer.code.instructions.InstructionAstore_0;
 import sword.java.class_analyzer.code.instructions.InstructionAstore_1;
 import sword.java.class_analyzer.code.instructions.InstructionAstore_2;
 import sword.java.class_analyzer.code.instructions.InstructionAstore_3;
+import sword.java.class_analyzer.code.instructions.InstructionAstore_n;
 import sword.java.class_analyzer.code.instructions.InstructionAthrow;
 import sword.java.class_analyzer.code.instructions.InstructionBastore;
 import sword.java.class_analyzer.code.instructions.InstructionBipush;
@@ -108,6 +110,7 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x12, 2, InstructionLdc.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x13, 3, InstructionLdc_w.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x15, 2, InstructionIload_n.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x19, 2, InstructionAload_n.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1A, 1, InstructionIload_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1B, 1, InstructionIload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1C, 1, InstructionIload_2.class)) ||
@@ -118,6 +121,7 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2D, 1, InstructionAload_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x32, 1, InstructionAaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore_n.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x3A, 2, InstructionAstore_n.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3B, 1, InstructionIstore_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3C, 1, InstructionIstore_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3D, 1, InstructionIstore_2.class)) ||
