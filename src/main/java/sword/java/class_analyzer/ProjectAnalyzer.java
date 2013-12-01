@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import sword.java.class_analyzer.ref.ClassReference;
@@ -199,19 +201,35 @@ public class ProjectAnalyzer {
 
                 System.out.println("");
                 System.out.println("Classes referenced and found in classPath:");
-                for (ClassHolder holder : classHolders) {
-                    if (holder.loaded()) {
-                        System.out.println("  " + holder.reference.getQualifiedName());
+                do {
+                    final List<String> references = new ArrayList<String>(classHolders.size());
+                    for (ClassHolder holder : classHolders) {
+                        if (holder.loaded()) {
+                            references.add(holder.reference.getQualifiedName());
+                        }
                     }
-                }
+
+                    java.util.Collections.sort(references);
+                    for (String reference : references) {
+                        System.out.println("  " + reference);
+                    }
+                } while (false);
 
                 System.out.println("");
                 System.out.println("Classes referenced but not found in classPath:");
-                for (ClassHolder holder : classHolders) {
-                    if (!holder.loaded()) {
-                        System.out.println("  " + holder.reference.getQualifiedName());
+                do {
+                    final List<String> references = new ArrayList<String>(classHolders.size());
+                    for (ClassHolder holder : classHolders) {
+                        if (!holder.loaded()) {
+                            references.add(holder.reference.getQualifiedName());
+                        }
                     }
-                }
+
+                    java.util.Collections.sort(references);
+                    for (String reference : references) {
+                        System.out.println("  " + reference);
+                    }
+                } while (false);
 
                 System.out.println("");
                 System.out.println("Referenced " + checkedAmount + " classes. " +
