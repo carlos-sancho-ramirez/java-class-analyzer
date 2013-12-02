@@ -10,9 +10,11 @@ import java.util.Set;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
 import sword.java.class_analyzer.code.InstructionBlock.DisassemblerOptions;
+import sword.java.class_analyzer.interf.KnownReferencesProvider;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
+import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.AbstractMethodEntry;
 
 /**
  * Collection of InstructionBlocks make a self contained algorithm.
@@ -21,7 +23,7 @@ import sword.java.class_analyzer.pool.AbstractMethodEntry;
  * first. The rest of blocks are not public for other methods and will only be
  * executed by another block within this method.
  */
-public class MethodCode {
+public class MethodCode implements KnownReferencesProvider {
 
     private static class BlockHolder {
         public int index;
@@ -184,6 +186,7 @@ public class MethodCode {
         return result;
     }
 
+    @Override
     public Set<AbstractMethodEntry> getKnownInvokedMethods() {
         Set<AbstractMethodEntry> methods = new HashSet<AbstractMethodEntry>();
         for (BlockHolder holder : mHolders) {
@@ -196,6 +199,7 @@ public class MethodCode {
         return methods;
     }
 
+    @Override
     public Set<FieldEntry> getKnownReferencedFields() {
         Set<FieldEntry> fields = new HashSet<FieldEntry>();
         for (BlockHolder holder : mHolders) {
@@ -206,6 +210,19 @@ public class MethodCode {
         }
 
         return fields;
+    }
+
+    @Override
+    public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
+        Set<ClassReferenceEntry> classes = new HashSet<ClassReferenceEntry>();
+        for (BlockHolder holder : mHolders) {
+            Set<ClassReferenceEntry> insClasses = holder.block.getKnownReflectionClassReferences();
+            if (insClasses.size() > 0) {
+                classes.addAll(insClasses);
+            }
+        }
+
+        return classes;
     }
 
     public boolean isValid() {

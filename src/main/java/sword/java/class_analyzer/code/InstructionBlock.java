@@ -8,9 +8,11 @@ import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.code.instructions.AbstractInstruction;
+import sword.java.class_analyzer.interf.KnownReferencesProvider;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
+import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.AbstractMethodEntry;
 
 /**
  * Class representing a sortered list of instructions to execute.
@@ -21,7 +23,7 @@ import sword.java.class_analyzer.pool.AbstractMethodEntry;
  * is ensured that none of the instructions in the middle, or the last, will be
  * executed without executing the previous one first.
  */
-public class InstructionBlock {
+public class InstructionBlock implements KnownReferencesProvider {
 
     public static final class DisassemblerOptions {
        public static final int SHOW_INDEX = 1;
@@ -180,6 +182,7 @@ public class InstructionBlock {
         return result;
     }
 
+    @Override
     public Set<AbstractMethodEntry> getKnownInvokedMethods() {
         Set<AbstractMethodEntry> methods = new HashSet<AbstractMethodEntry>();
         for (InstructionHolder holder : mHolders) {
@@ -192,6 +195,7 @@ public class InstructionBlock {
         return methods;
     }
 
+    @Override
     public Set<FieldEntry> getKnownReferencedFields() {
         Set<FieldEntry> fields = new HashSet<FieldEntry>();
         for (InstructionHolder holder : mHolders) {
@@ -202,6 +206,19 @@ public class InstructionBlock {
         }
 
         return fields;
+    }
+
+    @Override
+    public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
+        Set<ClassReferenceEntry> classes = new HashSet<ClassReferenceEntry>();
+        for (InstructionHolder holder : mHolders) {
+            Set<ClassReferenceEntry> insClasses = holder.instruction.getKnownReflectionClassReferences();
+            if (insClasses.size() > 0) {
+                classes.addAll(insClasses);
+            }
+        }
+
+        return classes;
     }
 
     public int byteCodeSize() {
