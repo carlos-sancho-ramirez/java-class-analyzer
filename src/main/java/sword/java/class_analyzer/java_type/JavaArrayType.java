@@ -17,4 +17,8 @@ public class JavaArrayType extends JavaType {
     public String getJavaRepresentation() {
         return mArrayType.getJavaRepresentation() + "[]";
     }
+
+    public JavaType getElementType() {
+        return mArrayType;
+    }
 }

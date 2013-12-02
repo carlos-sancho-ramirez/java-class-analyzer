@@ -90,6 +90,13 @@ public class PackageReference extends JavaReference {
         return addNode(qualifiedName, mClasses, addClassLambda, null);
     }
 
+    public ArrayClassReference addArrayClass(ClassReference element) {
+        final ArrayClassReference array = new ArrayClassReference(element);
+        mClasses.add(element);
+        mClasses.add(array);
+        return array;
+    }
+
     private static final AddNodeLambda<PackageReference, PackageReference, JavaType> addPackageLambda = new AddNodeLambda<PackageReference, PackageReference, JavaType>() {
 
         @Override
@@ -109,11 +116,11 @@ public class PackageReference extends JavaReference {
      * Returns a PackageReference for the given qualified name. This method also
      * registers the instance. A new instance will be created only if the
      * reference was not registered for this namespace root.
-     * 
+     *
      * @param qualifiedName
      *            , relative to the current package, for the package to add.
      *            This should be in the format "java.util"
-     * 
+     *
      * @throws NullPointerException
      *             if qualifiedName is null
      * @throws IllegalArgumentException

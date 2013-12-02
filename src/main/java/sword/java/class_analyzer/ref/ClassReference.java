@@ -77,4 +77,8 @@ public class ClassReference extends JavaReference {
         set.add(this);
         return set;
     }
+
+    public ArrayClassReference tryCastToArray() {
+        return null;
+    }
 }
