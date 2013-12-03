@@ -3,7 +3,7 @@ package sword.java.class_analyzer.ref;
 import java.io.File;
 import java.util.Set;
 
-import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaType;
 
 public abstract class JavaReference {
 
@@ -86,7 +86,10 @@ public abstract class JavaReference {
     }
 
     /**
-     * Returns the file where the class should be within the classpath
+     * Returns the file where the class should be within the classpath.
+     * Arrays will return the file for the class on its element or null element
+     * is a primitive type.
+     *
      * @param classPath Folder where to look for files.
      */
     public abstract File getFile(File classPath);

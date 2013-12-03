@@ -8,15 +8,9 @@ public abstract class MemberReference extends JavaReference {
 
     private final ClassReference mClass;
 
-    public MemberReference(ClassReference classReference, String name) {
+    MemberReference(ClassReference classReference, String name) {
         super(name);
-        final int parentCharsCount = name.length() - mName.length() - 1;
-        if (parentCharsCount > 0) {
-            mClass = new ClassReference(null, name.substring(0,parentCharsCount));
-        }
-        else {
-            mClass = classReference;
-        }
+        mClass = classReference;
     }
 
     @Override

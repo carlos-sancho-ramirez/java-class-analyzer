@@ -1,32 +1,12 @@
 package sword.java.class_analyzer.java_type;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import sword.java.class_analyzer.independent_type.JavaArrayType;
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.ref.RootReference;
 
-public class JavaTypeFactory {
+public class JavaTypeFactory extends sword.java.class_analyzer.independent_type.JavaTypeFactory {
 
     private RootReference mRootReference;
-
-    /**
-     * Set for primitives and arrays of primitives to be reused.
-     */
-    private static final Set<JavaType> INDEPENDENT_INSTANCES = new HashSet<JavaType>();
-
-    static {
-        if (!INDEPENDENT_INSTANCES.add(new PrimitiveType("V", "void"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("Z", "boolean"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("B", "byte"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("C", "char"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("S", "short"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("I", "int"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("J", "long"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("F", "float"))
-                || !INDEPENDENT_INSTANCES.add(new PrimitiveType("D", "double"))) {
-            throw new IllegalArgumentException();
-        }
-    }
 
     public JavaTypeFactory(RootReference rootReference) {
         mRootReference = rootReference;
@@ -34,29 +14,6 @@ public class JavaTypeFactory {
 
     public RootReference getRootReference() {
         return mRootReference;
-    }
-
-    private JavaType getIndependent(String signature) {
-        if (signature == null || signature.equals("")) {
-            return null;
-        }
-
-        for (JavaType javaType : INDEPENDENT_INSTANCES) {
-            if (javaType.signature().equals(signature)) {
-                return javaType;
-            }
-        }
-
-        if (signature.startsWith("[")) {
-            final JavaType element = getIndependent(signature.substring(1));
-            if (element != null) {
-                final JavaArrayType result = new JavaArrayType(element);
-                INDEPENDENT_INSTANCES.add(result);
-                return result;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -90,7 +47,7 @@ public class JavaTypeFactory {
 
         final JavaType returningType = getFromSignature(signature
                 .substring(closingIndex + 1));
-        if (returningType == null || returningType.isTypeList()) {
+        if (returningType == null || returningType instanceof JavaTypeList) {
             return null;
         }
 
@@ -108,7 +65,7 @@ public class JavaTypeFactory {
             return null;
         }
 
-        final JavaType independent = getIndependent(signature);
+        final JavaType independent = getIndependentTypeFromSignature(signature);
         if (independent != null) {
             return independent;
         }

@@ -1,5 +1,4 @@
-package sword.java.class_analyzer.java_type;
-
+package sword.java.class_analyzer.independent_type;
 
 public abstract class JavaType {
 
@@ -40,8 +39,8 @@ public abstract class JavaType {
                 && signature().equals(((JavaType) object).signature());
     }
 
-    boolean isTypeList() {
-        return false;
+    public JavaArrayType getArrayType() {
+        return (JavaArrayType) JavaTypeFactory.getIndependentTypeFromSignature("[" + signature());
     }
 
     @Override

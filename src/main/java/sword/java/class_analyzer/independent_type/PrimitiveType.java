@@ -1,4 +1,4 @@
-package sword.java.class_analyzer.java_type;
+package sword.java.class_analyzer.independent_type;
 
 public class PrimitiveType extends JavaType {
 

@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.attributes.AttributeTable;
-import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;

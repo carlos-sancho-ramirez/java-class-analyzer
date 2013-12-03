@@ -1,10 +1,11 @@
-package sword.java.class_analyzer.java_type;
+package sword.java.class_analyzer.independent_type;
+
 
 public class JavaArrayType extends JavaType {
 
     private final JavaType mArrayType;
 
-    JavaArrayType(JavaType arrayType) {
+    public JavaArrayType(JavaType arrayType) {
         mArrayType = arrayType;
     }
 

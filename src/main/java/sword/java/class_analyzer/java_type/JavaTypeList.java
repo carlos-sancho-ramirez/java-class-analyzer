@@ -1,5 +1,7 @@
 package sword.java.class_analyzer.java_type;
 
+import sword.java.class_analyzer.independent_type.JavaType;
+
 public class JavaTypeList extends JavaType {
 
     private final JavaType mJavaTypes[];
@@ -10,13 +12,13 @@ public class JavaTypeList extends JavaType {
 
     JavaTypeList(JavaType javaType) {
         int listSize = 1;
-        if (javaType.isTypeList()) {
+        if (javaType instanceof JavaTypeList) {
             listSize = ((JavaTypeList) javaType).mJavaTypes.length;
         }
 
         mJavaTypes = new JavaType[listSize];
 
-        if (javaType.isTypeList()) {
+        if (javaType instanceof JavaTypeList) {
             final JavaType list[] = ((JavaTypeList) javaType).mJavaTypes;
             final int elements = list.length;
 
@@ -32,11 +34,11 @@ public class JavaTypeList extends JavaType {
     JavaTypeList(JavaType first, JavaType last) {
         int listSize = 2;
 
-        if (first.isTypeList()) {
+        if (first instanceof JavaTypeList) {
             listSize += ((JavaTypeList) first).mJavaTypes.length - 1;
         }
 
-        if (last.isTypeList()) {
+        if (last instanceof JavaTypeList) {
             listSize += ((JavaTypeList) last).mJavaTypes.length - 1;
         }
 
@@ -44,7 +46,7 @@ public class JavaTypeList extends JavaType {
 
         int index = 0;
 
-        if (first.isTypeList()) {
+        if (first instanceof JavaTypeList) {
             final JavaType list[] = ((JavaTypeList) first).mJavaTypes;
             final int elements = list.length;
 
@@ -56,7 +58,7 @@ public class JavaTypeList extends JavaType {
             mJavaTypes[index++] = first;
         }
 
-        if (last.isTypeList()) {
+        if (last instanceof JavaTypeList) {
             final JavaType list[] = ((JavaTypeList) last).mJavaTypes;
             final int elements = list.length;
 
@@ -77,11 +79,6 @@ public class JavaTypeList extends JavaType {
         }
 
         return result;
-    }
-
-    @Override
-    boolean isTypeList() {
-        return true;
     }
 
     @Override

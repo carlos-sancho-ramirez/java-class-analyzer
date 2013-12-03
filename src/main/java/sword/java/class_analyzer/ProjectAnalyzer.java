@@ -12,6 +12,7 @@ import java.util.Set;
 import sword.java.class_analyzer.ref.ClassReference;
 import sword.java.class_analyzer.ref.PackageReference;
 import sword.java.class_analyzer.ref.RootReference;
+import sword.java.class_analyzer.ref.SimpleClassReference;
 
 public class ProjectAnalyzer {
 
@@ -104,9 +105,9 @@ public class ProjectAnalyzer {
                 PackageReference newReference = reference.addPackage(name);
                 checkClassPath(file, newReference);
             }
-            else if (file.isFile() && name.endsWith(ClassReference.FILE_EXTENSION) &&
-                    name.length() > ClassReference.FILE_EXTENSION.length()) {
-                final int extensionPosition = name.length() - ClassReference.FILE_EXTENSION.length();
+            else if (file.isFile() && name.endsWith(SimpleClassReference.FILE_EXTENSION) &&
+                    name.length() > SimpleClassReference.FILE_EXTENSION.length()) {
+                final int extensionPosition = name.length() - SimpleClassReference.FILE_EXTENSION.length();
                 reference.addClass(name.substring(0, extensionPosition));
             }
         }

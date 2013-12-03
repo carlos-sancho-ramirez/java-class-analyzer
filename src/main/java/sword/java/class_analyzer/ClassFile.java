@@ -8,8 +8,8 @@ import java.util.Set;
 
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.code.MethodCode;
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaClassType;
-import sword.java.class_analyzer.java_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaTypeFactory;
 import sword.java.class_analyzer.pool.AbstractMethodEntry;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;

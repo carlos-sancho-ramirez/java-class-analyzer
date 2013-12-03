@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaMethod;
-import sword.java.class_analyzer.java_type.JavaType;
 
 public class PackageReference extends JavaReference {
 
@@ -80,14 +80,41 @@ public class PackageReference extends JavaReference {
         }
 
         @Override
-        public ClassReference createIt(PackageReference instance, String name,
+        public SimpleClassReference createIt(PackageReference instance, String name,
                 JavaType javaType) {
-            return new ClassReference(instance, name);
+            return new SimpleClassReference(instance, name);
         }
     };
 
+    public SimpleClassReference addSimpleClass(String qualifiedName) {
+        if (qualifiedName.endsWith(ArrayClassReference.ARRAY_IDENTIFIER)) {
+            return null;
+        }
+
+        return (SimpleClassReference) addClass(qualifiedName);
+    }
+
     public ClassReference addClass(String qualifiedName) {
-        return addNode(qualifiedName, mClasses, addClassLambda, null);
+
+        if (qualifiedName.indexOf('.') < 0) {
+            String element = qualifiedName;
+            int arrayDepth = 0;
+            while (element.endsWith(ArrayClassReference.ARRAY_IDENTIFIER)) {
+                arrayDepth++;
+                element = element.substring(0, element.length() - ArrayClassReference.ARRAY_IDENTIFIER.length());
+            }
+            ClassReference elementResult = addNode(qualifiedName, mClasses, addClassLambda, null);
+
+            while (arrayDepth-- > 0) {
+                elementResult = new ArrayClassReference(elementResult);
+                mClasses.add(elementResult);
+            }
+
+            return elementResult;
+        }
+        else {
+            return addNode(qualifiedName, mClasses, addClassLambda, null);
+        }
     }
 
     public ArrayClassReference addArrayClass(ClassReference element) {

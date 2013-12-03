@@ -4,12 +4,10 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaMethod;
-import sword.java.class_analyzer.java_type.JavaType;
 
-public class ClassReference extends JavaReference {
-
-    public static final String FILE_EXTENSION = ".class";
+public abstract class ClassReference extends JavaReference {
 
     private final Set<FieldReference> mFields = new HashSet<FieldReference>();
     private final Set<MethodReference> mMethods = new HashSet<MethodReference>();
@@ -67,9 +65,7 @@ public class ClassReference extends JavaReference {
     }
 
     @Override
-    public File getFile(File classPath) {
-        return new File(mPackage.getFile(classPath), mName + FILE_EXTENSION);
-    }
+    public abstract File getFile(File classPath);
 
     @Override
     public Set<ClassReference> setOfClasses() {
