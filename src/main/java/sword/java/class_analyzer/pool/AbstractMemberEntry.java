@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.ref.MemberReference;
 
 public abstract class AbstractMemberEntry extends ConstantPoolEntry {
@@ -22,7 +22,7 @@ public abstract class AbstractMemberEntry extends ConstantPoolEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
+    boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError {
         mClassEntry = pool.get(mClassReferenceIndex, ClassReferenceEntry.class);
         mVariableEntry = pool.get(mVarReferenceIndex, VariableEntry.class);
 

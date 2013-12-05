@@ -8,14 +8,14 @@ import java.util.List;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 
 public class ConstantPool {
 
     public final int poolEntryCountPlusOne;
     private final List<ConstantPoolEntry> entries = new ArrayList<ConstantPoolEntry>();
 
-    public ConstantPool(InputStream inStream, JavaTypeFactory factory) throws IOException, FileError {
+    public ConstantPool(InputStream inStream, ExtendedTypeFactory factory) throws IOException, FileError {
         poolEntryCountPlusOne = Utils.getBigEndian2Int(inStream);
 
         for (int counter = 1; counter < poolEntryCountPlusOne; counter++) {

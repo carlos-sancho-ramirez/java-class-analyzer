@@ -10,7 +10,7 @@ import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.java_type.JavaClassType;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.pool.AbstractMethodEntry;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
@@ -48,7 +48,7 @@ public class ClassFile {
         minorVersion = Utils.getBigEndian2Int(inStream);
         majorVersion = JavaVersion.get(Utils.getBigEndian2Int(inStream));
 
-        final JavaTypeFactory factory = new JavaTypeFactory(rootReference);
+        final ExtendedTypeFactory factory = new ExtendedTypeFactory(rootReference);
         pool = new ConstantPool(inStream, factory);
 
         accessMask = new ClassModifierMask(Utils.getBigEndian2Int(inStream));

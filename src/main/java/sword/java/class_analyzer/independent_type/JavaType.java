@@ -40,7 +40,8 @@ public abstract class JavaType {
     }
 
     public JavaArrayType getArrayType() {
-        return (JavaArrayType) JavaTypeFactory.getIndependentTypeFromSignature("[" + signature());
+        return (JavaArrayType) JavaTypeFactory.getIndependentTypeFromSignature(
+                JavaArrayType.getArraySignature(signature()));
     }
 
     @Override

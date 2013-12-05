@@ -6,7 +6,7 @@ import java.io.InputStream;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.attributes.AttributeTable;
 import sword.java.class_analyzer.independent_type.JavaType;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.TextEntry;
 
@@ -17,7 +17,7 @@ public class FieldInfo {
     public final JavaType type;
     public final AttributeTable attributes;
 
-    public FieldInfo(InputStream inStream, ConstantPool pool, JavaTypeFactory factory) throws IOException, FileError {
+    public FieldInfo(InputStream inStream, ConstantPool pool, ExtendedTypeFactory factory) throws IOException, FileError {
         final int accessMaskValue = Utils.getBigEndian2Int(inStream);
         final int nameIndex = Utils.getBigEndian2Int(inStream);
         final int typeIndex = Utils.getBigEndian2Int(inStream);

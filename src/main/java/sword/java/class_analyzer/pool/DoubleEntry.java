@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 
 public class DoubleEntry extends ConstantPoolEntry {
 
@@ -18,7 +18,7 @@ public class DoubleEntry extends ConstantPoolEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
+    boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError {
         return true;
     }
 

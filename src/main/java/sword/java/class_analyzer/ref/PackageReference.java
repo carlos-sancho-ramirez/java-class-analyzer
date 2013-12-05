@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import sword.java.class_analyzer.independent_type.JavaArrayType;
 import sword.java.class_analyzer.independent_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaTypeFactory;
+import sword.java.class_analyzer.independent_type.PrimitiveType;
 import sword.java.class_analyzer.java_type.JavaMethod;
 
 public class PackageReference extends JavaReference {
@@ -87,7 +90,7 @@ public class PackageReference extends JavaReference {
     };
 
     public SimpleClassReference addSimpleClass(String qualifiedName) {
-        if (qualifiedName.endsWith(ArrayClassReference.ARRAY_IDENTIFIER)) {
+        if (JavaArrayType.isJavaArrayRepresentation(qualifiedName)) {
             return null;
         }
 
@@ -99,11 +102,17 @@ public class PackageReference extends JavaReference {
         if (qualifiedName.indexOf('.') < 0) {
             String element = qualifiedName;
             int arrayDepth = 0;
-            while (element.endsWith(ArrayClassReference.ARRAY_IDENTIFIER)) {
+            while (JavaArrayType.isJavaArrayRepresentation(element)) {
                 arrayDepth++;
-                element = element.substring(0, element.length() - ArrayClassReference.ARRAY_IDENTIFIER.length());
+                element = JavaArrayType.getElementJavaRepresentation(element);
             }
-            ClassReference elementResult = addNode(qualifiedName, mClasses, addClassLambda, null);
+
+            final JavaType independent = JavaTypeFactory.getIndependentTypeFromJavaRepresentation(qualifiedName);
+            if (independent != null && independent instanceof PrimitiveType) {
+                return null;
+            }
+
+            ClassReference elementResult = addNode(element, mClasses, addClassLambda, null);
 
             while (arrayDepth-- > 0) {
                 elementResult = new ArrayClassReference(elementResult);

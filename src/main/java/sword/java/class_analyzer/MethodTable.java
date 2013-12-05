@@ -3,14 +3,14 @@ package sword.java.class_analyzer;
 import java.io.IOException;
 import java.io.InputStream;
 
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class MethodTable {
 
     public final MethodInfo methods[];
 
-    public MethodTable(InputStream inStream, ConstantPool pool, JavaTypeFactory factory) throws IOException, FileError {
+    public MethodTable(InputStream inStream, ConstantPool pool, ExtendedTypeFactory factory) throws IOException, FileError {
         final int count = Utils.getBigEndian2Int(inStream);
         methods = new MethodInfo[count];
 

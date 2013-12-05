@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 
 public abstract class ConstantPoolEntry {
 
@@ -74,7 +74,7 @@ public abstract class ConstantPoolEntry {
      * @return whether this reference is actually resolved, this can be false if
      * some dependencies are not yet resolved.
      */
-    abstract boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError;
+    abstract boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError;
 
     /**
      * Returns the number of blocks that this entry takes within the constant pool.

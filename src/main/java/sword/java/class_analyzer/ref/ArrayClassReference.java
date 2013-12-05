@@ -3,14 +3,15 @@ package sword.java.class_analyzer.ref;
 import java.io.File;
 import java.util.Set;
 
-public class ArrayClassReference extends ClassReference {
+import sword.java.class_analyzer.independent_type.JavaArrayType;
 
-    public static final String ARRAY_IDENTIFIER = "[]";
+public class ArrayClassReference extends ClassReference {
 
     private ClassReference mElementReference;
 
     ArrayClassReference(ClassReference elementReference) {
-        super(elementReference.getJavaParentReference(), elementReference.getSimpleName() + ARRAY_IDENTIFIER);
+        super(elementReference.getJavaParentReference(),
+                JavaArrayType.getArrayRepresentation(elementReference.getSimpleName()));
         mElementReference = elementReference;
     }
 
@@ -25,19 +26,6 @@ public class ArrayClassReference extends ClassReference {
         set.add(this);
         return set;
     }
-
-    /*
-    public ClassReference getOriginElementReference() {
-        final ArrayClassReference array = mElementReference.tryCastToArray();
-
-        if (array != null) {
-            return array.getOriginElementReference();
-        }
-        else {
-            return mElementReference;
-        }
-    }
-    */
 
     @Override
     public ArrayClassReference tryCastToArray() {

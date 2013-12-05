@@ -2,13 +2,14 @@ package sword.java.class_analyzer.java_type;
 
 import sword.java.class_analyzer.independent_type.JavaArrayType;
 import sword.java.class_analyzer.independent_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaTypeFactory;
 import sword.java.class_analyzer.ref.RootReference;
 
-public class JavaTypeFactory extends sword.java.class_analyzer.independent_type.JavaTypeFactory {
+public class ExtendedTypeFactory extends JavaTypeFactory {
 
     private RootReference mRootReference;
 
-    public JavaTypeFactory(RootReference rootReference) {
+    public ExtendedTypeFactory(RootReference rootReference) {
         mRootReference = rootReference;
     }
 
@@ -60,22 +61,26 @@ public class JavaTypeFactory extends sword.java.class_analyzer.independent_type.
      * @param signature java binary style signature.
      * @return The instance matching the signature or null if the signature is not valid.
      */
+    @Override
     public JavaType getFromSignature(String signature) {
         if (signature == null || signature.equals("")) {
             return null;
         }
 
-        final JavaType independent = getIndependentTypeFromSignature(signature);
+        final JavaType independent = super.getFromSignature(signature);
         if (independent != null) {
             return independent;
         }
 
         final JavaType method = getMethodFromSignature(signature);
+        if (method != null) {
+            return method;
+        }
 
         int arrayDepth = 0;
-        while (signature.startsWith("[")) {
+        while (JavaArrayType.isJavaArraySignature(signature)) {
             ++arrayDepth;
-            signature = signature.substring(1);
+            signature = JavaArrayType.getElementSignature(signature);
         }
 
         for (JavaType instance : INDEPENDENT_INSTANCES) {
@@ -104,7 +109,10 @@ public class JavaTypeFactory extends sword.java.class_analyzer.independent_type.
 
         if (validClassReference
                 && JavaClassType.checkValidSignature(firstSignature)) {
-            final JavaType firstType = new JavaClassType(mRootReference, firstSignature);
+            JavaType firstType = new JavaClassType(mRootReference, firstSignature);
+            while (arrayDepth-- > 0) {
+                firstType = new JavaArrayType(firstType);
+            }
 
             if (signature.length() > firstSignature.length()) {
                 final JavaType rest = getFromSignature(signature

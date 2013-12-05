@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.independent_type.JavaType;
-import sword.java.class_analyzer.java_type.JavaTypeFactory;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.ref.FieldReference;
 
 public class FieldEntry extends AbstractMemberEntry {
@@ -17,7 +17,7 @@ public class FieldEntry extends AbstractMemberEntry {
     }
 
     @Override
-    boolean resolve(ConstantPool pool, JavaTypeFactory factory) throws FileError {
+    boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError {
         final boolean parentResult = super.resolve(pool, factory);
 
         if (parentResult) {

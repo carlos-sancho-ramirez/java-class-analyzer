@@ -35,7 +35,7 @@ public class JavaTypeFactory {
             }
         }
 
-        if (signature.startsWith("[")) {
+        if (JavaArrayType.isJavaArraySignature(signature)) {
             final JavaType element = getIndependentTypeFromSignature(signature.substring(1));
             if (element != null) {
                 final JavaArrayType result = new JavaArrayType(element);
@@ -45,5 +45,39 @@ public class JavaTypeFactory {
         }
 
         return null;
+    }
+
+    public static JavaType getIndependentTypeFromJavaRepresentation(String reference) {
+        if (reference == null || reference.equals("")) {
+            return null;
+        }
+
+        for (JavaType javaType : INDEPENDENT_INSTANCES) {
+            if (javaType.getJavaRepresentation().equals(reference)) {
+                return javaType;
+            }
+        }
+
+        if (JavaArrayType.isJavaArrayRepresentation(reference)) {
+            final String elementRepresentation = JavaArrayType.getElementJavaRepresentation(reference);
+            final JavaType element = getIndependentTypeFromJavaRepresentation(elementRepresentation);
+            if (element != null) {
+                final JavaArrayType result = new JavaArrayType(element);
+                INDEPENDENT_INSTANCES.add(result);
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the JavaType instance matching the given signature.
+     *
+     * @param signature java binary style signature.
+     * @return The instance matching the signature or null if the signature is not valid.
+     */
+    public JavaType getFromSignature(String signature) {
+        return getIndependentTypeFromSignature(signature);
     }
 }
