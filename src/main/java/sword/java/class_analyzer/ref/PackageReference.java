@@ -97,6 +97,10 @@ public class PackageReference extends JavaReference {
         return (SimpleClassReference) addClass(qualifiedName);
     }
 
+    PrimitiveArrayClassReference getPrimitiveArrayClassReference(PrimitiveType javaType) {
+        return null;
+    }
+
     public ClassReference addClass(String qualifiedName) {
 
         if (qualifiedName.indexOf('.') < 0) {
@@ -109,7 +113,17 @@ public class PackageReference extends JavaReference {
 
             final JavaType independent = JavaTypeFactory.getIndependentTypeFromJavaRepresentation(qualifiedName);
             if (independent != null && independent instanceof PrimitiveType) {
-                return null;
+                ClassReference reference = getPrimitiveArrayClassReference((PrimitiveType) independent);
+
+                if (reference != null) {
+                    while (--arrayDepth > 0) {
+                        reference = new ArrayClassReference(reference);
+                    }
+
+                    mClasses.add(reference);
+                }
+
+                return reference;
             }
 
             ClassReference elementResult = addNode(element, mClasses, addClassLambda, null);
