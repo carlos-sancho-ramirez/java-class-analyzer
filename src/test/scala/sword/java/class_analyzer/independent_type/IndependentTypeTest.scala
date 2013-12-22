@@ -2,20 +2,21 @@ package sword.java.class_analyzer.independent_type
 
 import org.scalatest.FunSuite
 
-object IndependentTypeTest extends FunSuite {
-
+object IndependentTypeTest {
   val primitiveSignatures = "V" :: "Z" :: "B" :: "C" :: "S" :: "I" :: "J" :: "F" :: "D" :: List()
-  val primitiveRep = "void" :: "boolean" :: "byte" :: "char" :: "short" :: "int" :: "long" :: "float" :: "double" :: List()
-
   val arraySignatures = primitiveSignatures.map( "[" + _ )
   val array2Signatures = arraySignatures.map( "[" + _ )
-
   val allValidValues = primitiveSignatures ::: arraySignatures ::: array2Signatures
+}
+
+class IndependentTypeTest extends FunSuite {
+
+  val primitiveRep = "void" :: "boolean" :: "byte" :: "char" :: "short" :: "int" :: "long" :: "float" :: "double" :: List()
   val someWrongValues = "X" :: "S[" :: "D[I" :: List()
 
   test("Valid values for signatures never gives null references") {
     val factory = new JavaTypeFactory
-    allValidValues foreach { x => assert( factory.getFromSignature(x) ne null, "null reference for " + x) }
+    IndependentTypeTest.allValidValues foreach { x => assert( factory.getFromSignature(x) ne null, "null reference for " + x) }
   }
 
   test("Invalid signatures returns null references") {
@@ -25,14 +26,14 @@ object IndependentTypeTest extends FunSuite {
 
   test("Signature is the one given") {
     val factory = new JavaTypeFactory
-    allValidValues foreach { x =>
+    IndependentTypeTest.allValidValues foreach { x =>
       assert(factory.getFromSignature(x).signature() === x)
     }
   }
 
   test("Same instance") {
     val factory = new JavaTypeFactory
-    allValidValues foreach { x =>
+    IndependentTypeTest.allValidValues foreach { x =>
       val a = factory getFromSignature x
       val b = factory getFromSignature x
       assert(a eq b, s"Calling getFromSignature for $x do not always returns the same instance. " + (if (a != null) a.signature else "null"))
@@ -41,8 +42,8 @@ object IndependentTypeTest extends FunSuite {
 
   test("different instances") {
     val factory = new JavaTypeFactory
-    allValidValues foreach {
-      x => allValidValues.foreach {
+    IndependentTypeTest.allValidValues foreach {
+      x => IndependentTypeTest.allValidValues.foreach {
         y => if (x != y) {
           val a = factory getFromSignature x
           val b = factory getFromSignature y
@@ -54,21 +55,21 @@ object IndependentTypeTest extends FunSuite {
 
   test("all simple signature return a PrimitiveType instance") {
     val factory = new JavaTypeFactory
-    primitiveSignatures foreach { x =>
+    IndependentTypeTest.primitiveSignatures foreach { x =>
       assert(factory.getFromSignature(x).isInstanceOf[PrimitiveType])
     }
   }
 
   test("all no primitive signatures return a JavaArrayType instance") {
     val factory = new JavaTypeFactory
-    allValidValues foreach { x => if (!primitiveSignatures.contains(x))
+    IndependentTypeTest.allValidValues foreach { x => if (!IndependentTypeTest.primitiveSignatures.contains(x))
       assert(factory.getFromSignature(x).isInstanceOf[JavaArrayType])
     }
   }
 
   test("All 1 depth array are indeed it") {
     val factory = new JavaTypeFactory
-    arraySignatures foreach { x =>
+    IndependentTypeTest.arraySignatures foreach { x =>
       val javaType = factory.getFromSignature(x).asInstanceOf[JavaArrayType]
       assert(javaType.getElementType.isInstanceOf[PrimitiveType])
     }
@@ -76,7 +77,7 @@ object IndependentTypeTest extends FunSuite {
 
   test("All 2 depth array are indeed it") {
     val factory = new JavaTypeFactory
-    array2Signatures foreach { x =>
+    IndependentTypeTest.array2Signatures foreach { x =>
       val javaType = factory.getFromSignature(x).asInstanceOf[JavaArrayType]
       val javaElement = javaType.getElementType
       assert(javaElement.isInstanceOf[JavaArrayType])
@@ -94,7 +95,7 @@ object IndependentTypeTest extends FunSuite {
       }
     }
 
-    assertNext(primitiveSignatures, primitiveRep);
+    assertNext(IndependentTypeTest.primitiveSignatures, primitiveRep);
   }
 
   test("Java representation for 1-depth array types") {
@@ -107,13 +108,13 @@ object IndependentTypeTest extends FunSuite {
       }
     }
 
-    assertNext(arraySignatures, primitiveRep);
+    assertNext(IndependentTypeTest.arraySignatures, primitiveRep);
   }
 
   test("getArrayType works properly") {
     val factory = new JavaTypeFactory
 
-    allValidValues foreach { x =>
+    IndependentTypeTest.allValidValues foreach { x =>
       val instance = factory getFromSignature x
       val array = instance.getArrayType
       assert(instance eq array.getElementType)
