@@ -41,6 +41,13 @@ public abstract class JavaReference {
         return false;
     }
 
+    /**
+     * Returns the root reference for this reference
+     */
+    public final RootReference getRootReference() {
+        return isRootReference()? (RootReference) this : getJavaParentReference().getRootReference();
+    }
+
     /** Generalized implementation to avoid having repeated code for all adders */
     interface AddNodeLambda<T extends JavaReference, P extends JavaReference, JT extends JavaType> {
         public T addIt(P instance, String first, String rest, JT javaType);
