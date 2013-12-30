@@ -4,9 +4,9 @@ import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
 import sword.java.class_analyzer.pool.ConstantPool;
 
-public class InstructionAreturn extends AbstractReturnInstruction {
+public class InstructionFreturn extends AbstractReturnInstruction {
 
-    public InstructionAreturn(byte[] code, int index, ConstantPool pool,
+    public InstructionFreturn(byte[] code, int index, ConstantPool pool,
             ByteCodeInterpreter interpreter) throws IllegalArgumentException,
             IncompleteInstructionException {
         super(code, index, pool, interpreter);
@@ -14,6 +14,6 @@ public class InstructionAreturn extends AbstractReturnInstruction {
 
     @Override
     public String disassemble() {
-        return "areturn";
+        return "freturn";
     }
 }

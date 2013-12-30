@@ -24,7 +24,9 @@ import sword.java.class_analyzer.code.instructions.InstructionAthrow;
 import sword.java.class_analyzer.code.instructions.InstructionBastore;
 import sword.java.class_analyzer.code.instructions.InstructionBipush;
 import sword.java.class_analyzer.code.instructions.InstructionCheckcast;
+import sword.java.class_analyzer.code.instructions.InstructionDreturn;
 import sword.java.class_analyzer.code.instructions.InstructionDup;
+import sword.java.class_analyzer.code.instructions.InstructionFreturn;
 import sword.java.class_analyzer.code.instructions.InstructionGetfield;
 import sword.java.class_analyzer.code.instructions.InstructionGetstatic;
 import sword.java.class_analyzer.code.instructions.InstructionGoto;
@@ -66,6 +68,7 @@ import sword.java.class_analyzer.code.instructions.InstructionInvokestatic;
 import sword.java.class_analyzer.code.instructions.InstructionInvokevirtual;
 import sword.java.class_analyzer.code.instructions.InstructionIor;
 import sword.java.class_analyzer.code.instructions.InstructionIrem;
+import sword.java.class_analyzer.code.instructions.InstructionIreturn;
 import sword.java.class_analyzer.code.instructions.InstructionIshl;
 import sword.java.class_analyzer.code.instructions.InstructionIshr;
 import sword.java.class_analyzer.code.instructions.InstructionIstore_0;
@@ -78,6 +81,7 @@ import sword.java.class_analyzer.code.instructions.InstructionIushr;
 import sword.java.class_analyzer.code.instructions.InstructionIxor;
 import sword.java.class_analyzer.code.instructions.InstructionLdc;
 import sword.java.class_analyzer.code.instructions.InstructionLdc_w;
+import sword.java.class_analyzer.code.instructions.InstructionLreturn;
 import sword.java.class_analyzer.code.instructions.InstructionNew;
 import sword.java.class_analyzer.code.instructions.InstructionNewArrayBoolean;
 import sword.java.class_analyzer.code.instructions.InstructionNewArrayByte;
@@ -188,6 +192,10 @@ public class InstructionFactory {
                     }
 
                 }) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAC, 1, InstructionIreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAD, 1, InstructionLreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAE, 1, InstructionFreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAF, 1, InstructionDreturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB0, 1, InstructionAreturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB1, 1, InstructionReturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB2, 3, InstructionGetstatic.class)) ||
