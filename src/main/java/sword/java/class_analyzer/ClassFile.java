@@ -9,8 +9,8 @@ import java.util.Set;
 import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.independent_type.JavaType;
-import sword.java.class_analyzer.java_type.JavaClassType;
 import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
+import sword.java.class_analyzer.java_type.JavaClassType;
 import sword.java.class_analyzer.pool.AbstractMethodEntry;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
@@ -67,6 +67,10 @@ public class ClassFile {
         if (type instanceof JavaClassType) {
             set.add(((JavaClassType) type).getReference());
         }
+    }
+
+    public ClassReference getReference() {
+        return thisClassReference.getReference();
     }
 
     /**
