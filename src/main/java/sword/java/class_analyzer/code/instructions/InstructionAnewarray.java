@@ -1,5 +1,9 @@
 package sword.java.class_analyzer.code.instructions;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
@@ -20,5 +24,10 @@ public class InstructionAnewarray extends AbstractConstantPoolReferenceInstructi
     @Override
     public String disassemble() {
         return "anewarray\t" + mClassReference.toString();
+    }
+
+    @Override
+    public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
+        return new HashSet<ClassReferenceEntry>(Arrays.asList(mClassReference));
     }
 }

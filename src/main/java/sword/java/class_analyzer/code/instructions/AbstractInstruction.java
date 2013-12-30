@@ -91,8 +91,8 @@ public abstract class AbstractInstruction implements KnownReferencesProvider {
     }
 
     /**
-     * It is expected that only Ldc, Ldc_w and Ld2_w will return something not
-     * empty.
+     * It is expected that only Ldc, Ldc_w, Ld2_w and anewarray will return
+     * something not empty.
      */
     @Override
     public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
