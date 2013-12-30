@@ -18,7 +18,7 @@ public class ProjectAnalyzer {
 
     private static final class ProgramArguments {
         /**
-         * System dependet path to the folder where class fiels are located.
+         * System dependent path to the folder where class fiels are located.
          */
         public static final int CLASS_PATH = 0;
 
@@ -119,6 +119,39 @@ public class ProjectAnalyzer {
         return root;
     }
 
+    private static ClassFile loadClass(File file, RootReference dependenciesReference) {
+
+        InputStreamWrapper inStream = null;
+
+        try {
+            try {
+                inStream = new InputStreamWrapper(new FileInputStream(file));
+
+                try {
+                    return new ClassFile(inStream, dependenciesReference);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        inStream.close();
+                    }
+                    catch (IOException e) { }
+                }
+            }
+            catch (FileNotFoundException e) {
+            }
+        }
+        catch (FileError e) {
+            final int filePosition = inStream.readBytes();
+            System.out.println("  Error found when loading the file at position " + filePosition + " (0x" + Integer.toHexString(filePosition) + ')');
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static void main(String args[]) {
         System.out.println("ClassAnalyzer v0.1");
 
@@ -150,50 +183,17 @@ public class ProjectAnalyzer {
 
                 int checkedAmount = 0;
                 int foundAmount = 0;
-                int successfullyRead = 0;
 
                 while (checkedAmount < classHolders.size()) {
                     final ClassHolder currentHolder = findFirstNotChecked(classHolders);
-                    final File file = currentHolder.getFile(classPath);
+                    final ClassFile classFile = loadClass(currentHolder.getFile(classPath), dependenciesReference);
 
-                    InputStreamWrapper inStream = null;
-                    ClassFile classFile = null;
-
-                    try {
-                        try {
-                            inStream = new InputStreamWrapper(new FileInputStream(file));
-                            foundAmount++;
-                            System.out.println("Class " + currentHolder.reference.getQualifiedName() + " found at file " + file.getPath() + "...");
-
-                            try {
-                                classFile = new ClassFile(inStream, dependenciesReference);
-                                successfullyRead++;
-                                System.out.println("  Successfully loaded!");
-
-                                Set<ClassReference> dependencies = classFile.getReferencedClasses();
-                                for (ClassReference dependency : dependencies) {
-                                    classHolders.add(new ClassHolder(dependency));
-                                    System.out.println("Dependency: " + dependency.getQualifiedName());
-                                }
-                            }
-                            catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            finally {
-                                try {
-                                    inStream.close();
-                                }
-                                catch (IOException e) { }
-                            }
+                    if (classFile != null) {
+                        foundAmount++;
+                        Set<ClassReference> dependencies = classFile.getReferencedClasses();
+                        for (ClassReference dependency : dependencies) {
+                            classHolders.add(new ClassHolder(dependency));
                         }
-                        catch (FileNotFoundException e) {
-                            System.out.println("Class " + currentHolder.reference.getQualifiedName() + " not found in the classPath");
-                        }
-                    }
-                    catch (FileError e) {
-                        final int filePosition = inStream.readBytes();
-                        System.out.println("  Error found when loading the file at position " + filePosition + " (0x" + Integer.toHexString(filePosition) + ')');
-                        e.printStackTrace();
                     }
 
                     currentHolder.setChecked(classFile);
@@ -234,8 +234,7 @@ public class ProjectAnalyzer {
 
                 System.out.println("");
                 System.out.println("Referenced " + checkedAmount + " classes. " +
-                        foundAmount + " classes found in the classpath " + classPath +
-                        " and " + successfullyRead + " read with no major errors.");
+                        foundAmount + " classes found in the classpath " + classPath);
 
                 final RootReference classesInPath = checkClassPath(classPath);
                 Set<ClassReference> inPathSet = classesInPath.setOfClasses();
@@ -243,10 +242,20 @@ public class ProjectAnalyzer {
                 System.out.println("Found " + inPathSet.size() + " classes in the class path");
 
                 inPathSet.removeAll(dependenciesReference.setOfClasses());
-                System.out.println("Found " + inPathSet.size() + " files not referenced:");
-                for (ClassReference ref : inPathSet) {
-                    System.out.println("  " + ref.getQualifiedName());
-                }
+                do {
+                    final int inPathCount = inPathSet.size();
+                    System.out.println("Found " + inPathCount + " files not referenced in the class path:");
+                    final List<String> references = new ArrayList<String>(inPathCount);
+                    for (ClassReference ref : inPathSet) {
+                        references.add(ref.getQualifiedName());
+                    }
+
+                    java.util.Collections.sort(references);
+
+                    for (String reference : references) {
+                        System.out.println("  " + reference);
+                    }
+                } while(false);
             }
         }
     }
