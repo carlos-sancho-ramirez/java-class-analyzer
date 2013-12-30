@@ -7,6 +7,7 @@ import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.code.instructions.AbstractInstruction;
 import sword.java.class_analyzer.code.instructions.InstructionAaload;
 import sword.java.class_analyzer.code.instructions.InstructionAastore;
+import sword.java.class_analyzer.code.instructions.InstructionAconst_null;
 import sword.java.class_analyzer.code.instructions.InstructionAload_0;
 import sword.java.class_analyzer.code.instructions.InstructionAload_1;
 import sword.java.class_analyzer.code.instructions.InstructionAload_2;
@@ -108,6 +109,7 @@ public class InstructionFactory {
 
     static {
         if (
+                !interpreters.add(new SimpleByteCodeInterpreter(0x01, 1, InstructionAconst_null.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x02, 1, InstructionIconst_m1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x03, 1, InstructionIconst_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x04, 1, InstructionIconst_1.class)) ||
