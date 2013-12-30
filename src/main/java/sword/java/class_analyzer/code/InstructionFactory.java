@@ -54,6 +54,8 @@ import sword.java.class_analyzer.code.instructions.InstructionIfgt;
 import sword.java.class_analyzer.code.instructions.InstructionIfle;
 import sword.java.class_analyzer.code.instructions.InstructionIflt;
 import sword.java.class_analyzer.code.instructions.InstructionIfne;
+import sword.java.class_analyzer.code.instructions.InstructionIfnonnull;
+import sword.java.class_analyzer.code.instructions.InstructionIfnull;
 import sword.java.class_analyzer.code.instructions.InstructionIinc;
 import sword.java.class_analyzer.code.instructions.InstructionIload_0;
 import sword.java.class_analyzer.code.instructions.InstructionIload_1;
@@ -218,7 +220,9 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBD, 3, InstructionAnewarray.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBE, 1, InstructionArraylength.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBF, 1, InstructionAthrow.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0xC0, 3, InstructionCheckcast.class))
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC0, 3, InstructionCheckcast.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC6, 3, InstructionIfnull.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC7, 3, InstructionIfnonnull.class))
                 ) {
             throw new IllegalStateException("One of the interpreters is equal to some other");
         }
