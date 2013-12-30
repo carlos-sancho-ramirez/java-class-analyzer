@@ -236,4 +236,8 @@ public class MethodCode implements KnownReferencesProvider {
     public boolean isValid() {
         return mInvalidReason == null;
     }
+
+    public String getInvalidReason() {
+        return mInvalidReason;
+    }
 }
