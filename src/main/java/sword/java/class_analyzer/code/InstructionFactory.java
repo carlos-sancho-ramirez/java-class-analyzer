@@ -4,103 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
-import sword.java.class_analyzer.code.instructions.AbstractInstruction;
-import sword.java.class_analyzer.code.instructions.InstructionAaload;
-import sword.java.class_analyzer.code.instructions.InstructionAastore;
-import sword.java.class_analyzer.code.instructions.InstructionAconst_null;
-import sword.java.class_analyzer.code.instructions.InstructionAload_0;
-import sword.java.class_analyzer.code.instructions.InstructionAload_1;
-import sword.java.class_analyzer.code.instructions.InstructionAload_2;
-import sword.java.class_analyzer.code.instructions.InstructionAload_3;
-import sword.java.class_analyzer.code.instructions.InstructionAload_n;
-import sword.java.class_analyzer.code.instructions.InstructionAnewarray;
-import sword.java.class_analyzer.code.instructions.InstructionAreturn;
-import sword.java.class_analyzer.code.instructions.InstructionArraylength;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_0;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_1;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_2;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_3;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_n;
-import sword.java.class_analyzer.code.instructions.InstructionAthrow;
-import sword.java.class_analyzer.code.instructions.InstructionBastore;
-import sword.java.class_analyzer.code.instructions.InstructionBipush;
-import sword.java.class_analyzer.code.instructions.InstructionCheckcast;
-import sword.java.class_analyzer.code.instructions.InstructionDreturn;
-import sword.java.class_analyzer.code.instructions.InstructionDup;
-import sword.java.class_analyzer.code.instructions.InstructionFreturn;
-import sword.java.class_analyzer.code.instructions.InstructionGetfield;
-import sword.java.class_analyzer.code.instructions.InstructionGetstatic;
-import sword.java.class_analyzer.code.instructions.InstructionGoto;
-import sword.java.class_analyzer.code.instructions.InstructionIadd;
-import sword.java.class_analyzer.code.instructions.InstructionIand;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_0;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_1;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_2;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_3;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_4;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_5;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_m1;
-import sword.java.class_analyzer.code.instructions.InstructionIdiv;
-import sword.java.class_analyzer.code.instructions.InstructionIf_acmpeq;
-import sword.java.class_analyzer.code.instructions.InstructionIf_acmpne;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpeq;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpge;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpgt;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmple;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmplt;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpne;
-import sword.java.class_analyzer.code.instructions.InstructionIfeq;
-import sword.java.class_analyzer.code.instructions.InstructionIfge;
-import sword.java.class_analyzer.code.instructions.InstructionIfgt;
-import sword.java.class_analyzer.code.instructions.InstructionIfle;
-import sword.java.class_analyzer.code.instructions.InstructionIflt;
-import sword.java.class_analyzer.code.instructions.InstructionIfne;
-import sword.java.class_analyzer.code.instructions.InstructionIfnonnull;
-import sword.java.class_analyzer.code.instructions.InstructionIfnull;
-import sword.java.class_analyzer.code.instructions.InstructionIinc;
-import sword.java.class_analyzer.code.instructions.InstructionIload_0;
-import sword.java.class_analyzer.code.instructions.InstructionIload_1;
-import sword.java.class_analyzer.code.instructions.InstructionIload_2;
-import sword.java.class_analyzer.code.instructions.InstructionIload_3;
-import sword.java.class_analyzer.code.instructions.InstructionIload_n;
-import sword.java.class_analyzer.code.instructions.InstructionImul;
-import sword.java.class_analyzer.code.instructions.InstructionIneg;
-import sword.java.class_analyzer.code.instructions.InstructionInstanceof;
-import sword.java.class_analyzer.code.instructions.InstructionInvokeinterface;
-import sword.java.class_analyzer.code.instructions.InstructionInvokespecial;
-import sword.java.class_analyzer.code.instructions.InstructionInvokestatic;
-import sword.java.class_analyzer.code.instructions.InstructionInvokevirtual;
-import sword.java.class_analyzer.code.instructions.InstructionIor;
-import sword.java.class_analyzer.code.instructions.InstructionIrem;
-import sword.java.class_analyzer.code.instructions.InstructionIreturn;
-import sword.java.class_analyzer.code.instructions.InstructionIshl;
-import sword.java.class_analyzer.code.instructions.InstructionIshr;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_0;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_1;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_2;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_3;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_n;
-import sword.java.class_analyzer.code.instructions.InstructionIsub;
-import sword.java.class_analyzer.code.instructions.InstructionIushr;
-import sword.java.class_analyzer.code.instructions.InstructionIxor;
-import sword.java.class_analyzer.code.instructions.InstructionLdc;
-import sword.java.class_analyzer.code.instructions.InstructionLdc_w;
-import sword.java.class_analyzer.code.instructions.InstructionLreturn;
-import sword.java.class_analyzer.code.instructions.InstructionNew;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayBoolean;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayByte;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayChar;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayDouble;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayFloat;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayInt;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayLong;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayShort;
-import sword.java.class_analyzer.code.instructions.InstructionPop;
-import sword.java.class_analyzer.code.instructions.InstructionPutfield;
-import sword.java.class_analyzer.code.instructions.InstructionPutstatic;
-import sword.java.class_analyzer.code.instructions.InstructionReturn;
-import sword.java.class_analyzer.code.instructions.InstructionSipush;
-import sword.java.class_analyzer.code.instructions.InstructionTableswitch;
+import sword.java.class_analyzer.code.instructions.*;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class InstructionFactory {
@@ -131,7 +35,14 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2B, 1, InstructionAload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2C, 1, InstructionAload_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2D, 1, InstructionAload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x2E, 1, InstructionIaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x2F, 1, InstructionLaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x30, 1, InstructionFaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x31, 1, InstructionDaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x32, 1, InstructionAaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x33, 1, InstructionBaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x34, 1, InstructionCaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x35, 1, InstructionSaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore_n.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3A, 2, InstructionAstore_n.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3B, 1, InstructionIstore_0.class)) ||
