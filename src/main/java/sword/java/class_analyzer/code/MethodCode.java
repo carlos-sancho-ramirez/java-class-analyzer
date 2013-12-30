@@ -167,6 +167,14 @@ public class MethodCode implements KnownReferencesProvider {
             }
         }
 
+        Set<ClassReferenceEntry> classes = getKnownReflectionClassReferences();
+        if (classes.size() > 0) {
+            result = result + "depends on classes:\n";
+            for(ClassReferenceEntry cls : classes) {
+                result = result + "  " + cls.getReference().getQualifiedName() + '\n';
+            }
+        }
+
         if (!isValid()) {
             result = result + "WARNING: At least one instruction block is not valid. " + mInvalidReason + '\n';
         }
