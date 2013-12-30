@@ -82,6 +82,10 @@ public class ProjectAnalyzer {
         public boolean loaded() {
             return mClassFile != null;
         }
+
+        public ClassFile getClassFile() {
+            return mClassFile;
+        }
     }
 
     private static final ClassHolder findFirstNotChecked(Set<ClassHolder> holders) {
@@ -152,6 +156,50 @@ public class ProjectAnalyzer {
         return null;
     }
 
+    public static Set<ClassFile> analyzeProject(ClassReference mainClass,
+            File classPath, final Set<ClassReference> notFound) {
+
+        final RootReference root = mainClass.getRootReference();
+        Set<ClassHolder> classHolders = new HashSet<ClassHolder>();
+        classHolders.add(new ClassHolder(mainClass));
+
+        int checkedAmount = 0;
+        int foundAmount = 0;
+
+        while (checkedAmount < classHolders.size()) {
+            final ClassHolder currentHolder = findFirstNotChecked(classHolders);
+            final ClassFile classFile = loadClass(currentHolder.getFile(classPath), root);
+
+            if (classFile != null) {
+                foundAmount++;
+                Set<ClassReference> dependencies = classFile.getReferencedClasses();
+                for (ClassReference dependency : dependencies) {
+                    classHolders.add(new ClassHolder(dependency));
+                }
+            }
+
+            currentHolder.setChecked(classFile);
+            checkedAmount++;
+        }
+
+        if (notFound != null) {
+            for (ClassHolder holder : classHolders) {
+                if (!holder.loaded()) {
+                    notFound.add(holder.reference);
+                }
+            }
+        }
+
+        Set<ClassFile> loaded = new HashSet<ClassFile>(foundAmount);
+        for (ClassHolder holder : classHolders) {
+            if (holder.loaded()) {
+                loaded.add(holder.getClassFile());
+            }
+        }
+
+        return loaded;
+    }
+
     public static void main(String args[]) {
         System.out.println("ClassAnalyzer v0.1");
 
@@ -161,8 +209,7 @@ public class ProjectAnalyzer {
         }
         else {
             final File classPath = new File(args[ProgramArguments.CLASS_PATH]);
-            final RootReference dependenciesReference = new RootReference();
-            final ClassReference firstClass = dependenciesReference.addClass(args[ProgramArguments.MAIN_JAVA_CLASS]);
+            final ClassReference firstClass = new RootReference().addClass(args[ProgramArguments.MAIN_JAVA_CLASS]);
 
             boolean error = true;
             try {
@@ -178,36 +225,15 @@ public class ProjectAnalyzer {
             }
 
             if (!error) {
-                Set<ClassHolder> classHolders = new HashSet<ClassHolder>();
-                classHolders.add(new ClassHolder(firstClass));
-
-                int checkedAmount = 0;
-                int foundAmount = 0;
-
-                while (checkedAmount < classHolders.size()) {
-                    final ClassHolder currentHolder = findFirstNotChecked(classHolders);
-                    final ClassFile classFile = loadClass(currentHolder.getFile(classPath), dependenciesReference);
-
-                    if (classFile != null) {
-                        foundAmount++;
-                        Set<ClassReference> dependencies = classFile.getReferencedClasses();
-                        for (ClassReference dependency : dependencies) {
-                            classHolders.add(new ClassHolder(dependency));
-                        }
-                    }
-
-                    currentHolder.setChecked(classFile);
-                    checkedAmount++;
-                }
+                Set<ClassReference> notFoundReferences = new HashSet<ClassReference>();
+                Set<ClassFile> loadedClasses = analyzeProject(firstClass, classPath, notFoundReferences);
 
                 System.out.println("");
-                System.out.println("Classes referenced and found in classPath:");
+                System.out.println("" + loadedClasses.size() + " classes referenced and found in classPath:");
                 do {
-                    final List<String> references = new ArrayList<String>(classHolders.size());
-                    for (ClassHolder holder : classHolders) {
-                        if (holder.loaded()) {
-                            references.add(holder.reference.getQualifiedName());
-                        }
+                    final List<String> references = new ArrayList<String>(loadedClasses.size());
+                    for (ClassFile loaded : loadedClasses) {
+                        references.add(loaded.getReference().getQualifiedName());
                     }
 
                     java.util.Collections.sort(references);
@@ -217,13 +243,11 @@ public class ProjectAnalyzer {
                 } while (false);
 
                 System.out.println("");
-                System.out.println("Classes referenced but not found in classPath:");
+                System.out.println("" + notFoundReferences.size() + " classes referenced but not found in classPath:");
                 do {
-                    final List<String> references = new ArrayList<String>(classHolders.size());
-                    for (ClassHolder holder : classHolders) {
-                        if (!holder.loaded()) {
-                            references.add(holder.reference.getQualifiedName());
-                        }
+                    final List<String> references = new ArrayList<String>(notFoundReferences.size());
+                    for (ClassReference reference : notFoundReferences) {
+                        references.add(reference.getQualifiedName());
                     }
 
                     java.util.Collections.sort(references);
@@ -231,20 +255,17 @@ public class ProjectAnalyzer {
                         System.out.println("  " + reference);
                     }
                 } while (false);
-
-                System.out.println("");
-                System.out.println("Referenced " + checkedAmount + " classes. " +
-                        foundAmount + " classes found in the classpath " + classPath);
 
                 final RootReference classesInPath = checkClassPath(classPath);
                 Set<ClassReference> inPathSet = classesInPath.setOfClasses();
 
+                System.out.println("");
                 System.out.println("Found " + inPathSet.size() + " classes in the class path");
 
-                inPathSet.removeAll(dependenciesReference.setOfClasses());
+                inPathSet.removeAll(firstClass.getRootReference().setOfClasses());
                 do {
                     final int inPathCount = inPathSet.size();
-                    System.out.println("Found " + inPathCount + " files not referenced in the class path:");
+                    System.out.println("Found " + inPathCount + " files in the class path but not referenced:");
                     final List<String> references = new ArrayList<String>(inPathCount);
                     for (ClassReference ref : inPathSet) {
                         references.add(ref.getQualifiedName());
