@@ -70,6 +70,21 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x80, 1, InstructionIor.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x82, 1, InstructionIxor.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x84, 3, InstructionIinc.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x85, 1, InstructionI2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x86, 1, InstructionI2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x87, 1, InstructionI2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x88, 1, InstructionL2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x89, 1, InstructionL2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8A, 1, InstructionL2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8B, 1, InstructionF2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8C, 1, InstructionF2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8D, 1, InstructionF2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8E, 1, InstructionD2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8F, 1, InstructionD2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x90, 1, InstructionD2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x91, 1, InstructionI2b.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x92, 1, InstructionI2c.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x93, 1, InstructionI2s.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x99, 3, InstructionIfeq.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9A, 3, InstructionIfne.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9B, 3, InstructionIflt.class)) ||
