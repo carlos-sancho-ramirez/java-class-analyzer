@@ -80,6 +80,13 @@ public class ClassFile {
         Set<ClassReference> set = new HashSet<ClassReference>();
         set.add(superClassReference.getReference());
 
+        ClassReferenceEntry interfaces[] = interfaceTable.interfaces;
+        if (interfaces.length != 0) {
+            for (int i=0; i<interfaces.length; i++) {
+                set.add(interfaces[i].getReference());
+            }
+        }
+
         for (FieldInfo field : fieldTable.fields) {
             registerClass(set, field.type);
         }
