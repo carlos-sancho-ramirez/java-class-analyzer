@@ -4,26 +4,16 @@ import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
 import sword.java.class_analyzer.pool.ConstantPool;
 
-public class InstructionAload_n extends AbstractInstruction {
+public class InstructionDload extends AbstractOneByteIndexedInstruction {
 
-    private final int mLocalVariableIndex;
-
-    public InstructionAload_n(byte[] code, int index, ConstantPool pool,
+    public InstructionDload(byte[] code, int index, ConstantPool pool,
             ByteCodeInterpreter interpreter) throws
             IllegalArgumentException, IncompleteInstructionException {
         super(code, index, pool, interpreter);
-
-        mLocalVariableIndex = (code[index + 1]) & 0xFF;
-    }
-
-    @Override
-    protected void fillByteCode(byte code[], int index) {
-        super.fillByteCode(code, index);
-        code[index + 1] = (byte) mLocalVariableIndex;
     }
 
     @Override
     public String disassemble() {
-        return "aload " + mLocalVariableIndex;
+        return "dload " + mLocalVariableIndex;
     }
 }
