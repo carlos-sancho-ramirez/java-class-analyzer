@@ -31,6 +31,18 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1B, 1, InstructionIload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1C, 1, InstructionIload_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1D, 1, InstructionIload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x1E, 1, InstructionLload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x1F, 1, InstructionLload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x20, 1, InstructionLload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x21, 1, InstructionLload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x22, 1, InstructionFload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x23, 1, InstructionFload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x24, 1, InstructionFload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x25, 1, InstructionFload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x26, 1, InstructionDload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x27, 1, InstructionDload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x28, 1, InstructionDload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x29, 1, InstructionDload_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2A, 1, InstructionAload_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2B, 1, InstructionAload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2C, 1, InstructionAload_2.class)) ||
