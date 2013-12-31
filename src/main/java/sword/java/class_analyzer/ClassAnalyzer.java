@@ -11,7 +11,7 @@ import sword.java.class_analyzer.ref.RootReference;
 public class ClassAnalyzer {
 
     public static void main(String args[]) {
-        System.out.println("ClassAnalyzer v0.1");
+        System.out.println("ClassAnalyzer v0.2");
 
         if (args.length < 1) {
             System.out.println("Syntax: java " + ClassAnalyzer.class.getName() + " <class-file>");

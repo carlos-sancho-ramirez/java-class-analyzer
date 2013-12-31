@@ -201,7 +201,7 @@ public class ProjectAnalyzer {
     }
 
     public static void main(String args[]) {
-        System.out.println("ClassAnalyzer v0.1");
+        System.out.println("ProjectAnalyzer v0.2");
 
         if (args.length < ProgramArguments.LENGTH) {
             System.out.println("Syntax: java " + ProjectAnalyzer.class.getName() + " <class-path> <full-qualified-java-class>");
