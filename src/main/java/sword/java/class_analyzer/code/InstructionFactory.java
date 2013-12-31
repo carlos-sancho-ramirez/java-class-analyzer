@@ -129,6 +129,11 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x91, 1, InstructionI2b.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x92, 1, InstructionI2c.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x93, 1, InstructionI2s.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x94, 1, InstructionLcmp.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x95, 1, InstructionFcmpl.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x96, 1, InstructionFcmpg.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x97, 1, InstructionDcmpl.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x98, 1, InstructionDcmpg.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x99, 3, InstructionIfeq.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9A, 3, InstructionIfne.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9B, 3, InstructionIflt.class)) ||
