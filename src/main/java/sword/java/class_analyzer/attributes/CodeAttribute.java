@@ -2,6 +2,8 @@ package sword.java.class_analyzer.attributes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
@@ -29,14 +31,20 @@ public class CodeAttribute extends AbstractAttribute {
         maxLocalVariables = Utils.getBigEndian2Int(inStream);
 
         final int codeLength = Utils.getBigEndian4Int(inStream);
-        methodCode = new MethodCode(inStream, codeLength, pool);
+        final byte code[] = new byte[codeLength];
+        Utils.fillBuffer(inStream, code);
+
+        Set<Integer> indexes = new HashSet<Integer>();
+        indexes.add(0);
 
         final int codeExceptionCount = Utils.getBigEndian2Int(inStream);
         exceptions = new CodeException[codeExceptionCount];
         for(int i=0; i<codeExceptionCount; i++) {
             exceptions[0] = new CodeException(inStream);
+            indexes.add(exceptions[0].handler);
         }
 
+        methodCode = new MethodCode(code, pool, indexes);
         attributes = new AttributeTable(inStream, pool);
 
         final int expectedInfoSize = 2 + 2 + 4 + codeLength + 2 + codeExceptionCount * 8 + attributes.fileSize();

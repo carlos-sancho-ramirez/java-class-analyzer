@@ -3,6 +3,7 @@ package sword.java.class_analyzer.code;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,8 +36,13 @@ public class MethodCode implements KnownReferencesProvider {
         }
     }
 
-    private List<BlockHolder> mHolders = new ArrayList<BlockHolder>();
+    private final List<BlockHolder> mHolders = new ArrayList<BlockHolder>();
     private String mInvalidReason;
+
+    /**
+     * Set to true if there is code passed that not correspond to any block.
+     */
+    public final boolean hasUnreferencedCode;
 
     private int findFirstIndexNoMatchingBlock(Set<Integer> indexes) {
 
@@ -105,13 +111,8 @@ public class MethodCode implements KnownReferencesProvider {
         }
     }
 
-    public MethodCode(InputStream inStream, int codeLength, ConstantPool pool) throws IOException, FileError {
-        final byte code[] = new byte[codeLength];
-        Utils.fillBuffer(inStream, code);
-
-        Set<Integer> indexes = new HashSet<Integer>();
-        indexes.add(0);
-
+    public MethodCode(byte code[], ConstantPool pool, final Set<Integer> indexes) throws IOException, FileError {
+        final int codeLength = code.length;
         while (indexes.size() > mHolders.size()) {
 
             final int targetIndex = findFirstIndexNoMatchingBlock(indexes);
@@ -144,6 +145,31 @@ public class MethodCode implements KnownReferencesProvider {
                 break;
             }
         }
+
+        // Checks if there is unreferenced code
+        int checkingIndex = 0;
+        boolean indexUpdated = true;
+        while (checkingIndex < codeLength && indexUpdated) {
+            indexUpdated = false;
+            for (BlockHolder holder : mHolders) {
+                if (holder.index == checkingIndex) {
+                    checkingIndex += holder.block.byteCodeSize();
+                    indexUpdated = true;
+                }
+            }
+        }
+
+        hasUnreferencedCode = checkingIndex < codeLength;
+    }
+
+    private static byte[] fillCodeBuffer(InputStream inStream, int codeLength) throws IOException, FileError {
+        final byte code[] = new byte[codeLength];
+        Utils.fillBuffer(inStream, code);
+        return code;
+    }
+
+    public MethodCode(InputStream inStream, int codeLength, ConstantPool pool) throws IOException, FileError {
+        this(fillCodeBuffer(inStream, codeLength), pool, new HashSet<Integer>(Arrays.asList(0)));
     }
 
     @Override

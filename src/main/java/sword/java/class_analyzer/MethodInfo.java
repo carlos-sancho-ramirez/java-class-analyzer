@@ -57,7 +57,7 @@ public class MethodInfo {
         return result;
     }
 
-    MethodCode getMethodCode() {
+    public MethodCode getMethodCode() {
         return attributes != null ? attributes.getMethodCode() : null;
     }
 
