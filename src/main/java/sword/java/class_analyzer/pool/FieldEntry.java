@@ -4,10 +4,34 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
+import sword.java.class_analyzer.independent_type.JavaType;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
+import sword.java.class_analyzer.ref.FieldReference;
 
 public class FieldEntry extends AbstractMemberEntry {
 
-    protected FieldEntry(InputStream inStream) throws IOException, FileError {
+    private FieldReference mReference;
+
+    FieldEntry(InputStream inStream) throws IOException, FileError {
         super(inStream);
+    }
+
+    @Override
+    boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError {
+        final boolean parentResult = super.resolve(pool, factory);
+
+        if (parentResult) {
+            JavaType fieldType = factory.getFromSignature(mVariableEntry
+                    .getType());
+            mReference = mClassEntry.getReference().addField(
+                    mVariableEntry.getName(), fieldType);
+        }
+
+        return parentResult;
+    }
+
+    @Override
+    public FieldReference getReference() {
+        return mReference;
     }
 }

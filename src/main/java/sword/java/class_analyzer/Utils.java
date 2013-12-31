@@ -35,6 +35,25 @@ public final class Utils {
         return (((((value1 << 8) + value2) << 8) + value3) << 8) + value4;
     }
 
+    public static long getBigEndian8Int(InputStream inStream) throws IOException, FileError {
+        long value1 = inStream.read();
+        long value2 = inStream.read();
+        long value3 = inStream.read();
+        long value4 = inStream.read();
+        long value5 = inStream.read();
+        int value6 = inStream.read();
+        int value7 = inStream.read();
+        int value8 = inStream.read();
+
+        if (value1 < 0 || value2 < 0 || value3 < 0 || value4 < 0 ||
+                value5 < 0 || value6 < 0 || value7 < 0 || value8 < 0) {
+            throw new FileError(Kind.UNEXPECTED_END_OF_FILE);
+        }
+
+        return ((((((((((((value1 << 8) + value2) << 8) + value3) << 8) +
+                value4) << 8) + value5) << 8 + value6) << 8) + value7) << 8) + value8;
+    }
+
     public static void fillBuffer(InputStream inStream, final byte[] buffer) throws IOException, FileError {
         final int bytes = buffer.length;
         int index = 0;

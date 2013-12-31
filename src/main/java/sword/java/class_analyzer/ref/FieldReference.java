@@ -1,6 +1,6 @@
 package sword.java.class_analyzer.ref;
 
-import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaType;
 
 public class FieldReference extends MemberReference {
 

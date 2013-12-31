@@ -1,26 +1,37 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
+
+import sword.java.class_analyzer.independent_type.PrimitiveType;
+
 public class RootReference extends PackageReference {
 
-    private static final RootReference INSTANCE = new RootReference();
-
-    private RootReference() {
+    public RootReference() {
         super(null, "");
     }
 
-    public static RootReference getInstance() {
-        return INSTANCE;
-    }
-
+    @Override
     public String getQualifiedName() {
         return getSimpleName();
     }
 
+    @Override
     public boolean isRootReference() {
         return true;
     }
 
+    @Override
     public RootReference getJavaParentReference() {
         return this;
+    }
+
+    @Override
+    public File getFile(File classPath) {
+        return classPath;
+    }
+
+    @Override
+    PrimitiveArrayClassReference getPrimitiveArrayClassReference(PrimitiveType javaType) {
+        return new PrimitiveArrayClassReference(this, javaType);
     }
 }

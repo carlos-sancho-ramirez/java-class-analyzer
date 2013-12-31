@@ -4,91 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import sword.java.class_analyzer.FileError;
-import sword.java.class_analyzer.code.instructions.AbstractInstruction;
-import sword.java.class_analyzer.code.instructions.InstructionAaload;
-import sword.java.class_analyzer.code.instructions.InstructionAastore;
-import sword.java.class_analyzer.code.instructions.InstructionAload_0;
-import sword.java.class_analyzer.code.instructions.InstructionAload_1;
-import sword.java.class_analyzer.code.instructions.InstructionAload_2;
-import sword.java.class_analyzer.code.instructions.InstructionAload_3;
-import sword.java.class_analyzer.code.instructions.InstructionAnewarray;
-import sword.java.class_analyzer.code.instructions.InstructionAreturn;
-import sword.java.class_analyzer.code.instructions.InstructionArraylength;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_0;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_1;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_2;
-import sword.java.class_analyzer.code.instructions.InstructionAstore_3;
-import sword.java.class_analyzer.code.instructions.InstructionAthrow;
-import sword.java.class_analyzer.code.instructions.InstructionBastore;
-import sword.java.class_analyzer.code.instructions.InstructionBipush;
-import sword.java.class_analyzer.code.instructions.InstructionCheckcast;
-import sword.java.class_analyzer.code.instructions.InstructionDup;
-import sword.java.class_analyzer.code.instructions.InstructionGetfield;
-import sword.java.class_analyzer.code.instructions.InstructionGetstatic;
-import sword.java.class_analyzer.code.instructions.InstructionGoto;
-import sword.java.class_analyzer.code.instructions.InstructionIadd;
-import sword.java.class_analyzer.code.instructions.InstructionIand;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_0;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_1;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_2;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_3;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_4;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_5;
-import sword.java.class_analyzer.code.instructions.InstructionIconst_m1;
-import sword.java.class_analyzer.code.instructions.InstructionIdiv;
-import sword.java.class_analyzer.code.instructions.InstructionIf_acmpeq;
-import sword.java.class_analyzer.code.instructions.InstructionIf_acmpne;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpeq;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpge;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpgt;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmple;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmplt;
-import sword.java.class_analyzer.code.instructions.InstructionIf_icmpne;
-import sword.java.class_analyzer.code.instructions.InstructionIfeq;
-import sword.java.class_analyzer.code.instructions.InstructionIfge;
-import sword.java.class_analyzer.code.instructions.InstructionIfgt;
-import sword.java.class_analyzer.code.instructions.InstructionIfle;
-import sword.java.class_analyzer.code.instructions.InstructionIflt;
-import sword.java.class_analyzer.code.instructions.InstructionIfne;
-import sword.java.class_analyzer.code.instructions.InstructionIinc;
-import sword.java.class_analyzer.code.instructions.InstructionIload_0;
-import sword.java.class_analyzer.code.instructions.InstructionIload_1;
-import sword.java.class_analyzer.code.instructions.InstructionIload_2;
-import sword.java.class_analyzer.code.instructions.InstructionIload_3;
-import sword.java.class_analyzer.code.instructions.InstructionIload_n;
-import sword.java.class_analyzer.code.instructions.InstructionImul;
-import sword.java.class_analyzer.code.instructions.InstructionIneg;
-import sword.java.class_analyzer.code.instructions.InstructionInvokespecial;
-import sword.java.class_analyzer.code.instructions.InstructionInvokestatic;
-import sword.java.class_analyzer.code.instructions.InstructionInvokevirtual;
-import sword.java.class_analyzer.code.instructions.InstructionIor;
-import sword.java.class_analyzer.code.instructions.InstructionIrem;
-import sword.java.class_analyzer.code.instructions.InstructionIshl;
-import sword.java.class_analyzer.code.instructions.InstructionIshr;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_0;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_1;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_2;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_3;
-import sword.java.class_analyzer.code.instructions.InstructionIstore_n;
-import sword.java.class_analyzer.code.instructions.InstructionIsub;
-import sword.java.class_analyzer.code.instructions.InstructionIushr;
-import sword.java.class_analyzer.code.instructions.InstructionIxor;
-import sword.java.class_analyzer.code.instructions.InstructionLdc;
-import sword.java.class_analyzer.code.instructions.InstructionLdc_w;
-import sword.java.class_analyzer.code.instructions.InstructionNew;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayBoolean;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayByte;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayChar;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayDouble;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayFloat;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayInt;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayLong;
-import sword.java.class_analyzer.code.instructions.InstructionNewArrayShort;
-import sword.java.class_analyzer.code.instructions.InstructionPop;
-import sword.java.class_analyzer.code.instructions.InstructionPutfield;
-import sword.java.class_analyzer.code.instructions.InstructionPutstatic;
-import sword.java.class_analyzer.code.instructions.InstructionReturn;
-import sword.java.class_analyzer.code.instructions.InstructionTableswitch;
+import sword.java.class_analyzer.code.instructions.*;
 import sword.java.class_analyzer.pool.ConstantPool;
 
 public class InstructionFactory {
@@ -97,6 +13,7 @@ public class InstructionFactory {
 
     static {
         if (
+                !interpreters.add(new SimpleByteCodeInterpreter(0x01, 1, InstructionAconst_null.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x02, 1, InstructionIconst_m1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x03, 1, InstructionIconst_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x04, 1, InstructionIconst_1.class)) ||
@@ -104,45 +21,143 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x06, 1, InstructionIconst_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x07, 1, InstructionIconst_4.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x08, 1, InstructionIconst_5.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x09, 1, InstructionLconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0A, 1, InstructionLconst_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0B, 1, InstructionFconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0C, 1, InstructionFconst_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0D, 1, InstructionFconst_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0E, 1, InstructionDconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0F, 1, InstructionDconst_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x10, 2, InstructionBipush.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x11, 3, InstructionSipush.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x12, 2, InstructionLdc.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x13, 3, InstructionLdc_w.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0x15, 2, InstructionIload_n.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x14, 3, InstructionLdc2_w.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x15, 2, InstructionIload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x16, 2, InstructionLload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x17, 2, InstructionFload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x18, 2, InstructionDload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x19, 2, InstructionAload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1A, 1, InstructionIload_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1B, 1, InstructionIload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1C, 1, InstructionIload_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x1D, 1, InstructionIload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x1E, 1, InstructionLload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x1F, 1, InstructionLload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x20, 1, InstructionLload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x21, 1, InstructionLload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x22, 1, InstructionFload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x23, 1, InstructionFload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x24, 1, InstructionFload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x25, 1, InstructionFload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x26, 1, InstructionDload_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x27, 1, InstructionDload_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x28, 1, InstructionDload_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x29, 1, InstructionDload_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2A, 1, InstructionAload_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2B, 1, InstructionAload_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2C, 1, InstructionAload_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x2D, 1, InstructionAload_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x2E, 1, InstructionIaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x2F, 1, InstructionLaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x30, 1, InstructionFaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x31, 1, InstructionDaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x32, 1, InstructionAaload.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore_n.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x33, 1, InstructionBaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x34, 1, InstructionCaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x35, 1, InstructionSaload.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x37, 2, InstructionLstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x38, 2, InstructionFstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x39, 2, InstructionDstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x3A, 2, InstructionAstore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3B, 1, InstructionIstore_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3C, 1, InstructionIstore_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3D, 1, InstructionIstore_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3E, 1, InstructionIstore_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x3F, 1, InstructionLstore_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x40, 1, InstructionLstore_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x41, 1, InstructionLstore_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x42, 1, InstructionLstore_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x43, 1, InstructionFstore_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x44, 1, InstructionFstore_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x45, 1, InstructionFstore_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x46, 1, InstructionFstore_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x47, 1, InstructionDstore_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x48, 1, InstructionDstore_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x49, 1, InstructionDstore_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x4A, 1, InstructionDstore_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4B, 1, InstructionAstore_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4C, 1, InstructionAstore_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4D, 1, InstructionAstore_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4E, 1, InstructionAstore_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x4F, 1, InstructionIastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x50, 1, InstructionLastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x51, 1, InstructionFastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x52, 1, InstructionDastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x53, 1, InstructionAastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x54, 1, InstructionBastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x55, 1, InstructionCastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x56, 1, InstructionSastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x57, 1, InstructionPop.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x59, 1, InstructionDup.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x60, 1, InstructionIadd.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x61, 1, InstructionLadd.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x62, 1, InstructionFadd.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x63, 1, InstructionDadd.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x64, 1, InstructionIsub.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x65, 1, InstructionLsub.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x66, 1, InstructionFsub.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x67, 1, InstructionDsub.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x68, 1, InstructionImul.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x69, 1, InstructionLmul.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x6A, 1, InstructionFmul.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x6B, 1, InstructionDmul.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x6C, 1, InstructionIdiv.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x6D, 1, InstructionLdiv.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x6E, 1, InstructionFdiv.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x6F, 1, InstructionDdiv.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x70, 1, InstructionIrem.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x71, 1, InstructionLrem.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x72, 1, InstructionFrem.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x73, 1, InstructionDrem.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x74, 1, InstructionIneg.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x75, 1, InstructionLneg.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x76, 1, InstructionFneg.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x77, 1, InstructionDneg.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x78, 1, InstructionIshl.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x79, 1, InstructionLshl.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x7A, 1, InstructionIshr.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x7B, 1, InstructionLshr.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x7C, 1, InstructionIushr.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x7D, 1, InstructionLushr.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x7E, 1, InstructionIand.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x7F, 1, InstructionLand.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x80, 1, InstructionIor.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x81, 1, InstructionLor.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x82, 1, InstructionIxor.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x83, 1, InstructionLxor.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x84, 3, InstructionIinc.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x85, 1, InstructionI2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x86, 1, InstructionI2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x87, 1, InstructionI2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x88, 1, InstructionL2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x89, 1, InstructionL2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8A, 1, InstructionL2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8B, 1, InstructionF2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8C, 1, InstructionF2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8D, 1, InstructionF2d.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8E, 1, InstructionD2i.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x8F, 1, InstructionD2l.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x90, 1, InstructionD2f.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x91, 1, InstructionI2b.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x92, 1, InstructionI2c.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x93, 1, InstructionI2s.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x94, 1, InstructionLcmp.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x95, 1, InstructionFcmpl.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x96, 1, InstructionFcmpg.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x97, 1, InstructionDcmpl.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x98, 1, InstructionDcmpg.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x99, 3, InstructionIfeq.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9A, 3, InstructionIfne.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x9B, 3, InstructionIflt.class)) ||
@@ -181,6 +196,10 @@ public class InstructionFactory {
                     }
 
                 }) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAC, 1, InstructionIreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAD, 1, InstructionLreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAE, 1, InstructionFreturn.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xAF, 1, InstructionDreturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB0, 1, InstructionAreturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB1, 1, InstructionReturn.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB2, 3, InstructionGetstatic.class)) ||
@@ -190,6 +209,7 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB6, 3, InstructionInvokevirtual.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB7, 3, InstructionInvokespecial.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xB8, 3, InstructionInvokestatic.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xB9, 5, InstructionInvokeinterface.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBB, 3, InstructionNew.class)) ||
                 !interpreters.add(new TwoBytesSimpleByteCodeInterpreter(0xBC, 0x04, 2, InstructionNewArrayBoolean.class)) ||
                 !interpreters.add(new TwoBytesSimpleByteCodeInterpreter(0xBC, 0x05, 2, InstructionNewArrayChar.class)) ||
@@ -202,7 +222,10 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBD, 3, InstructionAnewarray.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBE, 1, InstructionArraylength.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0xBF, 1, InstructionAthrow.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0xC0, 3, InstructionCheckcast.class))
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC0, 3, InstructionCheckcast.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC1, 3, InstructionInstanceof.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC6, 3, InstructionIfnull.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0xC7, 3, InstructionIfnonnull.class))
                 ) {
             throw new IllegalStateException("One of the interpreters is equal to some other");
         }

@@ -1,11 +1,12 @@
 package sword.java.class_analyzer.java_type;
 
-import sword.java.class_analyzer.ref.ClassReference;
+import sword.java.class_analyzer.independent_type.JavaType;
 import sword.java.class_analyzer.ref.RootReference;
+import sword.java.class_analyzer.ref.SimpleClassReference;
 
 public class JavaClassType extends JavaType {
 
-    private final ClassReference mClass;
+    private final SimpleClassReference mClass;
 
     public static boolean checkValidSignature(String signature) {
         return signature != null && signature.startsWith("L")
@@ -13,8 +14,8 @@ public class JavaClassType extends JavaType {
                 && !signature.contains(".");
     }
 
-    JavaClassType(String signature) {
-        mClass = RootReference.getInstance().addClass(
+    JavaClassType(RootReference rootReference, String signature) {
+        mClass = rootReference.addSimpleClass(
                 signature.substring(1, signature.length() - 1)
                         .replace('/', '.'));
 
@@ -26,5 +27,14 @@ public class JavaClassType extends JavaType {
     @Override
     public String signature() {
         return "L" + mClass.getQualifiedName().replace('.', '/') + ";";
+    }
+
+    @Override
+    public String getJavaRepresentation() {
+        return mClass.getQualifiedName();
+    }
+
+    public SimpleClassReference getReference() {
+        return mClass;
     }
 }

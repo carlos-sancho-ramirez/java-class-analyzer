@@ -5,12 +5,14 @@ import java.util.Set;
 
 import sword.java.class_analyzer.code.ByteCodeInterpreter;
 import sword.java.class_analyzer.code.IncompleteInstructionException;
+import sword.java.class_analyzer.interf.KnownReferencesProvider;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
+import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.MethodEntry;
 
 
-public abstract class AbstractInstruction {
+public abstract class AbstractInstruction implements KnownReferencesProvider {
 
     protected final ByteCodeInterpreter mInterpreter;
 
@@ -78,16 +80,23 @@ public abstract class AbstractInstruction {
         return new HashSet<Integer>(0);
     }
 
-    /**
-     * Returns a set of methods this instruction can call. In case no method can
-     * be called an empty set will be returned instead.
-     */
-    public Set<MethodEntry> getKnownInvokedMethods() {
-        return new HashSet<MethodEntry>(0);
+    @Override
+    public Set<AbstractMethodEntry> getKnownInvokedMethods() {
+        return new HashSet<AbstractMethodEntry>(0);
     }
 
+    @Override
     public Set<FieldEntry> getKnownReferencedFields() {
         return new HashSet<FieldEntry>(0);
+    }
+
+    /**
+     * It is expected that only Ldc, Ldc_w, Ld2_w, anewarray and instanceof will return
+     * something not empty.
+     */
+    @Override
+    public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
+        return new HashSet<ClassReferenceEntry>(0);
     }
 
     /**

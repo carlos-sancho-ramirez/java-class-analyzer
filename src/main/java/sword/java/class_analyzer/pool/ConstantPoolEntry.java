@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.FileError.Kind;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 
 public abstract class ConstantPoolEntry {
 
@@ -29,6 +30,18 @@ public abstract class ConstantPoolEntry {
         case Types.TEXT:
             return new TextEntry(inStream);
 
+        case Types.INT:
+            return new IntEntry(inStream);
+
+        case Types.FLOAT:
+            return new FloatEntry(inStream);
+
+        case Types.LONG:
+            return new LongEntry(inStream);
+
+        case Types.DOUBLE:
+            return new DoubleEntry(inStream);
+
         case Types.CLASS:
             return new ClassReferenceEntry(inStream);
 
@@ -39,7 +52,10 @@ public abstract class ConstantPoolEntry {
             return new FieldEntry(inStream);
 
         case Types.METHOD:
-            return new MethodEntry(inStream);
+            return new InstanceMethodEntry(inStream);
+
+        case Types.INTERFACE_METHOD:
+            return new InterfaceMethodEntry(inStream);
 
         case Types.NAME_TYPE_PAIR:
             return new VariableEntry(inStream);
@@ -58,5 +74,14 @@ public abstract class ConstantPoolEntry {
      * @return whether this reference is actually resolved, this can be false if
      * some dependencies are not yet resolved.
      */
-    abstract boolean resolve(ConstantPool pool) throws FileError;
+    abstract boolean resolve(ConstantPool pool, ExtendedTypeFactory factory) throws FileError;
+
+    /**
+     * Returns the number of blocks that this entry takes within the constant pool.
+     *
+     * Only long and double is expected to return here 2. All others will return 1
+     */
+    int size() {
+        return 1;
+    }
 }

@@ -1,12 +1,13 @@
 package sword.java.class_analyzer.ref;
 
+import java.io.File;
 import java.util.Set;
 
-import sword.java.class_analyzer.java_type.JavaType;
+import sword.java.class_analyzer.independent_type.JavaType;
 
 public abstract class JavaReference {
 
-    protected final String mName;
+    final String mName;
 
     JavaReference(String name) {
         mName = name;
@@ -40,20 +41,24 @@ public abstract class JavaReference {
         return false;
     }
 
-    /** Generalized implementation to avoid having repeated code for all adders */
-    interface AddNodeLambda<T extends JavaReference, P extends JavaReference> {
-        public T addIt(P instance, String first, String rest,
-                JavaType returningType, JavaType... paramTypes);
+    /**
+     * Returns the root reference for this reference
+     */
+    public final RootReference getRootReference() {
+        return isRootReference()? (RootReference) this : getJavaParentReference().getRootReference();
+    }
 
-        public T createIt(P instance, String name, JavaType returningType,
-                JavaType... paramTypes);
+    /** Generalized implementation to avoid having repeated code for all adders */
+    interface AddNodeLambda<T extends JavaReference, P extends JavaReference, JT extends JavaType> {
+        public T addIt(P instance, String first, String rest, JT javaType);
+
+        public T createIt(P instance, String name, JT javaType);
     }
 
     @SuppressWarnings("unchecked")
-    <T extends JavaReference, P extends JavaReference> T addNode(
+    <T extends JavaReference, P extends JavaReference, JT extends JavaType> T addNode(
             String qualifiedName, Set<T> instances,
-            AddNodeLambda<T, P> lambdas, JavaType returningType,
-            JavaType... paramTypes) {
+            AddNodeLambda<T, P, JT> lambdas, JT javaType) {
         assertValidName(qualifiedName);
 
         final int firstDot = qualifiedName.indexOf('.');
@@ -61,8 +66,7 @@ public abstract class JavaReference {
         if (firstDot > 0) {
             final String firstName = qualifiedName.substring(0, firstDot);
             final String restOfName = qualifiedName.substring(firstDot + 1);
-            result = lambdas.addIt((P) this, firstName, restOfName,
-                    returningType, paramTypes);
+            result = lambdas.addIt((P) this, firstName, restOfName, javaType);
         } else {
             T found = null;
             if (instances != null) {
@@ -77,8 +81,7 @@ public abstract class JavaReference {
             if (found != null) {
                 result = found;
             } else {
-                result = lambdas.createIt((P) this, qualifiedName,
-                        returningType, paramTypes);
+                result = lambdas.createIt((P) this, qualifiedName, javaType);
             }
 
             // This position will never be reached with instances == null
@@ -88,4 +91,26 @@ public abstract class JavaReference {
 
         return result;
     }
+
+    /**
+     * Returns the file where the class should be within the classpath.
+     * Arrays will return the file for the class on its element or null element
+     * is a primitive type.
+     *
+     * @param classPath Folder where to look for files.
+     */
+    public abstract File getFile(File classPath);
+
+    @Override
+    public final int hashCode() {
+        return getQualifiedName().hashCode();
+    }
+
+    @Override
+    public final boolean equals(Object object) {
+        return object != null && object instanceof JavaReference &&
+                getQualifiedName().equals(((JavaReference) object).getQualifiedName());
+    }
+
+    public abstract Set<ClassReference> setOfClasses();
 }

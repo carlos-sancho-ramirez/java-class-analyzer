@@ -3,6 +3,7 @@ package sword.java.class_analyzer.code;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,9 +11,11 @@ import java.util.Set;
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
 import sword.java.class_analyzer.code.InstructionBlock.DisassemblerOptions;
+import sword.java.class_analyzer.interf.KnownReferencesProvider;
+import sword.java.class_analyzer.pool.AbstractMethodEntry;
+import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.FieldEntry;
-import sword.java.class_analyzer.pool.MethodEntry;
 
 /**
  * Collection of InstructionBlocks make a self contained algorithm.
@@ -21,7 +24,7 @@ import sword.java.class_analyzer.pool.MethodEntry;
  * first. The rest of blocks are not public for other methods and will only be
  * executed by another block within this method.
  */
-public class MethodCode {
+public class MethodCode implements KnownReferencesProvider {
 
     private static class BlockHolder {
         public int index;
@@ -33,8 +36,13 @@ public class MethodCode {
         }
     }
 
-    private List<BlockHolder> mHolders = new ArrayList<BlockHolder>();
+    private final List<BlockHolder> mHolders = new ArrayList<BlockHolder>();
     private String mInvalidReason;
+
+    /**
+     * Set to true if there is code passed that not correspond to any block.
+     */
+    public final boolean hasUnreferencedCode;
 
     private int findFirstIndexNoMatchingBlock(Set<Integer> indexes) {
 
@@ -103,13 +111,8 @@ public class MethodCode {
         }
     }
 
-    public MethodCode(InputStream inStream, int codeLength, ConstantPool pool) throws IOException, FileError {
-        final byte code[] = new byte[codeLength];
-        Utils.fillBuffer(inStream, code);
-
-        Set<Integer> indexes = new HashSet<Integer>();
-        indexes.add(0);
-
+    public MethodCode(byte code[], ConstantPool pool, final Set<Integer> indexes) throws IOException, FileError {
+        final int codeLength = code.length;
         while (indexes.size() > mHolders.size()) {
 
             final int targetIndex = findFirstIndexNoMatchingBlock(indexes);
@@ -142,6 +145,31 @@ public class MethodCode {
                 break;
             }
         }
+
+        // Checks if there is unreferenced code
+        int checkingIndex = 0;
+        boolean indexUpdated = true;
+        while (checkingIndex < codeLength && indexUpdated) {
+            indexUpdated = false;
+            for (BlockHolder holder : mHolders) {
+                if (holder.index == checkingIndex) {
+                    checkingIndex += holder.block.byteCodeSize();
+                    indexUpdated = true;
+                }
+            }
+        }
+
+        hasUnreferencedCode = checkingIndex < codeLength;
+    }
+
+    private static byte[] fillCodeBuffer(InputStream inStream, int codeLength) throws IOException, FileError {
+        final byte code[] = new byte[codeLength];
+        Utils.fillBuffer(inStream, code);
+        return code;
+    }
+
+    public MethodCode(InputStream inStream, int codeLength, ConstantPool pool) throws IOException, FileError {
+        this(fillCodeBuffer(inStream, codeLength), pool, new HashSet<Integer>(Arrays.asList(0)));
     }
 
     @Override
@@ -157,11 +185,19 @@ public class MethodCode {
             }
         }
 
-        Set<MethodEntry> methods = getKnownInvokedMethods();
+        Set<AbstractMethodEntry> methods = getKnownInvokedMethods();
         if (methods.size() > 0) {
             result = result + "depends on methods:\n";
-            for(MethodEntry method : methods) {
+            for(AbstractMethodEntry method : methods) {
                 result = result + "  " + method.toString() + '\n';
+            }
+        }
+
+        Set<ClassReferenceEntry> classes = getKnownReflectionClassReferences();
+        if (classes.size() > 0) {
+            result = result + "depends on classes:\n";
+            for(ClassReferenceEntry cls : classes) {
+                result = result + "  " + cls.getReference().getQualifiedName() + '\n';
             }
         }
 
@@ -184,10 +220,11 @@ public class MethodCode {
         return result;
     }
 
-    public Set<MethodEntry> getKnownInvokedMethods() {
-        Set<MethodEntry> methods = new HashSet<MethodEntry>();
+    @Override
+    public Set<AbstractMethodEntry> getKnownInvokedMethods() {
+        Set<AbstractMethodEntry> methods = new HashSet<AbstractMethodEntry>();
         for (BlockHolder holder : mHolders) {
-            Set<MethodEntry> insMethods = holder.block.getKnownInvokedMethods();
+            Set<AbstractMethodEntry> insMethods = holder.block.getKnownInvokedMethods();
             if (insMethods.size() > 0) {
                 methods.addAll(insMethods);
             }
@@ -196,6 +233,7 @@ public class MethodCode {
         return methods;
     }
 
+    @Override
     public Set<FieldEntry> getKnownReferencedFields() {
         Set<FieldEntry> fields = new HashSet<FieldEntry>();
         for (BlockHolder holder : mHolders) {
@@ -208,7 +246,24 @@ public class MethodCode {
         return fields;
     }
 
+    @Override
+    public Set<ClassReferenceEntry> getKnownReflectionClassReferences() {
+        Set<ClassReferenceEntry> classes = new HashSet<ClassReferenceEntry>();
+        for (BlockHolder holder : mHolders) {
+            Set<ClassReferenceEntry> insClasses = holder.block.getKnownReflectionClassReferences();
+            if (insClasses.size() > 0) {
+                classes.addAll(insClasses);
+            }
+        }
+
+        return classes;
+    }
+
     public boolean isValid() {
         return mInvalidReason == null;
+    }
+
+    public String getInvalidReason() {
+        return mInvalidReason;
     }
 }

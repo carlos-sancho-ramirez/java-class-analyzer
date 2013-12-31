@@ -8,17 +8,28 @@ import java.util.List;
 
 import sword.java.class_analyzer.FileError;
 import sword.java.class_analyzer.Utils;
+import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 
 public class ConstantPool {
 
     public final int poolEntryCountPlusOne;
     private final List<ConstantPoolEntry> entries = new ArrayList<ConstantPoolEntry>();
 
-    public ConstantPool(InputStream inStream) throws IOException, FileError {
+    public ConstantPool(InputStream inStream, ExtendedTypeFactory factory) throws IOException, FileError {
         poolEntryCountPlusOne = Utils.getBigEndian2Int(inStream);
 
         for (int counter = 1; counter < poolEntryCountPlusOne; counter++) {
-            entries.add(ConstantPoolEntry.get(inStream));
+            final ConstantPoolEntry entry = ConstantPoolEntry.get(inStream);
+            entries.add(entry);
+
+            final int entrySize = entry.size();
+            if (entrySize > 1) {
+                for (int index = 2; index <= entrySize; index++) {
+                    entries.add(new UnusedEntry());
+                }
+
+                counter += entrySize - 1;
+            }
         }
 
         final int entryCount = entries.size();
@@ -31,7 +42,7 @@ public class ConstantPool {
             for (int counter = 0; counter < entryCount; counter++) {
                 ConstantPoolEntry entry = entries.get(counter);
 
-                if (!entry.mResolved && !entry.resolve(this)) {
+                if (!entry.mResolved && !entry.resolve(this, factory)) {
                     unresolved++;
                 }
             }

@@ -28,7 +28,7 @@ public abstract class AbstractConditionalInstruction extends AbstractInstruction
             IncompleteInstructionException {
 
         super(code, index, pool, interpreter);
-        mOffset = getUnsignedBigEndian2Int(code, index + 1);
+        mOffset = getSignedBigEndian2Int(code, index + 1);
     }
 
     public final int getOffset() {
