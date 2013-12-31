@@ -21,6 +21,13 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x06, 1, InstructionIconst_3.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x07, 1, InstructionIconst_4.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x08, 1, InstructionIconst_5.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x09, 1, InstructionLconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0A, 1, InstructionLconst_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0B, 1, InstructionFconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0C, 1, InstructionFconst_1.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0D, 1, InstructionFconst_2.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0E, 1, InstructionDconst_0.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x0F, 1, InstructionDconst_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x10, 2, InstructionBipush.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x11, 3, InstructionSipush.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x12, 2, InstructionLdc.class)) ||
