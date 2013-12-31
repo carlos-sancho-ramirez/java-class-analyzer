@@ -102,12 +102,12 @@ public abstract class JavaReference {
     public abstract File getFile(File classPath);
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return getQualifiedName().hashCode();
     }
 
     @Override
-    public boolean equals(Object object) {
+    public final boolean equals(Object object) {
         return object != null && object instanceof JavaReference &&
                 getQualifiedName().equals(((JavaReference) object).getQualifiedName());
     }
