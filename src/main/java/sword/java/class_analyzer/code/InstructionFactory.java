@@ -53,8 +53,14 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4C, 1, InstructionAstore_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4D, 1, InstructionAstore_2.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x4E, 1, InstructionAstore_3.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x4F, 1, InstructionIastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x50, 1, InstructionLastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x51, 1, InstructionFastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x52, 1, InstructionDastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x53, 1, InstructionAastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x54, 1, InstructionBastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x55, 1, InstructionCastore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x56, 1, InstructionSastore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x57, 1, InstructionPop.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x59, 1, InstructionDup.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x60, 1, InstructionIadd.class)) ||
