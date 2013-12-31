@@ -43,8 +43,11 @@ public class InstructionFactory {
                 !interpreters.add(new SimpleByteCodeInterpreter(0x33, 1, InstructionBaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x34, 1, InstructionCaload.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x35, 1, InstructionSaload.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore_n.class)) ||
-                !interpreters.add(new SimpleByteCodeInterpreter(0x3A, 2, InstructionAstore_n.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x36, 2, InstructionIstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x37, 2, InstructionLstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x38, 2, InstructionFstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x39, 2, InstructionDstore.class)) ||
+                !interpreters.add(new SimpleByteCodeInterpreter(0x3A, 2, InstructionAstore.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3B, 1, InstructionIstore_0.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3C, 1, InstructionIstore_1.class)) ||
                 !interpreters.add(new SimpleByteCodeInterpreter(0x3D, 1, InstructionIstore_2.class)) ||
