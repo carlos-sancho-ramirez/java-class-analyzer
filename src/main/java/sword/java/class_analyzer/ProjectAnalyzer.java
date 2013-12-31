@@ -259,14 +259,21 @@ public class ProjectAnalyzer {
                 final RootReference classesInPath = checkClassPath(classPath);
                 Set<ClassReference> inPathSet = classesInPath.setOfClasses();
 
-                System.out.println("");
-                System.out.println("Found " + inPathSet.size() + " classes in the class path");
-
-                inPathSet.removeAll(firstClass.getRootReference().setOfClasses());
                 do {
-                    final int inPathCount = inPathSet.size();
-                    System.out.println("Found " + inPathCount + " files in the class path but not referenced:");
-                    final List<String> references = new ArrayList<String>(inPathCount);
+                    final Set<ClassReference> references = new HashSet<ClassReference>(loadedClasses.size());
+                    for (ClassFile loaded : loadedClasses) {
+                        references.add(loaded.getReference());
+                    }
+
+                    inPathSet.removeAll(references);
+                } while (false);
+
+                System.out.println("");
+                final int notReferencedClassesCount = inPathSet.size();
+                if (notReferencedClassesCount > 0) {
+                    System.out.println("Found " + notReferencedClassesCount +
+                            " classes in the class path but not referenced:");
+                    final List<String> references = new ArrayList<String>(notReferencedClassesCount);
                     for (ClassReference ref : inPathSet) {
                         references.add(ref.getQualifiedName());
                     }
@@ -276,7 +283,10 @@ public class ProjectAnalyzer {
                     for (String reference : references) {
                         System.out.println("  " + reference);
                     }
-                } while(false);
+                }
+                else {
+                    System.out.println("All classes in the class path are referenced.");
+                }
             }
         }
     }
