@@ -9,6 +9,8 @@ import sword.java.class_analyzer.code.IncompleteInstructionException;
 import sword.java.class_analyzer.pool.ClassReferenceEntry;
 import sword.java.class_analyzer.pool.ConstantPool;
 import sword.java.class_analyzer.pool.ConstantPoolEntry;
+import sword.java.class_analyzer.pool.DoubleEntry;
+import sword.java.class_analyzer.pool.LongEntry;
 
 public class InstructionLdc_w extends AbstractConstantPoolReferenceInstruction {
 
@@ -18,6 +20,10 @@ public class InstructionLdc_w extends AbstractConstantPoolReferenceInstruction {
             IncompleteInstructionException, FileError {
         super(code, index, pool, interpreter);
         mPoolEntry = pool.get(mPoolIndex, ConstantPoolEntry.class);
+
+        if ((mPoolEntry instanceof LongEntry) || (mPoolEntry instanceof DoubleEntry)) {
+            throw new FileError(FileError.Kind.INVALID_POOL_TYPE_MATCH, mPoolIndex);
+        }
     }
 
     @Override
