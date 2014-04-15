@@ -14,6 +14,6 @@ public class InstructionIfnull extends AbstractConditionalInstruction {
 
     @Override
     public String disassemble() {
-        return "ifnonnull\t" + getOffsetString();
+        return "ifnull\t" + getOffsetString();
     }
 }
