@@ -16,8 +16,9 @@ public class AttributeTable {
     public final List<AbstractAttribute> allAttributes;
     public final List<GenericAttribute> genericAttributes = new ArrayList<GenericAttribute>();
 
-    private ExceptionsAttribute mExceptions;
     private CodeAttribute mCode;
+    private ExceptionsAttribute mExceptions;
+    private SignatureAttribute mSignature;
 
     public AttributeTable(InputStream inStream, ConstantPool pool) throws IOException, FileError {
         final int count = Utils.getBigEndian2Int(inStream);
@@ -40,6 +41,13 @@ public class AttributeTable {
                 }
 
                 mExceptions = (ExceptionsAttribute) attr;
+            }
+            else if (attr instanceof SignatureAttribute) {
+                if (mSignature != null) {
+                    throw new FileError(Kind.ATTRIBUTE_NOT_UNIQUE, SignatureAttribute.attrType);
+                }
+
+                mSignature = (SignatureAttribute) attr;
             }
             else {
                 genericAttributes.add( (GenericAttribute) attr);
@@ -70,6 +78,10 @@ public class AttributeTable {
      */
     public ExceptionsAttribute getExceptions() {
         return mExceptions;
+    }
+
+    public SignatureAttribute getSignature() {
+    	return mSignature;
     }
 
     /**

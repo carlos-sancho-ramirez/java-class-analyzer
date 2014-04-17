@@ -27,6 +27,9 @@ public abstract class AbstractAttribute {
         else if (ExceptionsAttribute.attrType.equals(name.text)) {
             result = new ExceptionsAttribute(inStream, pool);
         }
+        else if (SignatureAttribute.attrType.equals(name.text)) {
+            result = new SignatureAttribute(inStream, pool);
+        }
         else {
             result = new GenericAttribute(inStream, name, pool);
         }

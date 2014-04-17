@@ -7,6 +7,7 @@ import sword.java.class_analyzer.FileError.Kind;
 import sword.java.class_analyzer.attributes.AttributeTable;
 import sword.java.class_analyzer.attributes.CodeAttribute;
 import sword.java.class_analyzer.attributes.ExceptionsAttribute;
+import sword.java.class_analyzer.attributes.SignatureAttribute;
 import sword.java.class_analyzer.code.MethodCode;
 import sword.java.class_analyzer.java_type.ExtendedTypeFactory;
 import sword.java.class_analyzer.java_type.JavaMethod;
@@ -46,6 +47,11 @@ public class MethodInfo {
         ExceptionsAttribute exceptions = attributes.getExceptions();
         if (exceptions != null) {
             result = result + " throws " + exceptions.exceptionListToString();
+        }
+
+        SignatureAttribute signature = attributes.getSignature();
+        if (signature != null) {
+        	result = result + " @ With signature " + signature.signatureToString();
         }
 
         result = result + attributes.genericAttributesToString();
