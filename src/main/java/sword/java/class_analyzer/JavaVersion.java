@@ -49,6 +49,13 @@ public enum JavaVersion {
         public String toString() {
             return "J2SE 7.0";
         }
+    },
+
+    J2SE8_0 {
+        @Override
+        public String toString() {
+            return "J2SE 8.0";
+        }
     };
 
     private JavaVersion() { }
@@ -69,6 +76,8 @@ public enum JavaVersion {
             return J2SE6_0;
         case 0x33:
             return J2SE7_0;
+        case 0x34:
+            return J2SE8_0;
         }
 
         throw new IllegalArgumentException();
