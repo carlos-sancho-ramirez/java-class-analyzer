@@ -21,6 +21,11 @@ public abstract class ConstantPoolEntry {
         public static final int METHOD = 10;
         public static final int INTERFACE_METHOD = 11;
         public static final int NAME_TYPE_PAIR = 12;
+
+        // Added for Java8
+        public static final int METHOD_HANDLE = 15;
+        public static final int METHOD_TYPE = 16;
+        public static final int INVOKE_DYNAMIC = 18;
     }
 
     public static ConstantPoolEntry get(InputStream inStream) throws IOException, FileError {
@@ -59,6 +64,15 @@ public abstract class ConstantPoolEntry {
 
         case Types.NAME_TYPE_PAIR:
             return new VariableEntry(inStream);
+
+        case Types.METHOD_HANDLE:
+        	return new MethodHandleEntry(inStream);
+
+        case Types.METHOD_TYPE:
+        	return new MethodTypeEntry(inStream);
+
+        case Types.INVOKE_DYNAMIC:
+            return new InvokeDynamicEntry(inStream);
 
         default:
             throw new FileError(Kind.INVALID_POOL_TYPE, "" + entryType);
